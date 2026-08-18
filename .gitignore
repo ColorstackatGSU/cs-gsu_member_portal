@@ -1,0 +1,17 @@
+node_modules
+dist
+dist-ssr
+*.local
+
+.env
+.env.*
+# The template has to be negated back in, since `.env.*` catches it too.
+!.env.example
+
+
+.DS_Thumbs
+.DS_Store
+Thumbs.db
+
+*.log
+npm-debug.log*
