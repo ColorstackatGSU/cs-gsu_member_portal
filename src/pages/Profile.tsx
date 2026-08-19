@@ -159,27 +159,6 @@ export default function Profile() {
     }
   }
 
-  async function answerSharing(shared: boolean) {
-    setError(null);
-    setBusy(true);
-    try {
-      const next = await memberApi.setResumeShared(shared);
-      setProfile((p) => (p ? { ...p, ...pickSharing(next) } : next));
-      setForm((f) => (f ? { ...f, ...pickSharing(next) } : next));
-      setDismissed(false);
-      localStorage.removeItem(DISMISS_KEY);
-    } catch (err) {
-      setError(message(err));
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  /** Only the sharing fields, so an unsaved profile edit is not clobbered by the reply. */
-  function pickSharing(p: MemberProfile) {
-    return { resumeShared: p.resumeShared, sharingPromptedAt: p.sharingPromptedAt };
-  }
-
   function pickResume(p: MemberProfile) {
     return { hasResume: p.hasResume, resumeUploadedAt: p.resumeUploadedAt };
   }
@@ -247,8 +226,9 @@ export default function Profile() {
     );
   }
 
-  const neverAsked = profile.sharingPromptedAt === null;
-  const showSharingWarning = !neverAsked && !profile.resumeShared && !dismissed;
+  // Sharing is on unless they turned it off, so the only thing left to say is when it is
+  // off: a member who opted out and later wonders why recruiters never call.
+  const showSharingWarning = !profile.resumeShared && !dismissed;
 
   return (
     <section className="portal-pad">
@@ -298,26 +278,6 @@ export default function Profile() {
             )}
           </div>
         </div>
-
-        {/* Asked once, and only once: sharingPromptedAt records that it was put to them,
-            separately from what they answered. */}
-        {neverAsked && (
-          <div className="card fade-in-up" style={{ marginTop: 20 }}>
-            <h2 className="card-title">Should sponsors be able to see your resume?</h2>
-            <p className="card-sub" style={{ marginBottom: 18 }}>
-              Our sponsors ask for a resume book as part of their partnership. Saying yes puts yours in it. Saying no
-              keeps it visible only to you and the chapter officers. You can change this whenever you like.
-            </p>
-            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-              <button type="button" className="btn-primary" disabled={busy} onClick={() => answerSharing(true)}>
-                Yes, share it
-              </button>
-              <button type="button" className="btn-secondary" disabled={busy} onClick={() => answerSharing(false)}>
-                Keep it private
-              </button>
-            </div>
-          </div>
-        )}
 
         {showSharingWarning && (
           <Notice
@@ -622,10 +582,15 @@ export default function Profile() {
           <div className="card-head" style={{ display: 'block', marginBottom: 16 }}>
             <h2 className="card-title">Resume</h2>
             <p className="card-sub">
-              PDF, up to 5 MB. Uploading a new one replaces the old one.
-              {profile.resumeShared
-                ? ' Sponsors can see this.'
-                : ' Only you and the chapter officers can see this.'}
+              PDF, up to 5 MB. Uploading a new one replaces the old one.{' '}
+              {profile.resumeShared ? (
+                <>
+                  Sponsors can see this, which is how members get recruited. Turn that off in{' '}
+                  <Link to="/settings" style={{ textDecoration: 'underline' }}>settings</Link>.
+                </>
+              ) : (
+                'Only you and the chapter officers can see this.'
+              )}
             </p>
           </div>
 

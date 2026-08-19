@@ -9,9 +9,12 @@ import Notice from '../components/Notice';
 /**
  * Where a member changes their mind about sponsor visibility, and signs out.
  *
- * Consent lives on its own page and its own endpoint rather than as a checkbox on the
- * profile form. Saving a major should never be the thing that hands a resume to a
- * recruiter, so turning sharing on or off is always a deliberate act.
+ * Sharing is on by default, since getting members in front of recruiters is the point of
+ * the resume book, so this page is where someone opts out rather than in.
+ *
+ * It lives on its own page and its own endpoint rather than as a checkbox on the profile
+ * form. Saving a major should never be the thing that changes who can see a resume, so
+ * every change here is a deliberate act.
  */
 function message(e: unknown): string {
   return e instanceof ApiError ? e.message : 'Something went wrong. Try again in a moment.';
@@ -70,9 +73,9 @@ export default function Settings() {
               <div className="card-head" style={{ display: 'block', marginBottom: 18 }}>
                 <h2 className="card-title">Sponsors and recruiters</h2>
                 <p className="card-sub">
-                  Our sponsors ask for a resume book as part of their partnership. Turning this on puts your resume in
-                  it. Turning it off keeps it visible only to you and the chapter officers. Nothing else on your profile
-                  is shared either way, and your allergies never are.
+                  Our sponsors ask for a resume book as part of their partnership, and your resume is in it by
+                  default. Turning this off keeps it visible only to you and the chapter officers. Nothing else on
+                  your profile is shared either way, and your allergies never are.
                 </p>
               </div>
 
