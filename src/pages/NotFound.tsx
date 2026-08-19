@@ -20,8 +20,8 @@ export default function NotFound() {
         <p style={{ marginTop: 16, color: 'rgba(255,255,255,0.6)' }}>
           That page doesn't exist, or it hasn't been built yet.
         </p>
-        <Link to="/login" className="btn-primary" style={{ marginTop: 32 }}>
-          Back to sign in
+        <Link to="/dashboard" className="btn-primary" style={{ marginTop: 32 }}>
+          Back to the portal
         </Link>
       </div>
     </section>

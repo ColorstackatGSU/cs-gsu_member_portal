@@ -289,9 +289,9 @@ export default function Activate() {
                 type="button"
                 className="btn-primary"
                 style={{ marginTop: 20, width: '100%' }}
-                onClick={() => navigate('/profile')}
+                onClick={() => navigate('/dashboard')}
               >
-                Go to my profile
+                Go to my dashboard
               </button>
             </>
           )}

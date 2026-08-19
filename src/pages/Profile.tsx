@@ -3,44 +3,26 @@ import type { FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { memberApi, toEdits } from '../lib/member';
 import type { MemberProfile } from '../lib/member';
+import { completeness } from '../lib/progress';
 import { ApiError } from '../lib/api';
 import Field from '../components/Field';
 import Notice from '../components/Notice';
 
 /**
- * Everything the member told us on the intake form, editable, plus their resume.
+ * Everything the member can change about themselves, plus their resume.
  *
- * The page leads with who they are rather than with a form, because that is the question
- * someone opening a member portal is actually asking: does this thing know me, and is what
- * it knows correct. The completeness meter follows from the same idea. Sponsors ask for
- * this data, so the honest way to get it filled in is to show what is missing once, rather
- * than nag on every visit.
+ * The intake form asks more than this page shows. The 1-to-5 interest ratings in
+ * particular are planning input for the officers, not facts about the member, so they
+ * stay in the spreadsheet and are not surfaced or edited here. They still ride along in
+ * the save payload untouched, because the API replaces the editable half of the row
+ * wholesale and dropping them from the body would clear the columns.
  *
- * The form posts every editable field on save rather than a diff, and the API replaces
- * that half of the row wholesale. That is deliberate: over JSON there is no way to tell
- * "field omitted" from "field cleared" without a wrapper type on all twenty columns, and
- * getting it wrong silently wipes data.
+ * Saving posts every editable field rather than a diff. Over JSON there is no way to
+ * tell "field omitted" from "field cleared" without a wrapper type on every column, and
+ * getting that wrong silently wipes data.
  */
 
-const DISMISS_KEY = 'colorstack.sharingNoticeDismissed';
-
-/** The four options the intake form's dropdown offers. */
 const CLASS_YEARS = ['Freshman', 'Sophomore', 'Junior', 'Senior'];
-
-const INTERESTS = [
-  ['interestRecruiting', 'Recruiting opportunities'],
-  ['interestInterviewPrep', 'Interview preparation'],
-  ['interestTechProjects', 'New tech and building projects'],
-  ['interestAcademic', 'Academic preparation'],
-  ['interestCareerExploration', 'Career exploration'],
-  ['interestSocial', 'Social events'],
-] as const;
-
-/** What counts towards a complete profile, and therefore what the meter nudges. */
-const COMPLETENESS: (keyof MemberProfile)[] = [
-  'firstName', 'lastName', 'pronouns', 'majors', 'classYear', 'gradTerm', 'gradYear',
-  'linkedinUrl', 'discordUsername', 'postGradPlan',
-];
 
 function message(e: unknown): string {
   return e instanceof ApiError ? e.message : 'Something went wrong. Try again in a moment.';
@@ -58,7 +40,6 @@ export default function Profile() {
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [dismissed, setDismissed] = useState(() => localStorage.getItem(DISMISS_KEY) === '1');
   const [emailStep, setEmailStep] = useState<'idle' | 'enter' | 'code'>('idle');
   const [newEmail, setNewEmail] = useState('');
   const [emailCode, setEmailCode] = useState('');
@@ -83,15 +64,7 @@ export default function Profile() {
     [profile, form],
   );
 
-  const completeness = useMemo(() => {
-    if (!form) return 0;
-    const filled = COMPLETENESS.filter((k) => {
-      const v = form[k];
-      return v !== null && v !== undefined && String(v).trim() !== '';
-    }).length;
-    const withResume = filled + (form.hasResume ? 1 : 0);
-    return Math.round((withResume / (COMPLETENESS.length + 1)) * 100);
-  }, [form]);
+  const pct = useMemo(() => (form ? completeness(form) : 0), [form]);
 
   function set<K extends keyof MemberProfile>(key: K, value: MemberProfile[K]) {
     setSaved(false);
@@ -151,7 +124,7 @@ export default function Profile() {
       setProfile((p) => (p ? { ...p, personalEmail: next.personalEmail } : next));
       setForm((f) => (f ? { ...f, personalEmail: next.personalEmail } : next));
       cancelEmailChange();
-      setEmailNote('Your personal email is updated. You can sign in with it now.');
+      setEmailNote('Personal email updated.');
     } catch (err) {
       setEmailError(message(err));
     } finally {
@@ -206,7 +179,7 @@ export default function Profile() {
   if (loadError) {
     return (
       <section className="portal-pad">
-        <div className="container-wide" style={{ maxWidth: 800 }}>
+        <div className="container-wide" style={{ maxWidth: 820 }}>
           <Notice kind="error">{loadError}</Notice>
         </div>
       </section>
@@ -217,90 +190,61 @@ export default function Profile() {
     // Matches the real layout so the page does not reflow when the data lands.
     return (
       <section className="portal-pad">
-        <div className="container-wide" style={{ maxWidth: 800, display: 'grid', gap: 20 }}>
-          <div className="skeleton" style={{ height: 132 }} />
+        <div className="container-wide" style={{ maxWidth: 820, display: 'grid', gap: 18 }}>
+          <div className="skeleton" style={{ height: 112 }} />
           <div className="skeleton" style={{ height: 260 }} />
-          <div className="skeleton" style={{ height: 180 }} />
+          <div className="skeleton" style={{ height: 160 }} />
         </div>
       </section>
     );
   }
 
-  // Sharing is on unless they turned it off, so the only thing left to say is when it is
-  // off: a member who opted out and later wonders why recruiters never call.
-  const showSharingWarning = !profile.resumeShared && !dismissed;
-
   return (
     <section className="portal-pad">
-      <div className="container-wide" style={{ maxWidth: 800 }}>
-        {/* Who we think you are. */}
+      <div className="container-wide" style={{ maxWidth: 820 }}>
         <div className="card fade-in-up">
           <div className="identity">
             <div className="avatar" aria-hidden="true">{initials(profile)}</div>
             <div style={{ flex: '1 1 240px', minWidth: 0 }}>
-              <h1 style={{ fontSize: 'clamp(22px, 3vw, 28px)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>
+              <h1 style={{ fontSize: 'clamp(20px, 2.6vw, 25px)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>
                 {[profile.firstName, profile.lastName].filter(Boolean).join(' ') || 'Your profile'}
               </h1>
-              <p className="muted" style={{ fontSize: 13.5, margin: '4px 0 0', wordBreak: 'break-word' }}>
+              <p className="muted" style={{ fontSize: 13.5, margin: '3px 0 0', wordBreak: 'break-word' }}>
                 {profile.email}
               </p>
               <div className="chip-row">
-                {profile.pronouns && <span className="chip">{profile.pronouns}</span>}
                 {profile.classYear && <span className="chip">{profile.classYear}</span>}
-                {profile.gradTerm && profile.gradYear && (
-                  <span className="chip">Graduates {profile.gradTerm} {profile.gradYear}</span>
-                )}
                 {profile.majors && <span className="chip">{profile.majors}</span>}
+                {profile.gradTerm && profile.gradYear && (
+                  <span className="chip">{profile.gradTerm} {profile.gradYear}</span>
+                )}
                 {profile.resumeShared && <span className="chip chip-accent">Visible to sponsors</span>}
               </div>
             </div>
           </div>
 
-          <div style={{ marginTop: 22 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, fontSize: 12.5 }}>
-              <span className="muted">Profile completeness</span>
-              <span style={{ fontWeight: 600 }}>{completeness}%</span>
+          <div style={{ marginTop: 18 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 7, fontSize: 12.5 }}>
+              <span className="muted">Profile complete</span>
+              <span style={{ fontWeight: 600 }}>{pct}%</span>
             </div>
             <div
               className="meter"
               role="progressbar"
-              aria-valuenow={completeness}
+              aria-valuenow={pct}
               aria-valuemin={0}
               aria-valuemax={100}
               aria-label="Profile completeness"
             >
-              <div className="meter-fill" style={{ width: `${completeness}%` }} />
+              <div className="meter-fill" style={{ width: `${pct}%` }} />
             </div>
-            {completeness < 100 && (
-              <p className="muted" style={{ fontSize: 12.5, marginTop: 8 }}>
-                A fuller profile is what we hand to sponsors when they ask who our members are.
-              </p>
-            )}
           </div>
         </div>
 
-        {showSharingWarning && (
-          <Notice
-            kind="warn"
-            style={{ marginTop: 20 }}
-            onDismiss={() => {
-              setDismissed(true);
-              localStorage.setItem(DISMISS_KEY, '1');
-            }}
-          >
-            Your profile is not visible to recruiters. You can turn this on in{' '}
-            <Link to="/settings" style={{ textDecoration: 'underline' }}>settings</Link>.
-          </Notice>
-        )}
-
-        {error && (
-          <Notice kind="error" style={{ marginTop: 20 }}>
-            {error}
-          </Notice>
-        )}
+        {error && <Notice kind="error" style={{ marginTop: 18 }}>{error}</Notice>}
 
         <form onSubmit={save}>
-          <div className="card fade-in-up fade-delay-1" style={{ marginTop: 20 }}>
+          <div className="card fade-in-up fade-delay-1" style={{ marginTop: 18 }}>
             <div className="card-head">
               <h2 className="card-title">About you</h2>
             </div>
@@ -312,14 +256,14 @@ export default function Profile() {
                 label="School email"
                 value={form.email}
                 disabled
-                hint="What your sign in is tied to. Email official@colorstackatgsu.com if it needs to change."
+                hint="Email official@colorstackatgsu.com to change this."
               />
               <Field
                 id="personalEmail"
                 label="Personal email"
                 value={form.personalEmail ?? 'Not set'}
                 disabled
-                hint="Also works to sign in. Changing it needs a code, so a typo cannot leave you with an address that does not work."
+                hint="Also works to sign in."
               />
               <Field
                 id="pronouns"
@@ -369,22 +313,22 @@ export default function Profile() {
             </div>
           </div>
 
-          <div className="card fade-in-up fade-delay-2" style={{ marginTop: 20 }}>
+          <div className="card fade-in-up fade-delay-2" style={{ marginTop: 18 }}>
             <div className="card-head">
-              <h2 className="card-title">Links and handles</h2>
+              <h2 className="card-title">Links</h2>
             </div>
             <div className="field-grid">
               <Field id="linkedinUrl" label="LinkedIn" type="url" value={form.linkedinUrl ?? ''} onChange={(v) => setText('linkedinUrl', v)} />
               <Field id="githubUrl" label="GitHub" type="url" value={form.githubUrl ?? ''} onChange={(v) => setText('githubUrl', v)} />
               <Field
                 id="discordUsername"
-                label="Discord username"
+                label="Discord"
                 value={form.discordUsername ?? ''}
                 onChange={(v) => setText('discordUsername', v)}
-                hint="Used to verify you on our Discord server."
+                hint="Used to verify you on our server."
               />
             </div>
-            <div style={{ display: 'flex', gap: 22, marginTop: 20, flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: 20, marginTop: 18, flexWrap: 'wrap' }}>
               <label className="check">
                 <input
                   type="checkbox"
@@ -399,46 +343,16 @@ export default function Profile() {
                   checked={form.nationalMemberApplied ?? false}
                   onChange={(e) => set('nationalMemberApplied', e.target.checked)}
                 />
-                I applied for national ColorStack membership
+                I applied for national membership
               </label>
             </div>
           </div>
 
-          <div className="card fade-in-up fade-delay-2" style={{ marginTop: 20 }}>
-            <div className="card-head" style={{ display: 'block', marginBottom: 8 }}>
-              <h2 className="card-title">What you want from us</h2>
-              <p className="card-sub">
-                1 is not interested, 5 is very interested. This is what we plan the semester around.
-              </p>
-            </div>
-            <div>
-              {INTERESTS.map(([key, label]) => (
-                <div className="interest-row" key={key}>
-                  <span className="interest-label">{label}</span>
-                  <div className="segmented" role="group" aria-label={label}>
-                    {[1, 2, 3, 4, 5].map((n) => (
-                      <span key={n} style={{ position: 'relative' }}>
-                        <input
-                          type="radio"
-                          id={`${key}-${n}`}
-                          name={key}
-                          checked={form[key] === n}
-                          onChange={() => set(key, n)}
-                        />
-                        <label htmlFor={`${key}-${n}`}>{n}</label>
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="card fade-in-up fade-delay-3" style={{ marginTop: 20 }}>
+          <div className="card fade-in-up fade-delay-3" style={{ marginTop: 18 }}>
             <div className="card-head">
               <h2 className="card-title">A bit more</h2>
             </div>
-            <Field id="postGradPlan" label="What do you plan on doing after graduation?">
+            <Field id="postGradPlan" label="Plans after graduation">
               <textarea
                 id="postGradPlan"
                 className="field-input"
@@ -449,25 +363,25 @@ export default function Profile() {
             </Field>
             <Field
               id="allergies"
-              label="Any allergies?"
+              label="Allergies"
               value={form.allergies ?? ''}
               onChange={(v) => setText('allergies', v)}
-              hint="Only used when we order food for an event. Never shared with sponsors."
-              style={{ marginTop: 18 }}
+              hint="Only used when we order food. Never shared."
+              style={{ marginTop: 16 }}
             />
           </div>
 
           {/* Only once something has changed. */}
           {(dirty || saved) && (
-            <div className="save-bar fade-in-up" style={{ marginTop: 20 }}>
+            <div className="save-bar fade-in-up" style={{ marginTop: 18 }}>
               <span className="muted" style={{ fontSize: 13.5 }}>
-                {dirty ? 'You have unsaved changes.' : 'All changes saved.'}
+                {dirty ? 'Unsaved changes' : 'Saved'}
               </span>
-              <div style={{ display: 'flex', gap: 10 }}>
+              <div style={{ display: 'flex', gap: 8 }}>
                 {dirty && (
                   <button
                     type="button"
-                    className="btn-secondary"
+                    className="btn-secondary btn-sm"
                     disabled={busy}
                     onClick={() => {
                       setForm(profile);
@@ -477,7 +391,7 @@ export default function Profile() {
                     Discard
                   </button>
                 )}
-                <button type="submit" className="btn-primary" disabled={busy || !dirty}>
+                <button type="submit" className="btn-primary btn-sm" disabled={busy || !dirty}>
                   {busy ? 'Saving...' : 'Save changes'}
                 </button>
               </div>
@@ -485,22 +399,68 @@ export default function Profile() {
           )}
         </form>
 
-        <div className="card fade-in-up" style={{ marginTop: 20 }}>
-          <div className="card-head" style={{ display: 'block', marginBottom: 16 }}>
+        <div id="resume" className="card fade-in-up" style={{ marginTop: 18, scrollMarginTop: 20 }}>
+          <div className="card-head">
+            <h2 className="card-title">Resume</h2>
+            <span className={profile.resumeShared ? 'pill pill-on' : 'pill pill-off'}>
+              {profile.resumeShared ? 'Shared with sponsors' : 'Private'}
+            </span>
+          </div>
+
+          <div className="resume-drop">
+            <div style={{ flex: '1 1 220px' }}>
+              <p style={{ margin: 0, fontSize: 14.5, fontWeight: 600 }}>
+                {profile.hasResume ? 'resume.pdf' : 'No resume yet'}
+              </p>
+              <p className="card-sub" style={{ margin: '3px 0 0' }}>
+                {profile.hasResume && profile.resumeUploadedAt
+                  ? `Uploaded ${new Date(profile.resumeUploadedAt).toLocaleDateString()}`
+                  : 'PDF, up to 5 MB.'}
+              </p>
+            </div>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              {profile.hasResume ? (
+                <>
+                  <button type="button" className="btn-secondary btn-sm" onClick={openResume}>View</button>
+                  <button type="button" className="btn-secondary btn-sm" disabled={busy} onClick={() => fileInput.current?.click()}>
+                    Replace
+                  </button>
+                  <button type="button" className="btn-secondary btn-sm btn-danger" disabled={busy} onClick={removeResume}>
+                    Remove
+                  </button>
+                </>
+              ) : (
+                <button type="button" className="btn-primary btn-sm" disabled={busy} onClick={() => fileInput.current?.click()}>
+                  {busy ? 'Uploading...' : 'Upload a PDF'}
+                </button>
+              )}
+            </div>
+          </div>
+
+          <input
+            ref={fileInput}
+            type="file"
+            accept="application/pdf"
+            style={{ display: 'none' }}
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) void upload(file);
+            }}
+          />
+        </div>
+
+        <div className="card fade-in-up" style={{ marginTop: 18 }}>
+          <div className="card-head">
             <h2 className="card-title">Personal email</h2>
-            <p className="card-sub">
-              A second address you can sign in with, and where we reach you after you graduate. Your
-              school email always works and cannot be changed here.
-            </p>
           </div>
 
           {emailStep === 'idle' && (
             <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
               <span style={{ fontSize: 14.5, flex: '1 1 220px' }}>
-                {profile.personalEmail ?? 'No personal email on file'}
+                {profile.personalEmail ?? 'Not set'}
               </span>
-              <button type="button" className="btn-secondary" onClick={() => setEmailStep('enter')}>
-                {profile.personalEmail ? 'Change' : 'Add one'}
+              <button type="button" className="btn-secondary btn-sm" onClick={() => setEmailStep('enter')}>
+                {profile.personalEmail ? 'Change' : 'Add'}
               </button>
             </div>
           )}
@@ -519,13 +479,13 @@ export default function Profile() {
                 value={newEmail}
                 placeholder="you@example.com"
                 onChange={setNewEmail}
-                hint="We will send a code there to make sure it reaches you."
+                hint="We will send a code there."
               />
-              <div style={{ display: 'flex', gap: 10, marginTop: 16, flexWrap: 'wrap' }}>
-                <button type="submit" className="btn-primary" disabled={busy || !newEmail.trim()}>
+              <div style={{ display: 'flex', gap: 8, marginTop: 14, flexWrap: 'wrap' }}>
+                <button type="submit" className="btn-primary btn-sm" disabled={busy || !newEmail.trim()}>
                   {busy ? 'Sending...' : 'Send code'}
                 </button>
-                <button type="button" className="btn-secondary" onClick={cancelEmailChange}>
+                <button type="button" className="btn-secondary btn-sm" onClick={cancelEmailChange}>
                   Cancel
                 </button>
               </div>
@@ -539,9 +499,8 @@ export default function Profile() {
                 void confirmEmailChange();
               }}
             >
-              <p className="muted" style={{ fontSize: 13.5, margin: '0 0 14px' }}>
-                We sent a code to <strong style={{ fontWeight: 600 }}>{newEmail}</strong>. Enter it to
-                confirm.
+              <p className="card-sub" style={{ margin: '0 0 12px' }}>
+                Code sent to <strong style={{ fontWeight: 600 }}>{newEmail}</strong>.
               </p>
               <input
                 inputMode="numeric"
@@ -553,88 +512,26 @@ export default function Profile() {
                 value={emailCode}
                 onChange={(e) => setEmailCode(e.target.value.replace(/\D/g, ''))}
               />
-              <div style={{ display: 'flex', gap: 10, marginTop: 16, flexWrap: 'wrap' }}>
-                <button
-                  type="submit"
-                  className="btn-primary"
-                  disabled={busy || emailCode.length !== 6}
-                >
+              <div style={{ display: 'flex', gap: 8, marginTop: 14, flexWrap: 'wrap' }}>
+                <button type="submit" className="btn-primary btn-sm" disabled={busy || emailCode.length !== 6}>
                   {busy ? 'Confirming...' : 'Confirm'}
                 </button>
-                <button type="button" className="btn-secondary" onClick={cancelEmailChange}>
+                <button type="button" className="btn-secondary btn-sm" onClick={cancelEmailChange}>
                   Cancel
                 </button>
               </div>
             </form>
           )}
 
-          {emailError && (
-            <Notice kind="error" style={{ marginTop: 16 }}>
-              {emailError}
-            </Notice>
-          )}
-          {emailNote && !emailError && (
-            <Notice style={{ marginTop: 16 }}>{emailNote}</Notice>
-          )}
+          {emailError && <Notice kind="error" style={{ marginTop: 14 }}>{emailError}</Notice>}
+          {emailNote && !emailError && <Notice style={{ marginTop: 14 }}>{emailNote}</Notice>}
         </div>
 
-        <div className="card fade-in-up" style={{ marginTop: 20 }}>
-          <div className="card-head" style={{ display: 'block', marginBottom: 16 }}>
-            <h2 className="card-title">Resume</h2>
-            <p className="card-sub">
-              PDF, up to 5 MB. Uploading a new one replaces the old one.{' '}
-              {profile.resumeShared ? (
-                <>
-                  Sponsors can see this, which is how members get recruited. Turn that off in{' '}
-                  <Link to="/settings" style={{ textDecoration: 'underline' }}>settings</Link>.
-                </>
-              ) : (
-                'Only you and the chapter officers can see this.'
-              )}
-            </p>
-          </div>
-
-          <div className="resume-drop">
-            <div style={{ flex: '1 1 220px' }}>
-              <p style={{ margin: 0, fontSize: 14.5, fontWeight: 600 }}>
-                {profile.hasResume ? 'resume.pdf' : 'No resume yet'}
-              </p>
-              <p className="muted" style={{ margin: '4px 0 0', fontSize: 12.5 }}>
-                {profile.hasResume && profile.resumeUploadedAt
-                  ? `Uploaded ${new Date(profile.resumeUploadedAt).toLocaleDateString()}`
-                  : 'This is the one thing sponsors always ask for.'}
-              </p>
-            </div>
-            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-              {profile.hasResume ? (
-                <>
-                  <button type="button" className="btn-secondary" onClick={openResume}>View</button>
-                  <button type="button" className="btn-secondary" disabled={busy} onClick={() => fileInput.current?.click()}>
-                    Replace
-                  </button>
-                  <button type="button" className="btn-secondary" disabled={busy} onClick={removeResume}>
-                    Remove
-                  </button>
-                </>
-              ) : (
-                <button type="button" className="btn-primary" disabled={busy} onClick={() => fileInput.current?.click()}>
-                  {busy ? 'Uploading...' : 'Upload a PDF'}
-                </button>
-              )}
-            </div>
-          </div>
-
-          <input
-            ref={fileInput}
-            type="file"
-            accept="application/pdf"
-            style={{ display: 'none' }}
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) void upload(file);
-            }}
-          />
-        </div>
+        <p style={{ marginTop: 18 }}>
+          <Link to="/settings" className="muted" style={{ fontSize: 13 }}>
+            Sharing and account settings &rarr;
+          </Link>
+        </p>
       </div>
     </section>
   );

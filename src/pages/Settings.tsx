@@ -9,12 +9,9 @@ import Notice from '../components/Notice';
 /**
  * Where a member changes their mind about sponsor visibility, and signs out.
  *
- * Sharing is on by default, since getting members in front of recruiters is the point of
- * the resume book, so this page is where someone opts out rather than in.
- *
- * It lives on its own page and its own endpoint rather than as a checkbox on the profile
- * form. Saving a major should never be the thing that changes who can see a resume, so
- * every change here is a deliberate act.
+ * Sharing is on by default, so this page is where someone opts out rather than in. It has
+ * its own page and its own endpoint rather than being a checkbox on the profile form:
+ * saving a major should never be the thing that changes who can see a resume.
  */
 function message(e: unknown): string {
   return e instanceof ApiError ? e.message : 'Something went wrong. Try again in a moment.';
@@ -70,12 +67,11 @@ export default function Settings() {
         ) : (
           <>
             <div className="card fade-in-up fade-delay-1" style={{ marginTop: 20 }}>
-              <div className="card-head" style={{ display: 'block', marginBottom: 18 }}>
-                <h2 className="card-title">Sponsors and recruiters</h2>
+              <div className="card-head" style={{ display: 'block', marginBottom: 16 }}>
+                <h2 className="card-title">Sponsor visibility</h2>
                 <p className="card-sub">
-                  Our sponsors ask for a resume book as part of their partnership, and your resume is in it by
-                  default. Turning this off keeps it visible only to you and the chapter officers. Nothing else on
-                  your profile is shared either way, and your allergies never are.
+                  Sponsors get a resume book as part of their partnership. Turning this off keeps
+                  yours visible only to the chapter officers.
                 </p>
               </div>
 
@@ -88,16 +84,14 @@ export default function Settings() {
                 />
                 <span className="switch-track" />
                 <span style={{ fontSize: 14.5 }}>
-                  {profile.resumeShared
-                    ? 'My resume is visible to sponsors'
-                    : 'My resume is private'}
+                  {profile.resumeShared ? 'Visible to sponsors' : 'Private'}
                 </span>
               </label>
 
               {!profile.hasResume && profile.resumeShared && (
-                <Notice kind="warn" style={{ marginTop: 18 }}>
-                  You have not uploaded a resume yet, so there is nothing to share.{' '}
-                  <Link to="/profile" style={{ textDecoration: 'underline' }}>Upload one</Link>.
+                <Notice kind="warn" style={{ marginTop: 16 }}>
+                  No resume uploaded yet, so there is nothing to share.{' '}
+                  <Link to="/profile#resume" style={{ textDecoration: 'underline' }}>Upload one</Link>.
                 </Notice>
               )}
             </div>
@@ -107,18 +101,12 @@ export default function Settings() {
                 <h2 className="card-title">Account</h2>
                 <p className="card-sub">Signed in as {profile.email}.</p>
               </div>
-              <button type="button" className="btn-secondary" onClick={onSignOut}>
+              <button type="button" className="btn-secondary btn-sm" onClick={onSignOut}>
                 Sign out
               </button>
             </div>
           </>
         )}
-
-        <p style={{ marginTop: 20 }}>
-          <Link to="/profile" style={{ fontSize: 13, textDecoration: 'underline' }}>
-            Back to my profile
-          </Link>
-        </p>
       </div>
     </section>
   );

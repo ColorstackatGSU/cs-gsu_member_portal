@@ -2,21 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Design tokens ported from cs-gsu_official_website/src/index.css.
-   Keep these in sync with the main site. They are the source of truth for the
-   look, not tailwind.config.js. Montserrat is loaded in index.html. */
+/* Design tokens. Montserrat is loaded in index.html and matches the main site.
+
+   The portal runs light. The marketing site is dark because it is selling
+   something; this is a tool a member opens to check facts about themselves, and
+   long forms and dense label/value rows are simply easier to read as dark text
+   on white. */
 :root {
   --gsu-blue: #0039A6;
   --gsu-blue-dim: #002a7a;
-  --gsu-blue-bright: #1d56c9;
   --gsu-red: #CC0000;
-  --gsu-red-dark: #a30000;
+
+  /* From the GSU Identity & Communications ToolKit secondary chart
+     (commkit.gsu.edu/website-management/web-color-guidelines/). Cool Blue is the
+     lighter blue the portal leads with: #0039A6 is nearly black at small sizes.
+     The ToolKit names #0071CE the accessible stand-in for Vibrant Blue (#00AEEF),
+     which fails contrast for small text, so Vibrant is used for fills only. */
+  --gsu-cool: #0071CE;
+  --gsu-cool-dim: #005ba8; /* hover, and links on white */
+  --gsu-vibrant: #00AEEF;
   --gsu-sky: #97CAEB;
-  --ink: #ffffff;
-  --paper: #091024;
-  --paper-warm: #0d152d;
-  --line: rgba(255, 255, 255, 0.1);
-  --line-strong: rgba(255, 255, 255, 0.2);
+  --gsu-steel: #374057;
+
+  --ink: #091024;
+  --muted: rgba(9, 16, 36, 0.58);
+  --faint: rgba(9, 16, 36, 0.38);
+  --paper: #f4f6fa;
+  --surface: #ffffff;
+  --line: rgba(9, 16, 36, 0.09);
+  --line-strong: rgba(9, 16, 36, 0.16);
+
   --mono: 'Montserrat', system-ui, sans-serif;
   --display: 'Montserrat', system-ui, sans-serif;
 }
@@ -31,7 +46,7 @@
     overflow-x: hidden;
     width: 100%;
     max-width: 100vw;
-    line-height: 1.4;
+    line-height: 1.45;
     -webkit-font-smoothing: antialiased;
   }
   a { color: inherit; text-decoration: none; }
@@ -39,18 +54,20 @@
   h1, h2, h3, h4 { font-family: var(--display); }
 }
 
+.muted { color: var(--muted); }
+
 /* ============ PAGE FADE-IN ============ */
 @keyframes fade-in-up {
-  from { opacity: 0; transform: translateY(24px); }
+  from { opacity: 0; transform: translateY(18px); }
   to   { opacity: 1; transform: none; }
 }
 .fade-in-up {
   opacity: 0;
-  animation: fade-in-up 0.6s cubic-bezier(.2,.6,.2,1) both;
+  animation: fade-in-up 0.5s cubic-bezier(.2,.6,.2,1) both;
 }
-.fade-delay-1 { animation-delay: 0.1s; }
-.fade-delay-2 { animation-delay: 0.2s; }
-.fade-delay-3 { animation-delay: 0.3s; }
+.fade-delay-1 { animation-delay: 0.07s; }
+.fade-delay-2 { animation-delay: 0.14s; }
+.fade-delay-3 { animation-delay: 0.21s; }
 
 @media (prefers-reduced-motion: reduce) {
   .fade-in-up { opacity: 1; animation: none; }
@@ -62,20 +79,20 @@
   font-size: 11px;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--gsu-sky);
+  color: var(--gsu-cool);
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 .section-eyebrow::before {
   content: '';
-  width: 32px; height: 1px;
-  background: var(--gsu-sky);
+  width: 28px; height: 1px;
+  background: var(--gsu-cool);
   display: inline-block;
 }
 
-/* ============ NAV ============ */
+/* ============ NAV (signed out) ============ */
 .nav-logo-img { height: 36px; width: 36px; }
 .nav-brand-text { font-size: 14px; }
 
@@ -85,7 +102,7 @@
   .nav-brand-text { font-size: 14px; }
 }
 
-/* ============ PHOTO MOSAIC ============ */
+/* ============ PHOTO MOSAIC (auth pages) ============ */
 /* Fixed so it never scrolls with the form. Inset negatively and scaled up because
    rotating a full-bleed grid exposes the corners otherwise. */
 .mosaic {
@@ -130,10 +147,8 @@
   flex-shrink: 0;
 }
 
-/* Eleven columns is dense on a phone: the tiles get too small to read as photos.
-   Drop to five and let each one stay legible. */
 /* Six columns is dense on a phone: the tiles get too small to read as photos.
-   Drop to three and let each one stay legible. Hidden lazy columns are not fetched. */
+   Drop to three and let each one stay legible. Hidden columns are not fetched. */
 @media (max-width: 768px) {
   .mosaic-grid { inset: -25% -20%; }
   .mosaic-col:nth-child(n + 4) { display: none; }
@@ -154,23 +169,22 @@
   .mosaic-col { animation: none; }
 }
 
-/* ============ PORTAL SHELL ============ */
-/* The portal is a narrow app, not a marketing page: one centred column that
-   clears the floating navbar. */
-.portal-pad { padding: 140px 32px 96px; }
+/* ============ PAGE PADDING ============ */
+/* Inside the sidebar shell the top bar supplies the clearance the old floating
+   navbar needed, so this is ordinary page padding now. */
+.portal-pad { padding: 20px 40px 72px; }
 
 @media (max-width: 768px) {
-  .portal-pad { padding: 110px 20px 64px; }
+  .portal-pad { padding: 18px 20px 56px; }
   .container-wide { padding-left: 20px !important; padding-right: 20px !important; }
 }
 
 /* ============ AUTH PAGE FIT ============
    Sign in and activation are short forms, so scrolling them feels broken. These
-   pin the page to exactly one viewport and centre the card in it.
+   pin the page to one viewport and centre the card in it.
 
    main keeps overflow-y:auto on purpose: on a very short viewport (landscape
-   phone, small laptop) the content still has to be reachable. Clipping the sign
-   in button would be a worse bug than a scrollbar. */
+   phone, small laptop) the content still has to be reachable. */
 .auth-page {
   height: 100vh;
   height: 100dvh;
@@ -183,6 +197,8 @@
   justify-content: center;
   overflow-y: auto;
   padding: 104px 0 44px; /* clears the floating navbar and the status pill */
+  position: relative;
+  z-index: 1;
 }
 
 .auth-pad { width: 100%; }
@@ -195,7 +211,7 @@
   transform: translateX(-50%);
   z-index: 2;
   margin: 0;
-  width: fit-content;   /* a block <p> would otherwise stretch the full viewport */
+  width: fit-content;
   max-width: calc(100% - 32px);
   white-space: nowrap;
   overflow: hidden;
@@ -229,134 +245,114 @@
     @apply mx-auto w-full max-w-[1400px] px-8;
   }
 
-  /* Bordered panel on the warm paper tone: the portal's main content surface. */
-  .panel {
-    background: var(--paper-warm);
-    border: 1px solid var(--line);
-    border-radius: 20px;
-    padding: 32px;
-  }
-
   .field-label {
     font-family: var(--mono);
     font-size: 11px;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.55);
+    color: var(--muted);
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 7px;
   }
 
   .field-input {
     width: 100%;
     font-family: var(--display);
     font-size: 15px;
-    padding: 14px 16px;
-    background: rgba(255, 255, 255, 0.04);
+    padding: 12px 14px;
+    background: #ffffff;
     color: var(--ink);
     border: 1px solid var(--line-strong);
-    border-radius: 12px;
-    transition: border-color 0.2s, background 0.2s;
+    border-radius: 10px;
+    transition: border-color 0.15s, box-shadow 0.15s;
   }
-  .field-input::placeholder { color: rgba(255, 255, 255, 0.35); }
-  .field-input:focus {
+  .field-input::placeholder { color: var(--faint); }
+  .field-input:focus,
+  .field-input:focus-visible {
     outline: none;
-    border-color: var(--gsu-blue-bright);
-    background: rgba(255, 255, 255, 0.07);
+    border-color: var(--gsu-cool);
+    box-shadow: 0 0 0 3px rgba(0, 113, 206, 0.16);
   }
   .field-input:disabled {
-    opacity: 0.5;
+    background: rgba(9, 16, 36, 0.035);
+    color: var(--muted);
     cursor: not-allowed;
   }
 
   .btn-primary {
-    font-family: var(--mono);
-    font-size: 13px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    padding: 16px 28px;
-    background: var(--gsu-blue);
-    color: white;
-    border-radius: 999px;
-    transition: all 0.2s;
+    font-family: var(--display);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 22px;
+    background: var(--gsu-cool);
+    color: #ffffff;
+    border-radius: 10px;
+    transition: background 0.15s, box-shadow 0.15s;
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    gap: 8px;
     text-decoration: none;
-    font-weight: 600;
   }
-  .btn-primary:hover:not(:disabled) {
-    background: var(--gsu-blue-bright);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px -10px rgba(0,57,166,0.6);
-  }
-  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-primary:hover:not(:disabled) { background: var(--gsu-cool-dim); }
+  .btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(0, 113, 206, 0.3); }
+  .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
 
   .btn-secondary {
-    font-family: var(--mono);
-    font-size: 13px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    padding: 16px 28px;
-    background: transparent;
+    font-family: var(--display);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 22px;
+    background: #ffffff;
     color: var(--ink);
     border: 1px solid var(--line-strong);
-    border-radius: 999px;
-    transition: all 0.2s;
+    border-radius: 10px;
+    transition: background 0.15s, border-color 0.15s;
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    gap: 8px;
     text-decoration: none;
   }
-  .btn-secondary:hover {
-    border-color: var(--gsu-sky);
-    color: var(--gsu-sky);
+  .btn-secondary:hover:not(:disabled) { background: rgba(9, 16, 36, 0.04); border-color: var(--line-strong); }
+  .btn-secondary:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(0, 113, 206, 0.25); }
+  .btn-secondary:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  /* Inline actions inside cards and list rows, where a full-size button shouts. */
+  .btn-sm {
+    font-size: 13px;
+    padding: 8px 14px;
+    border-radius: 9px;
+    flex: none;
+    align-self: flex-start;
   }
 
-  /* Sits on solid GSU-blue bands, mirroring the main site's accent CTA. */
-  .btn-accent {
-    font-family: var(--mono);
-    font-size: 13px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    padding: 16px 28px;
-    background: #ffffff;
-    color: var(--gsu-blue);
-    border-radius: 999px;
-    transition: all 0.2s;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-    font-weight: 600;
+  .btn-danger {
+    color: var(--gsu-red);
+    border-color: rgba(204, 0, 0, 0.28);
   }
-  .btn-accent:hover {
-    background: var(--gsu-sky);
-    color: var(--gsu-blue-dim);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-  }
+  .btn-danger:hover:not(:disabled) { background: rgba(204, 0, 0, 0.05); }
 
   /* The 6-digit code input. Wide tracking so six digits read as six digits. */
   .code-input {
     width: 100%;
     font-family: var(--mono);
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 600;
     letter-spacing: 0.4em;
     text-align: center;
     text-indent: 0.4em; /* offsets the trailing letter-space so digits look centred */
-    padding: 18px 16px;
-    background: rgba(255, 255, 255, 0.04);
+    padding: 16px;
+    background: #ffffff;
     color: var(--ink);
     border: 1px solid var(--line-strong);
-    border-radius: 12px;
+    border-radius: 10px;
   }
-  .code-input::placeholder { color: rgba(255, 255, 255, 0.2); }
+  .code-input::placeholder { color: var(--faint); }
   .code-input:focus {
     outline: none;
-    border-color: var(--gsu-blue-bright);
-    background: rgba(255, 255, 255, 0.07);
+    border-color: var(--gsu-cool);
+    box-shadow: 0 0 0 3px rgba(0, 113, 206, 0.16);
   }
 
   /* "or" rule separating the sign-in and activation paths. */
@@ -364,12 +360,12 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    margin: 28px 0;
+    margin: 24px 0;
     font-family: var(--mono);
     font-size: 11px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.35);
+    color: var(--faint);
   }
   .divider-or::before,
   .divider-or::after {
@@ -380,365 +376,429 @@
   }
 
   .notice-info {
-    border: 1px solid rgba(151, 202, 235, 0.35);
-    background: rgba(151, 202, 235, 0.08);
-    border-radius: 12px;
-    padding: 16px 18px;
-    font-size: 14px;
+    border: 1px solid rgba(0, 113, 206, 0.22);
+    background: rgba(0, 113, 206, 0.06);
+    border-radius: 10px;
+    padding: 13px 15px;
+    font-size: 13.5px;
     line-height: 1.5;
-    color: #dceefb;
+    color: #14406b;
   }
 
   /* Banner marking screens that are UI-only walkthroughs, not working auth. */
   .notice-preview {
-    border: 1px dashed rgba(255, 255, 255, 0.3);
-    border-radius: 12px;
-    padding: 12px 16px;
+    border: 1px dashed var(--line-strong);
+    border-radius: 10px;
+    padding: 11px 15px;
     font-family: var(--mono);
     font-size: 11px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.45);
+    color: var(--muted);
   }
 
   /* Amber, for the one message that is neither news nor a failure: telling a member
-     their profile is not visible to recruiters. Declining to share a resume is a
-     legitimate choice, so this must be noticeable without reading as an error. */
+     their profile is not visible to recruiters. Opting out is a legitimate choice,
+     so this must be noticeable without reading as an error. */
   .notice-warn {
-    border: 1px solid rgba(245, 179, 66, 0.4);
-    background: rgba(245, 179, 66, 0.1);
-    border-radius: 12px;
-    padding: 16px 18px;
-    font-size: 14px;
+    border: 1px solid rgba(180, 120, 10, 0.3);
+    background: rgba(245, 179, 66, 0.12);
+    border-radius: 10px;
+    padding: 13px 15px;
+    font-size: 13.5px;
     line-height: 1.5;
-    color: #ffe4b5;
-  }
-
-  /* Rejection / error state. Used by the "not a member" block on login. */
-  .notice-error {
-    border: 1px solid rgba(204, 0, 0, 0.5);
-    background: rgba(204, 0, 0, 0.1);
-    border-radius: 12px;
-    padding: 16px 18px;
-    font-size: 14px;
-    line-height: 1.5;
-    color: #ffd9d9;
-  }
-
-  /* ===== LIGHT AUTH SURFACE =====
-     Login and Activate float a white card over the photo mosaic. Everything below
-     re-tints the shared components for a light background. The signed-in Profile
-     page keeps the dark treatment, so these are deliberately scoped to .auth-card. */
-  .auth-card {
-    position: relative;
-    z-index: 1;
-    background: #ffffff;
-    color: #091024;
-    border: 1px solid rgba(9, 16, 36, 0.08);
-    border-radius: 22px;
-    padding: 28px;
-    box-shadow: 0 30px 70px -20px rgba(9, 16, 36, 0.45);
-  }
-
-  /* Auth forms are height-constrained, so they run tighter than the dark pages. */
-  .auth-card .field-input { padding: 12px 14px; }
-  .auth-card .btn-primary,
-  .auth-card .btn-secondary { padding: 14px 24px; }
-  .auth-card .divider-or { margin: 20px 0; }
-  .auth-card .notice-info,
-  .auth-card .notice-warn,
-  .auth-card .notice-error { padding: 12px 14px; font-size: 13px; }
-
-  .auth-card .field-label { color: rgba(9, 16, 36, 0.55); }
-
-  .auth-card .field-input,
-  .auth-card .code-input {
-    background: rgba(9, 16, 36, 0.03);
-    color: #091024;
-    border-color: rgba(9, 16, 36, 0.15);
-  }
-  .auth-card .field-input::placeholder,
-  .auth-card .code-input::placeholder { color: rgba(9, 16, 36, 0.3); }
-  .auth-card .field-input:focus,
-  .auth-card .code-input:focus {
-    border-color: var(--gsu-blue);
-    background: rgba(0, 57, 166, 0.04);
-  }
-
-  .auth-card .btn-secondary {
-    color: var(--gsu-blue);
-    border-color: rgba(0, 57, 166, 0.35);
-  }
-  .auth-card .btn-secondary:hover {
-    border-color: var(--gsu-blue);
-    background: rgba(0, 57, 166, 0.06);
-    color: var(--gsu-blue-dim);
-  }
-
-  .auth-card .divider-or { color: rgba(9, 16, 36, 0.4); }
-  .auth-card .divider-or::before,
-  .auth-card .divider-or::after { background: rgba(9, 16, 36, 0.12); }
-
-  .auth-card .notice-info {
-    border-color: rgba(0, 57, 166, 0.2);
-    background: rgba(0, 57, 166, 0.05);
-    color: #1c3057;
-  }
-
-  .auth-card .notice-error {
-    border-color: rgba(204, 0, 0, 0.35);
-    background: rgba(204, 0, 0, 0.05);
-    color: #8a1414;
-  }
-
-  .auth-card .notice-warn {
-    border-color: rgba(180, 120, 10, 0.35);
-    background: rgba(245, 179, 66, 0.09);
     color: #7a5209;
   }
 
-  .auth-card .muted { color: rgba(9, 16, 36, 0.55); }
-  .auth-card a { color: var(--gsu-blue); }
+  .notice-error {
+    border: 1px solid rgba(204, 0, 0, 0.3);
+    background: rgba(204, 0, 0, 0.05);
+    border-radius: 10px;
+    padding: 13px 15px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: #8a1414;
+  }
+
+  /* The card the auth pages float over the mosaic. Everything inside it already
+     inherits the light treatment, so it only needs the lift. */
+  .auth-card {
+    position: relative;
+    z-index: 1;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 26px;
+    box-shadow: 0 24px 60px -20px rgba(9, 16, 36, 0.4);
+  }
+
+  .auth-card a { color: var(--gsu-cool-dim); }
 }
 
-/* Text sitting directly on the mosaic (headings, footer, preview banner) rather
-   than inside the card. Needs the dark ink, not the dark-theme white. */
-.auth-page .auth-heading { color: #091024; }
-.auth-page .auth-sub { color: rgba(9, 16, 36, 0.6); }
-.auth-page .section-eyebrow { color: var(--gsu-blue); }
-.auth-page .section-eyebrow::before { background: var(--gsu-blue); }
+/* Text sitting directly on the mosaic rather than inside the card. */
+.auth-page .auth-sub { color: var(--muted); }
 
 .auth-page .notice-preview {
   position: relative;
   z-index: 1;
-  border-color: rgba(9, 16, 36, 0.25);
-  color: rgba(9, 16, 36, 0.5);
-  background: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.6);
 }
 
 .auth-page .portal-footer {
   position: relative;
   z-index: 1;
-  border-top-color: rgba(9, 16, 36, 0.12);
-  color: rgba(9, 16, 36, 0.55);
   background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
-.auth-page .portal-footer a { color: var(--gsu-blue); }
-
-/* Keeps page content above the fixed mosaic. */
-.auth-page main { position: relative; z-index: 1; }
-
-@media (max-width: 480px) {
-  .btn-primary, .btn-secondary, .btn-accent { justify-content: center; }
-}
 
 /* ===========================================================================
    SIGNED-IN PORTAL
-   ===========================================================================
-   Everything below is the member-facing app: profile and settings. The auth
-   screens keep the light card over the mosaic; this is the dark surface.
+   =========================================================================== */
 
-   The visual job here differs from the marketing site. A member arrives to
-   check or correct facts about themselves, so the layout leads with who they
-   are, then breaks the form into small cards that can each be scanned in one
-   glance, rather than one long undifferentiated column of inputs. */
+/* ============ SIDEBAR SHELL ============
+   Navigation lives down the left edge rather than in a floating pill. The portal
+   has a small fixed set of destinations and they read better as labelled rows
+   than as tabs competing for space. It also frees the top of the content column,
+   which is where the chapter mark sits. */
 
+.app-shell {
+  display: grid;
+  grid-template-columns: 236px minmax(0, 1fr);
+  min-height: 100vh;
+  background: var(--paper);
+}
+
+.app-sidebar {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 22px 14px;
+  border-right: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.app-sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 10px 16px;
+}
+
+.app-sidebar-brand img { width: 32px; height: 32px; border-radius: 50%; display: block; flex: none; }
+
+.app-sidebar-brand span {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+.app-nav { display: flex; flex-direction: column; gap: 2px; }
+
+.app-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 11px;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  transition: background 0.13s, color 0.13s;
+}
+.app-nav-link:hover { background: rgba(9, 16, 36, 0.045); color: var(--ink); }
+.app-nav-link svg { flex: none; }
+.app-nav-link:focus-visible { outline: none; box-shadow: 0 0 0 2px rgba(0, 113, 206, 0.35); }
+
+.app-nav-link-active {
+  background: rgba(0, 113, 206, 0.09);
+  color: var(--gsu-cool-dim);
+  font-weight: 600;
+}
+.app-nav-link-active:hover { background: rgba(0, 113, 206, 0.13); color: var(--gsu-cool-dim); }
+
+.app-sidebar-foot {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+/* Sign out is a nav row too, but it must not read as a destination. */
+.app-nav-link-quiet { color: var(--faint); font-size: 13px; width: 100%; text-align: left; }
+
+/* The strip above the page content, holding the chapter mark on the right. */
+.app-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  padding: 18px 40px 0;
+}
+
+.app-topbar-logo { display: flex; align-items: center; gap: 9px; }
+.app-topbar-logo img { width: 32px; height: 32px; border-radius: 50%; display: block; }
+.app-topbar-logo span {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+/* Below this the nav becomes a scrollable row pinned to the top, the one place
+   it can go without stealing content width. */
+@media (max-width: 900px) {
+  .app-shell { grid-template-columns: minmax(0, 1fr); }
+  .app-sidebar {
+    position: static;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 10px 14px;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+  .app-sidebar-brand { padding: 0 6px 0 0; }
+  .app-sidebar-brand span { display: none; }
+  .app-nav { flex-direction: row; gap: 3px; }
+  .app-nav-link { white-space: nowrap; padding: 8px 11px; }
+  .app-sidebar-foot {
+    margin-top: 0;
+    margin-left: auto;
+    flex-direction: row;
+    padding-top: 0;
+    border-top: none;
+  }
+  .app-topbar { padding: 14px 20px 0; }
+}
+
+/* ============ CARDS ============ */
 .card {
-  background: var(--paper-warm);
+  background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 20px;
-  padding: 26px 28px;
+  border-radius: 14px;
+  padding: 22px 24px;
 }
 
 .card-head {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 20px;
+  gap: 14px;
+  margin-bottom: 16px;
 }
 
 .card-title {
-  font-family: var(--display);
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 700;
   letter-spacing: -0.01em;
   margin: 0;
 }
 
 .card-sub {
-  font-size: 13.5px;
+  font-size: 13px;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.55);
-  margin: 6px 0 0;
+  color: var(--muted);
+  margin: 5px 0 0;
 }
 
-/* The identity header. Reads as a membership card rather than a page title,
-   which is the point: it is the one place that says the portal knows you. */
-.identity {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
+/* ============ COLUMNS ============ */
+.app-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 316px;
+  gap: 18px;
+  align-items: start;
 }
+
+.app-rail { display: grid; gap: 18px; position: sticky; top: 18px; }
+
+@media (max-width: 1080px) {
+  .app-columns { grid-template-columns: minmax(0, 1fr); }
+  .app-rail { position: static; }
+}
+
+/* ============ IDENTITY ============ */
+.identity { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
 
 .avatar {
-  width: 64px;
-  height: 64px;
+  width: 56px;
+  height: 56px;
   flex: none;
-  border-radius: 20px;
+  border-radius: 16px;
   display: grid;
   place-items: center;
-  font-family: var(--display);
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
   color: #ffffff;
-  background: linear-gradient(140deg, var(--gsu-blue-bright), var(--gsu-blue-dim));
-  box-shadow: 0 10px 30px -10px rgba(29, 86, 201, 0.8);
+  background: linear-gradient(140deg, var(--gsu-vibrant), var(--gsu-cool));
 }
 
-.chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.chip-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 9px; }
 
 .chip {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--line-strong);
-  background: rgba(255, 255, 255, 0.04);
+  padding: 4px 10px;
+  border-radius: 7px;
+  background: rgba(9, 16, 36, 0.05);
   font-size: 12.5px;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--muted);
   white-space: nowrap;
 }
 
 .chip-accent {
-  border-color: rgba(151, 202, 235, 0.35);
-  background: rgba(151, 202, 235, 0.1);
-  color: var(--gsu-sky);
+  background: rgba(0, 113, 206, 0.1);
+  color: var(--gsu-cool-dim);
+  font-weight: 600;
 }
 
-/* How complete the profile is. Sponsors ask for this data, so the honest way to
-   get it filled in is to show what is missing rather than nag on every save. */
-.meter {
-  height: 6px;
+/* Small on/off state marker in a card header. */
+.pill {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 4px 9px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  overflow: hidden;
+  flex: none;
+}
+.pill-on { background: rgba(0, 113, 206, 0.11); color: var(--gsu-cool-dim); }
+.pill-off { background: rgba(9, 16, 36, 0.07); color: var(--muted); }
+
+/* ============ COMPLETENESS ============ */
+/* A ring rather than a bar: in the rail it sits beside a block of text, and a
+   6px bar disappears there. */
+.ring { display: flex; align-items: center; gap: 15px; }
+.ring svg { flex: none; transform: rotate(-90deg); }
+.ring-track { stroke: rgba(9, 16, 36, 0.09); }
+.ring-fill {
+  stroke: var(--gsu-cool);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 520ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.meter { height: 6px; border-radius: 999px; background: rgba(9, 16, 36, 0.08); overflow: hidden; }
 .meter-fill {
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--gsu-blue-bright), var(--gsu-sky));
+  background: linear-gradient(90deg, var(--gsu-cool), var(--gsu-vibrant));
   transition: width 420ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .ring-fill, .meter-fill { transition: none; }
+}
+
+/* ============ READ VIEW ============
+   Facts from the intake form, shown as label/value rows rather than twenty input
+   boxes so the page answers "does this thing know me" at a glance. */
+.spec-list { display: grid; }
+
+.spec-row {
+  display: grid;
+  grid-template-columns: 148px minmax(0, 1fr);
+  gap: 16px;
+  align-items: baseline;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.spec-row:first-child { padding-top: 0; }
+.spec-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+.spec-key { font-size: 13px; color: var(--muted); }
+.spec-val { font-size: 14.5px; word-break: break-word; }
+.spec-val-empty { color: var(--faint); }
+
+@media (max-width: 560px) {
+  .spec-row { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+}
+
+/* ============ SUGGESTIONS ============ */
+.todo-list { display: grid; }
+
+.todo-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+.todo-row:first-child { padding-top: 0; }
+.todo-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+.todo-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: none;
+  margin-top: 7px;
+  background: rgba(9, 16, 36, 0.22);
+}
+.todo-dot-urgent { background: var(--gsu-cool); }
+
+.empty-state { display: flex; align-items: center; gap: 12px; }
+.empty-tick {
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 113, 206, 0.1);
+  color: var(--gsu-cool);
+}
+
+/* ============ FORM BITS ============ */
 .field-grid {
   display: grid;
-  gap: 18px;
+  gap: 16px;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-}
-
-/* Inputs get a visible focus ring. The default outline disappears against a
-   dark panel, and a form nobody can tab through is not accessible. */
-.field-input:focus-visible,
-select.field-input:focus-visible,
-textarea.field-input:focus-visible {
-  outline: none;
-  border-color: var(--gsu-blue-bright);
-  box-shadow: 0 0 0 3px rgba(29, 86, 201, 0.28);
-}
-
-.field-input:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
 }
 
 select.field-input {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 8%22%3E%3Cpath fill=%22%23ffffff%22 fill-opacity=%220.5%22 d=%22M1 1.5 6 6.5l5-5%22/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 8%22%3E%3Cpath fill=%22none%22 stroke=%22%23091024%22 stroke-opacity=%220.5%22 stroke-width=%221.6%22 d=%22M1 1.5 6 6.5l5-5%22/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 16px center;
+  background-position: right 14px center;
   background-size: 11px;
-  padding-right: 40px;
+  padding-right: 38px;
 }
 
-textarea.field-input { resize: vertical; min-height: 84px; line-height: 1.55; }
+textarea.field-input { resize: vertical; min-height: 80px; line-height: 1.55; }
 
-/* The 1-to-5 interest questions, as a segmented control rather than bare radio
-   dots. Six stacked radio groups is the ugliest part of any long form and the
-   hardest to answer quickly on a phone. */
-.segmented { display: inline-flex; gap: 4px; }
-
-.segmented input { position: absolute; opacity: 0; pointer-events: none; }
-
-.segmented label {
-  min-width: 38px;
-  height: 34px;
-  display: grid;
-  place-items: center;
-  padding: 0 4px;
-  border-radius: 10px;
-  border: 1px solid var(--line-strong);
-  background: rgba(255, 255, 255, 0.03);
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.6);
-  cursor: pointer;
-  transition: background 140ms ease, border-color 140ms ease, color 140ms ease;
-}
-
-.segmented label:hover { border-color: rgba(151, 202, 235, 0.5); color: #ffffff; }
-
-.segmented input:checked + label {
-  background: var(--gsu-blue);
-  border-color: var(--gsu-blue-bright);
-  color: #ffffff;
-  font-weight: 600;
-}
-
-.segmented input:focus-visible + label {
-  box-shadow: 0 0 0 3px rgba(29, 86, 201, 0.35);
-}
-
-.interest-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-  padding: 11px 0;
-  border-bottom: 1px solid var(--line);
-}
-.interest-row:last-child { border-bottom: none; }
-.interest-label { flex: 1 1 220px; font-size: 14px; }
-
-/* Checkbox and toggle. A native checkbox on a dark panel renders as a small
-   white box with no visible association to its label, so both get restyled. */
 .check {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 9px;
   font-size: 14px;
   cursor: pointer;
   user-select: none;
 }
-.check input { width: 17px; height: 17px; accent-color: var(--gsu-blue-bright); cursor: pointer; }
+.check input { width: 16px; height: 16px; accent-color: var(--gsu-cool); cursor: pointer; }
 
 .switch { display: inline-flex; align-items: center; gap: 12px; cursor: pointer; }
 .switch input { position: absolute; opacity: 0; pointer-events: none; }
 
 .switch-track {
-  width: 46px;
-  height: 26px;
+  width: 44px;
+  height: 25px;
   flex: none;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.14);
-  border: 1px solid var(--line-strong);
+  background: rgba(9, 16, 36, 0.18);
   position: relative;
-  transition: background 180ms ease, border-color 180ms ease;
+  transition: background 0.16s;
 }
 
 .switch-track::after {
@@ -746,22 +806,20 @@ textarea.field-input { resize: vertical; min-height: 84px; line-height: 1.55; }
   position: absolute;
   top: 3px;
   left: 3px;
-  width: 18px;
-  height: 18px;
+  width: 19px;
+  height: 19px;
   border-radius: 50%;
   background: #ffffff;
-  transition: transform 180ms cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(9, 16, 36, 0.3);
+  transition: transform 0.16s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.switch input:checked + .switch-track {
-  background: var(--gsu-blue);
-  border-color: var(--gsu-blue-bright);
-}
-.switch input:checked + .switch-track::after { transform: translateX(20px); }
-.switch input:focus-visible + .switch-track { box-shadow: 0 0 0 3px rgba(29, 86, 201, 0.35); }
+.switch input:checked + .switch-track { background: var(--gsu-cool); }
+.switch input:checked + .switch-track::after { transform: translateX(19px); }
+.switch input:focus-visible + .switch-track { box-shadow: 0 0 0 3px rgba(0, 113, 206, 0.3); }
 
-/* The save bar only appears once something has changed, so the page stays calm
-   while reading and is unmissable once editing. */
+/* Only appears once something has changed, so the page stays calm while reading
+   and is unmissable once editing. */
 .save-bar {
   position: sticky;
   bottom: 16px;
@@ -769,53 +827,43 @@ textarea.field-input { resize: vertical; min-height: 84px; line-height: 1.55; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 14px;
   flex-wrap: wrap;
-  padding: 14px 18px;
-  border-radius: 16px;
+  padding: 12px 16px;
+  border-radius: 12px;
   border: 1px solid var(--line-strong);
-  background: rgba(13, 21, 45, 0.92);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.9);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 12px 32px -12px rgba(9, 16, 36, 0.35);
 }
 
 .resume-drop {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   flex-wrap: wrap;
-  padding: 18px;
-  border-radius: 16px;
+  padding: 16px;
+  border-radius: 12px;
   border: 1px dashed var(--line-strong);
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(9, 16, 36, 0.015);
 }
 
-.portal-tabs { display: flex; gap: 6px; }
-
-.portal-tab {
-  padding: 7px 16px;
-  border-radius: 999px;
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  font-weight: 500;
-  color: rgba(9, 16, 36, 0.6);
-  transition: background 140ms ease, color 140ms ease;
+/* ============ FOOTER ============ */
+.portal-footer {
+  border-top: 1px solid var(--line);
+  padding: 24px 0;
+  color: var(--faint);
 }
-.portal-tab:hover { background: rgba(9, 16, 36, 0.06); color: #091024; }
-.portal-tab-active { background: var(--gsu-blue); color: #ffffff; }
-.portal-tab-active:hover { background: var(--gsu-blue); color: #ffffff; }
+.portal-footer a { color: var(--gsu-cool-dim); }
 
-/* Loading state. A spinner is honest but jumpy; matching the real layout means
-   the page does not reflow when the data lands. */
+/* ============ LOADING ============ */
 .skeleton {
   border-radius: 12px;
   background: linear-gradient(90deg,
-    rgba(255, 255, 255, 0.05) 25%,
-    rgba(255, 255, 255, 0.1) 37%,
-    rgba(255, 255, 255, 0.05) 63%);
+    rgba(9, 16, 36, 0.05) 25%,
+    rgba(9, 16, 36, 0.09) 37%,
+    rgba(9, 16, 36, 0.05) 63%);
   background-size: 400% 100%;
   animation: shimmer 1.4s ease infinite;
 }
@@ -827,11 +875,11 @@ textarea.field-input { resize: vertical; min-height: 84px; line-height: 1.55; }
 
 @media (prefers-reduced-motion: reduce) {
   .skeleton { animation: none; }
-  .meter-fill { transition: none; }
 }
 
 @media (max-width: 560px) {
-  .card { padding: 20px 18px; border-radius: 16px; }
-  .avatar { width: 54px; height: 54px; font-size: 19px; border-radius: 16px; }
+  .card { padding: 18px 16px; }
+  .avatar { width: 48px; height: 48px; font-size: 17px; border-radius: 13px; }
   .save-bar { position: static; }
+  .btn-primary, .btn-secondary { justify-content: center; }
 }

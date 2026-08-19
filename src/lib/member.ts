@@ -68,6 +68,11 @@ export const EDITABLE_KEYS = [
   'nationalMemberApplied',
   'allergies',
   'postGradPlan',
+  // The interest ratings are no longer shown or edited anywhere in the portal: they are
+  // planning input for the officers and live in the intake spreadsheet. They stay listed
+  // here because the API replaces the editable half of the row wholesale, so a field left
+  // out of the body is a field cleared. Removing them properly means changing
+  // UpdateProfileBody.java first.
   'interestRecruiting',
   'interestInterviewPrep',
   'interestTechProjects',

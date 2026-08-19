@@ -29,8 +29,8 @@ export default function Login() {
   const [busy, setBusy] = useState(false);
 
   // Where they were headed before the guard bounced them here, so signing in resumes
-  // that rather than always landing on the profile.
-  const from = (location.state as { from?: string } | null)?.from ?? '/profile';
+  // that rather than always landing on the dashboard.
+  const from = (location.state as { from?: string } | null)?.from ?? '/dashboard';
 
   if (session) {
     return <Navigate to={from} replace />;
