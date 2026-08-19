@@ -118,8 +118,9 @@ export const activationApi = {
     ),
   verifyCode: (email: string, code: string) =>
     publicApi.post<void>('/activation/verify-code', { email, code }),
+  /** Replies with the address the account was created with, which may not be the one typed. */
   claim: (email: string, code: string, password: string) =>
-    publicApi.post<void>('/activation/claim', { email, code, password }),
+    publicApi.post<{ email: string }>('/activation/claim', { email, code, password }),
 };
 
 /**

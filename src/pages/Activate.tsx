@@ -82,11 +82,21 @@ export default function Activate() {
     }
     setBusy(true);
     try {
-      await activationApi.claim(email, code, password);
-      // Sign them straight in: making someone who just chose a password type it again is
-      // friction for no security.
-      await signIn(email, password);
-      setStep('done');
+      const account = await activationApi.claim(email, code, password);
+      // Sign in with the address the account was created with, not the one they typed.
+      // Members give two addresses and either may be used here, but Supabase only knows
+      // the school one, so signing in with the personal one fails as a wrong password
+      // moments after they chose it.
+      try {
+        // Sign them straight in: making someone who just chose a password type it again is
+        // friction for no security.
+        await signIn(account.email, password);
+        setStep('done');
+      } catch {
+        // The account exists at this point, so retrying activation would only ever say it
+        // is already set up. Sending them to sign in is the one thing that can still work.
+        setError('Your account is ready, but we could not sign you in automatically. Use the sign in page.');
+      }
     } catch (err) {
       setError(message(err));
     } finally {
