@@ -322,9 +322,6 @@ export default function Resume() {
                 </div>
               )}
 
-              <p className="card-sub" style={{ marginTop: 16 }}>
-                A model's read, not a verdict. Every upload is scored again.
-              </p>
             </>
           ) : (
             <Notice style={{ marginTop: 16 }}>

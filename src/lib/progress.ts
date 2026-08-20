@@ -78,7 +78,7 @@ export function suggestions(p: MemberProfile): Suggestion[] {
     out.push({
       id: 'linkedin',
       title: 'Add your LinkedIn',
-      body: 'The first place a recruiter looks after your resume.',
+      body: 'Recruiters look here after your resume.',
       to: '/profile',
       cta: 'Add a link',
     });
@@ -88,7 +88,7 @@ export function suggestions(p: MemberProfile): Suggestion[] {
     out.push({
       id: 'discord',
       title: 'Add your Discord username',
-      body: 'We use it to verify you on the chapter server, where events and opportunities get posted first.',
+      body: 'For verification on the chapter Discord.',
       to: '/profile',
       cta: 'Add it',
     });
@@ -108,7 +108,7 @@ export function suggestions(p: MemberProfile): Suggestion[] {
     out.push({
       id: 'academic',
       title: 'Fill in your major and year',
-      body: 'Two fields, and they decide which opportunities we forward to you.',
+      body: 'Sponsors filter by both.',
       to: '/profile',
       cta: 'Complete it',
     });
@@ -118,7 +118,7 @@ export function suggestions(p: MemberProfile): Suggestion[] {
     out.push({
       id: 'plan',
       title: 'Share what you want after graduation',
-      body: 'It helps us aim the semester at what members are actually going for.',
+      body: 'Helps us plan the semester.',
       to: '/profile',
       cta: 'Write a line',
     });

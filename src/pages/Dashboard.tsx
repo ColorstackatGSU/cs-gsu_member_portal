@@ -91,8 +91,8 @@ export default function Dashboard() {
                 </h2>
                 <p className="card-sub">
                   {todo.length === 0
-                    ? 'We will put something here when there is a reason to.'
-                    : 'Ordered by what it costs you to skip, not by how quick it is.'}
+                    ? 'Nothing right now.'
+                    : 'What is left to do.'}
                 </p>
               </div>
 
@@ -149,8 +149,8 @@ export default function Dashboard() {
               <Ring value={pct} />
               <p className="card-sub" style={{ marginTop: 14 }}>
                 {pct === 100
-                  ? 'Everything sponsors ask for is on file.'
-                  : 'Sponsors see this when they ask who our members are.'}
+                  ? 'Everything is on file.'
+                  : 'Sponsors see this.'}
               </p>
             </div>
 
@@ -181,7 +181,7 @@ export default function Dashboard() {
               <p className="card-sub" style={{ margin: '4px 0 0' }}>
                 {profile.hasResume && profile.resumeUploadedAt
                   ? `Uploaded ${new Date(profile.resumeUploadedAt).toLocaleDateString()}`
-                  : 'Sponsors ask for this before anything else.'}
+                  : 'Sponsors ask for this first.'}
               </p>
               <Link to="/resume" className="btn-secondary btn-sm" style={{ marginTop: 16 }}>
                 {profile.hasResume ? 'Replace it' : 'Upload one'}
