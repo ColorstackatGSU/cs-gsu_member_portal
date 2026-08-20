@@ -27,6 +27,8 @@ export type MemberProfile = {
   hasResume: boolean;
   resumeUploadedAt: string | null;
   resumeShared: boolean;
+  /** A signed link that expires, or null when there is no picture. */
+  avatarUrl: string | null;
   activatedAt: string | null;
 };
 
@@ -36,6 +38,7 @@ export type ProfileEdits = Omit<
   | 'id'
   | 'email'
   | 'personalEmail'
+  | 'avatarUrl'
   | 'hasResume'
   | 'resumeUploadedAt'
   | 'resumeShared'
@@ -110,6 +113,13 @@ export const memberApi = {
     api.post<MemberProfile>('/members/me/personal-email/verify', { code }),
   setResumeShared: (resumeShared: boolean) =>
     api.put<MemberProfile>('/members/me/sharing', { resumeShared }),
+  uploadAvatar: (file: File) => {
+    const form = new FormData();
+    form.append('file', file);
+    return api.postForm<MemberProfile>('/members/me/avatar', form);
+  },
+  deleteAvatar: () => api.del<MemberProfile>('/members/me/avatar'),
+
   uploadResume: (file: File) => {
     const form = new FormData();
     form.append('file', file);

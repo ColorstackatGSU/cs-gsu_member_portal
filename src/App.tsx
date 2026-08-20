@@ -6,6 +6,7 @@ import Activate from './pages/Activate';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import Resume from './pages/Resume';
+import Events from './pages/Events';
 import Settings from './pages/Settings';
 import NotFound from './pages/NotFound';
 
@@ -24,6 +25,14 @@ export default function App() {
             element={
               <RequireAuth>
                 <Dashboard />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="events"
+            element={
+              <RequireAuth>
+                <Events />
               </RequireAuth>
             }
           />

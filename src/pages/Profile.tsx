@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { memberApi, toEdits } from '../lib/member';
@@ -37,6 +37,7 @@ export default function Profile() {
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
   const [busy, setBusy] = useState(false);
+  const avatarInput = useRef<HTMLInputElement>(null);
   const [emailStep, setEmailStep] = useState<'idle' | 'enter' | 'code'>('idle');
   const [newEmail, setNewEmail] = useState('');
   const [emailCode, setEmailCode] = useState('');
@@ -70,6 +71,36 @@ export default function Profile() {
   /** Empty inputs mean "no answer", not an empty string, so the column clears properly. */
   function setText(key: keyof MemberProfile, value: string) {
     set(key, (value.trim() === '' ? null : value) as MemberProfile[typeof key]);
+  }
+
+  async function uploadAvatar(file: File) {
+    setError(null);
+    setBusy(true);
+    try {
+      const next = await memberApi.uploadAvatar(file);
+      // Only the picture, so an unsaved edit elsewhere on the form survives.
+      setProfile((p) => (p ? { ...p, avatarUrl: next.avatarUrl } : next));
+      setForm((f) => (f ? { ...f, avatarUrl: next.avatarUrl } : next));
+    } catch (err) {
+      setError(message(err));
+    } finally {
+      setBusy(false);
+      if (avatarInput.current) avatarInput.current.value = '';
+    }
+  }
+
+  async function removeAvatar() {
+    setError(null);
+    setBusy(true);
+    try {
+      const next = await memberApi.deleteAvatar();
+      setProfile((p) => (p ? { ...p, avatarUrl: next.avatarUrl } : next));
+      setForm((f) => (f ? { ...f, avatarUrl: next.avatarUrl } : next));
+    } catch (err) {
+      setError(message(err));
+    } finally {
+      setBusy(false);
+    }
   }
 
   async function save(e: FormEvent) {
@@ -156,7 +187,36 @@ export default function Profile() {
       <div className="container-wide" style={{ maxWidth: 820 }}>
         <div className="card fade-in-up">
           <div className="identity">
-            <div className="avatar" aria-hidden="true">{initials(profile)}</div>
+            <div className="avatar-slot">
+              {profile.avatarUrl ? (
+                <img className="avatar avatar-photo" src={profile.avatarUrl} alt="" />
+              ) : (
+                <div className="avatar" aria-hidden="true">{initials(profile)}</div>
+              )}
+              <button
+                type="button"
+                className="avatar-edit"
+                disabled={busy}
+                onClick={() => avatarInput.current?.click()}
+              >
+                {profile.avatarUrl ? 'Change' : 'Add photo'}
+              </button>
+              {profile.avatarUrl && (
+                <button type="button" className="avatar-edit" disabled={busy} onClick={removeAvatar}>
+                  Remove
+                </button>
+              )}
+              <input
+                ref={avatarInput}
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                style={{ display: 'none' }}
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) void uploadAvatar(file);
+                }}
+              />
+            </div>
             <div style={{ flex: '1 1 240px', minWidth: 0 }}>
               <h1 style={{ fontSize: 'clamp(20px, 2.6vw, 25px)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>
                 {[profile.firstName, profile.lastName].filter(Boolean).join(' ') || 'Your profile'}

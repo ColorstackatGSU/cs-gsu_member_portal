@@ -58,6 +58,18 @@ const NAV = [
     ),
   },
   {
+    to: '/events',
+    label: 'Events',
+    icon: (
+      <Icon>
+        <rect x="3" y="5" width="18" height="16" rx="2" />
+        <path d="M16 3v4" />
+        <path d="M8 3v4" />
+        <path d="M3 11h18" />
+      </Icon>
+    ),
+  },
+  {
     to: '/resume',
     label: 'Resume',
     icon: (
