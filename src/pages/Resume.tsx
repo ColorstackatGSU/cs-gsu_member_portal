@@ -225,19 +225,13 @@ export default function Resume() {
         </div>
 
         <div className="card fade-in-up fade-delay-2" style={{ marginTop: 18 }}>
-          <a
-            className="hr-banner"
-            href="https://github.com/interviewstreet/hiring-agent"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <div className="hr-banner">
             <HackerRankMark size={34} />
             <span className="hr-banner-text">
               <strong>Powered by HackerRank</strong>
-              Their open-source hiring-agent rubric
+              Scored on their hiring rubric
             </span>
-            <span className="hr-banner-arrow" aria-hidden="true">&rarr;</span>
-          </a>
+          </div>
 
           {scoreError && <Notice kind="error" style={{ marginTop: 16 }}>{scoreError}</Notice>}
 
@@ -278,6 +272,7 @@ export default function Resume() {
                   <p style={{ margin: 0, fontSize: 14.5, lineHeight: 1.55 }}>{score.summary}</p>
                   <p className="muted" style={{ margin: '8px 0 0', fontSize: 12 }}>
                     {score.scoredAt && `Scored ${new Date(score.scoredAt).toLocaleDateString()}`}
+                    {score.usedGithub && ' · your public GitHub was included'}
                   </p>
                 </div>
               </div>

@@ -22,21 +22,11 @@ export type MemberProfile = {
   linkedinUrl: string | null;
   githubUrl: string | null;
   discordUsername: string | null;
-  followsInstagram: boolean | null;
-  nationalMemberApplied: boolean | null;
   allergies: string | null;
   postGradPlan: string | null;
-  interestRecruiting: number | null;
-  interestInterviewPrep: number | null;
-  interestTechProjects: number | null;
-  interestAcademic: number | null;
-  interestCareerExploration: number | null;
-  interestSocial: number | null;
   hasResume: boolean;
   resumeUploadedAt: string | null;
   resumeShared: boolean;
-  /** Null means the sponsor-visibility question has never been put to them. */
-  sharingPromptedAt: string | null;
   activatedAt: string | null;
 };
 
@@ -49,7 +39,6 @@ export type ProfileEdits = Omit<
   | 'hasResume'
   | 'resumeUploadedAt'
   | 'resumeShared'
-  | 'sharingPromptedAt'
   | 'activatedAt'
 >;
 
@@ -64,21 +53,8 @@ export const EDITABLE_KEYS = [
   'linkedinUrl',
   'githubUrl',
   'discordUsername',
-  'followsInstagram',
-  'nationalMemberApplied',
   'allergies',
   'postGradPlan',
-  // The interest ratings are no longer shown or edited anywhere in the portal: they are
-  // planning input for the officers and live in the intake spreadsheet. They stay listed
-  // here because the API replaces the editable half of the row wholesale, so a field left
-  // out of the body is a field cleared. Removing them properly means changing
-  // UpdateProfileBody.java first.
-  'interestRecruiting',
-  'interestInterviewPrep',
-  'interestTechProjects',
-  'interestAcademic',
-  'interestCareerExploration',
-  'interestSocial',
 ] as const satisfies readonly (keyof ProfileEdits)[];
 
 /**
@@ -112,6 +88,8 @@ export type ResumeScore = {
   categories: ScoreCategory[];
   bonuses: string[];
   deductions: string[];
+  /** Whether public GitHub was folded in, which makes it a different score. */
+  usedGithub: boolean;
   scoredAt: string | null;
   model: string | null;
   /** The resume was replaced after this score, so it describes a file that is gone. */

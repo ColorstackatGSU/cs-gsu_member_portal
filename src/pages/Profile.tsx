@@ -11,11 +11,8 @@ import Notice from '../components/Notice';
 /**
  * Everything the member can change about themselves. The resume has its own page.
  *
- * The intake form asks more than this page shows. The 1-to-5 interest ratings in
- * particular are planning input for the officers, not facts about the member, so they
- * stay in the spreadsheet and are not surfaced or edited here. They still ride along in
- * the save payload untouched, because the API replaces the editable half of the row
- * wholesale and dropping them from the body would clear the columns.
+ * The intake form asks more than this page shows. Whatever has no column of its own,
+ * the interest ratings included, stays in the raw submission the API archives.
  *
  * Saving posts every editable field rather than a diff. Over JSON there is no way to
  * tell "field omitted" from "field cleared" without a wrapper type on every column, and
@@ -348,24 +345,6 @@ export default function Profile() {
                 onChange={(v) => setText('discordUsername', v)}
                 hint="For server verification."
               />
-            </div>
-            <div style={{ display: 'flex', gap: 20, marginTop: 18, flexWrap: 'wrap' }}>
-              <label className="check">
-                <input
-                  type="checkbox"
-                  checked={form.followsInstagram ?? false}
-                  onChange={(e) => set('followsInstagram', e.target.checked)}
-                />
-                I follow @colorstackatgsu
-              </label>
-              <label className="check">
-                <input
-                  type="checkbox"
-                  checked={form.nationalMemberApplied ?? false}
-                  onChange={(e) => set('nationalMemberApplied', e.target.checked)}
-                />
-                I applied for national membership
-              </label>
             </div>
           </div>
 
