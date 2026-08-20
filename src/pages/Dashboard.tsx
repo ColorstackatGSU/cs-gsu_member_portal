@@ -77,7 +77,7 @@ export default function Dashboard() {
           </h1>
           <p className="muted" style={{ fontSize: 14.5, margin: '8px 0 0', color: 'rgba(255,255,255,0.55)' }}>
             {todo.length === 0
-              ? 'Your profile is complete and visible to sponsors. Nothing needs you today.'
+              ? 'Nothing needs you today.'
               : `${todo.length} thing${todo.length === 1 ? '' : 's'} left to finish setting up.`}
           </p>
         </div>
@@ -104,7 +104,7 @@ export default function Dashboard() {
                     </svg>
                   </span>
                   <p style={{ margin: 0, fontSize: 14.5 }}>
-                    Profile complete, resume uploaded, and sponsors can see you.
+                    Profile complete, resume uploaded, shared with sponsors.
                   </p>
                 </div>
               ) : (
@@ -149,8 +149,8 @@ export default function Dashboard() {
               <Ring value={pct} />
               <p className="card-sub" style={{ marginTop: 14 }}>
                 {pct === 100
-                  ? 'Everything sponsors ask us for is on file.'
-                  : 'A fuller profile is what we hand to sponsors when they ask who our members are.'}
+                  ? 'Everything sponsors ask for is on file.'
+                  : 'Sponsors see this when they ask who our members are.'}
               </p>
             </div>
 
@@ -163,8 +163,8 @@ export default function Dashboard() {
               </div>
               <p className="card-sub" style={{ margin: 0 }}>
                 {profile.resumeShared
-                  ? 'Your resume is included in the book we share with sponsors. Your allergies never are.'
-                  : 'Your resume stays visible only to you and the chapter officers.'}
+                  ? 'Shared with sponsors.'
+                  : 'Private.'}
               </p>
               <Link to="/settings" className="btn-secondary btn-sm" style={{ marginTop: 16 }}>
                 Change this
@@ -183,7 +183,7 @@ export default function Dashboard() {
                   ? `Uploaded ${new Date(profile.resumeUploadedAt).toLocaleDateString()}`
                   : 'Sponsors ask for this before anything else.'}
               </p>
-              <Link to="/profile#resume" className="btn-secondary btn-sm" style={{ marginTop: 16 }}>
+              <Link to="/resume" className="btn-secondary btn-sm" style={{ marginTop: 16 }}>
                 {profile.hasResume ? 'Replace it' : 'Upload one'}
               </Link>
             </div>

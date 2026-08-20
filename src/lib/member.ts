@@ -95,6 +95,33 @@ export function toEdits(profile: MemberProfile): ProfileEdits {
   return edits as ProfileEdits;
 }
 
+/** One rubric category, as scored. Mirrors ResumeScoreService.Category. */
+export type ScoreCategory = {
+  name: string;
+  score: number;
+  evidence: string;
+  suggestion: string;
+};
+
+export type ResumeScore = {
+  /** none, running, ready, failed. Scoring starts on upload, so running is normal. */
+  status: 'none' | 'running' | 'ready' | 'failed';
+  /** Null unless status is ready. */
+  overall: number | null;
+  summary: string | null;
+  categories: ScoreCategory[];
+  bonuses: string[];
+  deductions: string[];
+  scoredAt: string | null;
+  model: string | null;
+  /** The resume was replaced after this score, so it describes a file that is gone. */
+  stale: boolean;
+  remainingToday: number;
+};
+
+/** available is false when the API has no model key, so the page can say so up front. */
+export type ResumeScoreResult = { available: boolean; score: ResumeScore };
+
 export const memberApi = {
   load: () => api.get<MemberProfile>('/members/me'),
   save: (edits: ProfileEdits) => api.put<MemberProfile>('/members/me', edits),
@@ -112,6 +139,9 @@ export const memberApi = {
   },
   resumeUrl: () => api.get<{ url: string; expiresInSeconds: number }>('/members/me/resume'),
   deleteResume: () => api.del<MemberProfile>('/members/me/resume'),
+  resumeScore: () => api.get<ResumeScoreResult>('/members/me/resume/score'),
+  /** Only after a failure: uploading is what normally starts a score. */
+  retryResumeScore: () => api.post<ResumeScoreResult>('/members/me/resume/score', {}),
 };
 
 export const activationApi = {

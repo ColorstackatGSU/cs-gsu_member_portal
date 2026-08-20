@@ -112,7 +112,7 @@ export default function Activate() {
         : 'Set up your account';
 
   const blurb = {
-    email: 'Use the email you put on the member interest form. Either the school one or the personal one works.',
+    email: 'Use the email you put on the membership form. School or personal, either works.',
     code: sent ? `We sent a 6-digit code to ${sent.sentTo}. It expires in 10 minutes.` : '',
     password: 'Pick a password. This is how you will sign in from now on.',
     done: 'Your account is ready and you are signed in.',
@@ -168,8 +168,16 @@ export default function Activate() {
                 </Notice>
               ) : (
                 <Notice style={{ marginTop: 16 }}>
-                  Have not filled the interest form yet? Do that first. Already did and still stuck?
-                  Email{' '}
+                  Not filled the{' '}
+                  <a
+                    href="https://forms.gle/GaMnRiAadtNspBr86"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ textDecoration: 'underline' }}
+                  >
+                    membership form
+                  </a>{' '}
+                  yet? Start there. Stuck? Email{' '}
                   <a href="mailto:official@colorstackatgsu.com" style={{ textDecoration: 'underline' }}>
                     official@colorstackatgsu.com
                   </a>

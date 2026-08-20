@@ -56,8 +56,8 @@ export function suggestions(p: MemberProfile): Suggestion[] {
     out.push({
       id: 'resume',
       title: 'Upload your resume',
-      body: 'This is the one thing sponsors always ask for. Without it you are not in the resume book.',
-      to: '/profile#resume',
+      body: 'Sponsors ask for this first.',
+      to: '/resume',
       cta: 'Upload a PDF',
       urgent: true,
     });
@@ -67,7 +67,7 @@ export function suggestions(p: MemberProfile): Suggestion[] {
     out.push({
       id: 'sharing',
       title: 'Turn on sponsor visibility',
-      body: 'Your profile is hidden from recruiters right now, so you will not show up when sponsors ask who our members are.',
+      body: 'Sponsors cannot see you right now.',
       to: '/settings',
       cta: 'Review sharing',
       urgent: true,
@@ -78,7 +78,7 @@ export function suggestions(p: MemberProfile): Suggestion[] {
     out.push({
       id: 'linkedin',
       title: 'Add your LinkedIn',
-      body: 'It is the first place a recruiter looks after your resume.',
+      body: 'The first place a recruiter looks after your resume.',
       to: '/profile',
       cta: 'Add a link',
     });
@@ -98,7 +98,7 @@ export function suggestions(p: MemberProfile): Suggestion[] {
     out.push({
       id: 'grad',
       title: 'Tell us when you graduate',
-      body: 'Sponsors filter the resume book by graduation date, so a blank one gets skipped.',
+      body: 'Sponsors filter the resume book by this.',
       to: '/profile',
       cta: 'Set a date',
     });

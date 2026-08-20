@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { memberApi, toEdits } from '../lib/member';
@@ -9,7 +9,7 @@ import Field from '../components/Field';
 import Notice from '../components/Notice';
 
 /**
- * Everything the member can change about themselves, plus their resume.
+ * Everything the member can change about themselves. The resume has its own page.
  *
  * The intake form asks more than this page shows. The 1-to-5 interest ratings in
  * particular are planning input for the officers, not facts about the member, so they
@@ -45,7 +45,6 @@ export default function Profile() {
   const [emailCode, setEmailCode] = useState('');
   const [emailError, setEmailError] = useState<string | null>(null);
   const [emailNote, setEmailNote] = useState<string | null>(null);
-  const fileInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     memberApi
@@ -132,50 +131,6 @@ export default function Profile() {
     }
   }
 
-  function pickResume(p: MemberProfile) {
-    return { hasResume: p.hasResume, resumeUploadedAt: p.resumeUploadedAt };
-  }
-
-  async function upload(file: File) {
-    setError(null);
-    setBusy(true);
-    try {
-      const next = await memberApi.uploadResume(file);
-      setProfile((p) => (p ? { ...p, ...pickResume(next) } : next));
-      setForm((f) => (f ? { ...f, ...pickResume(next) } : next));
-    } catch (err) {
-      setError(message(err));
-    } finally {
-      setBusy(false);
-      if (fileInput.current) fileInput.current.value = '';
-    }
-  }
-
-  async function openResume() {
-    setError(null);
-    try {
-      const { url } = await memberApi.resumeUrl();
-      // A short-lived signed URL, so it is opened rather than stored anywhere.
-      window.open(url, '_blank', 'noopener');
-    } catch (err) {
-      setError(message(err));
-    }
-  }
-
-  async function removeResume() {
-    setError(null);
-    setBusy(true);
-    try {
-      const next = await memberApi.deleteResume();
-      setProfile((p) => (p ? { ...p, ...pickResume(next) } : next));
-      setForm((f) => (f ? { ...f, ...pickResume(next) } : next));
-    } catch (err) {
-      setError(message(err));
-    } finally {
-      setBusy(false);
-    }
-  }
-
   if (loadError) {
     return (
       <section className="portal-pad">
@@ -256,15 +211,23 @@ export default function Profile() {
                 label="School email"
                 value={form.email}
                 disabled
-                hint="Email official@colorstackatgsu.com to change this."
+                hint="Email official@colorstackatgsu.com to change."
               />
-              <Field
-                id="personalEmail"
-                label="Personal email"
-                value={form.personalEmail ?? 'Not set'}
-                disabled
-                hint="Also works to sign in."
-              />
+              <Field id="personalEmail" label="Personal email" hint="Also works to sign in.">
+                <div className="field-static">
+                  <span style={{ minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {profile.personalEmail ?? 'Not set'}
+                  </span>
+                  {/* type="button" matters: this sits inside the profile save form. */}
+                  <button
+                    type="button"
+                    className="btn-secondary btn-sm"
+                    onClick={() => setEmailStep(emailStep === 'idle' ? 'enter' : 'idle')}
+                  >
+                    {emailStep === 'idle' ? (profile.personalEmail ? 'Change' : 'Add') : 'Cancel'}
+                  </button>
+                </div>
+              </Field>
               <Field
                 id="pronouns"
                 label="Pronouns"
@@ -311,6 +274,64 @@ export default function Profile() {
                 }}
               />
             </div>
+
+            {/* Changing the address you can sign in with is not a profile edit, so it
+                proves you receive mail there before it takes effect. Buttons rather than
+                a nested form: this card lives inside the profile's save form. */}
+            {emailStep !== 'idle' && (
+              <div className="subpanel">
+                {emailStep === 'enter' ? (
+                  <>
+                    <Field
+                      id="newPersonalEmail"
+                      label="New personal email"
+                      type="email"
+                      value={newEmail}
+                      placeholder="you@example.com"
+                      onChange={setNewEmail}
+                      hint="We send a code there."
+                    />
+                    <button
+                      type="button"
+                      className="btn-primary btn-sm"
+                      style={{ marginTop: 14 }}
+                      disabled={busy || !newEmail.trim()}
+                      onClick={() => void requestEmailChange()}
+                    >
+                      {busy ? 'Sending...' : 'Send code'}
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <p className="card-sub" style={{ margin: '0 0 12px' }}>
+                      Code sent to <strong style={{ fontWeight: 600 }}>{newEmail}</strong>.
+                    </p>
+                    <input
+                      inputMode="numeric"
+                      maxLength={6}
+                      className="code-input"
+                      placeholder="000000"
+                      autoComplete="one-time-code"
+                      aria-label="Confirmation code"
+                      value={emailCode}
+                      onChange={(e) => setEmailCode(e.target.value.replace(/\D/g, ''))}
+                    />
+                    <button
+                      type="button"
+                      className="btn-primary btn-sm"
+                      style={{ marginTop: 14 }}
+                      disabled={busy || emailCode.length !== 6}
+                      onClick={() => void confirmEmailChange()}
+                    >
+                      {busy ? 'Confirming...' : 'Confirm'}
+                    </button>
+                  </>
+                )}
+
+                {emailError && <Notice kind="error" style={{ marginTop: 14 }}>{emailError}</Notice>}
+                {emailNote && !emailError && <Notice style={{ marginTop: 14 }}>{emailNote}</Notice>}
+              </div>
+            )}
           </div>
 
           <div className="card fade-in-up fade-delay-2" style={{ marginTop: 18 }}>
@@ -325,7 +346,7 @@ export default function Profile() {
                 label="Discord"
                 value={form.discordUsername ?? ''}
                 onChange={(v) => setText('discordUsername', v)}
-                hint="Used to verify you on our server."
+                hint="For server verification."
               />
             </div>
             <div style={{ display: 'flex', gap: 20, marginTop: 18, flexWrap: 'wrap' }}>
@@ -366,7 +387,6 @@ export default function Profile() {
               label="Allergies"
               value={form.allergies ?? ''}
               onChange={(v) => setText('allergies', v)}
-              hint="Only used when we order food. Never shared."
               style={{ marginTop: 16 }}
             />
           </div>
@@ -398,134 +418,6 @@ export default function Profile() {
             </div>
           )}
         </form>
-
-        <div id="resume" className="card fade-in-up" style={{ marginTop: 18, scrollMarginTop: 20 }}>
-          <div className="card-head">
-            <h2 className="card-title">Resume</h2>
-            <span className={profile.resumeShared ? 'pill pill-on' : 'pill pill-off'}>
-              {profile.resumeShared ? 'Shared with sponsors' : 'Private'}
-            </span>
-          </div>
-
-          <div className="resume-drop">
-            <div style={{ flex: '1 1 220px' }}>
-              <p style={{ margin: 0, fontSize: 14.5, fontWeight: 600 }}>
-                {profile.hasResume ? 'resume.pdf' : 'No resume yet'}
-              </p>
-              <p className="card-sub" style={{ margin: '3px 0 0' }}>
-                {profile.hasResume && profile.resumeUploadedAt
-                  ? `Uploaded ${new Date(profile.resumeUploadedAt).toLocaleDateString()}`
-                  : 'PDF, up to 5 MB.'}
-              </p>
-            </div>
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              {profile.hasResume ? (
-                <>
-                  <button type="button" className="btn-secondary btn-sm" onClick={openResume}>View</button>
-                  <button type="button" className="btn-secondary btn-sm" disabled={busy} onClick={() => fileInput.current?.click()}>
-                    Replace
-                  </button>
-                  <button type="button" className="btn-secondary btn-sm btn-danger" disabled={busy} onClick={removeResume}>
-                    Remove
-                  </button>
-                </>
-              ) : (
-                <button type="button" className="btn-primary btn-sm" disabled={busy} onClick={() => fileInput.current?.click()}>
-                  {busy ? 'Uploading...' : 'Upload a PDF'}
-                </button>
-              )}
-            </div>
-          </div>
-
-          <input
-            ref={fileInput}
-            type="file"
-            accept="application/pdf"
-            style={{ display: 'none' }}
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) void upload(file);
-            }}
-          />
-        </div>
-
-        <div className="card fade-in-up" style={{ marginTop: 18 }}>
-          <div className="card-head">
-            <h2 className="card-title">Personal email</h2>
-          </div>
-
-          {emailStep === 'idle' && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
-              <span style={{ fontSize: 14.5, flex: '1 1 220px' }}>
-                {profile.personalEmail ?? 'Not set'}
-              </span>
-              <button type="button" className="btn-secondary btn-sm" onClick={() => setEmailStep('enter')}>
-                {profile.personalEmail ? 'Change' : 'Add'}
-              </button>
-            </div>
-          )}
-
-          {emailStep === 'enter' && (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                void requestEmailChange();
-              }}
-            >
-              <Field
-                id="newPersonalEmail"
-                label="New personal email"
-                type="email"
-                value={newEmail}
-                placeholder="you@example.com"
-                onChange={setNewEmail}
-                hint="We will send a code there."
-              />
-              <div style={{ display: 'flex', gap: 8, marginTop: 14, flexWrap: 'wrap' }}>
-                <button type="submit" className="btn-primary btn-sm" disabled={busy || !newEmail.trim()}>
-                  {busy ? 'Sending...' : 'Send code'}
-                </button>
-                <button type="button" className="btn-secondary btn-sm" onClick={cancelEmailChange}>
-                  Cancel
-                </button>
-              </div>
-            </form>
-          )}
-
-          {emailStep === 'code' && (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                void confirmEmailChange();
-              }}
-            >
-              <p className="card-sub" style={{ margin: '0 0 12px' }}>
-                Code sent to <strong style={{ fontWeight: 600 }}>{newEmail}</strong>.
-              </p>
-              <input
-                inputMode="numeric"
-                maxLength={6}
-                className="code-input"
-                placeholder="000000"
-                autoComplete="one-time-code"
-                aria-label="Confirmation code"
-                value={emailCode}
-                onChange={(e) => setEmailCode(e.target.value.replace(/\D/g, ''))}
-              />
-              <div style={{ display: 'flex', gap: 8, marginTop: 14, flexWrap: 'wrap' }}>
-                <button type="submit" className="btn-primary btn-sm" disabled={busy || emailCode.length !== 6}>
-                  {busy ? 'Confirming...' : 'Confirm'}
-                </button>
-                <button type="button" className="btn-secondary btn-sm" onClick={cancelEmailChange}>
-                  Cancel
-                </button>
-              </div>
-            </form>
-          )}
-
-          {emailError && <Notice kind="error" style={{ marginTop: 14 }}>{emailError}</Notice>}
-          {emailNote && !emailError && <Notice style={{ marginTop: 14 }}>{emailNote}</Notice>}
-        </div>
 
         <p style={{ marginTop: 18 }}>
           <Link to="/settings" className="muted" style={{ fontSize: 13 }}>

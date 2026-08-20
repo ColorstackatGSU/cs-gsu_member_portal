@@ -69,10 +69,7 @@ export default function Settings() {
             <div className="card fade-in-up fade-delay-1" style={{ marginTop: 20 }}>
               <div className="card-head" style={{ display: 'block', marginBottom: 16 }}>
                 <h2 className="card-title">Sponsor visibility</h2>
-                <p className="card-sub">
-                  Sponsors get a resume book as part of their partnership. Turning this off keeps
-                  yours visible only to the chapter officers.
-                </p>
+                <p className="card-sub">Your resume goes in the sponsor resume book.</p>
               </div>
 
               <label className="switch">
@@ -91,7 +88,7 @@ export default function Settings() {
               {!profile.hasResume && profile.resumeShared && (
                 <Notice kind="warn" style={{ marginTop: 16 }}>
                   No resume uploaded yet, so there is nothing to share.{' '}
-                  <Link to="/profile#resume" style={{ textDecoration: 'underline' }}>Upload one</Link>.
+                  <Link to="/resume" style={{ textDecoration: 'underline' }}>Upload one</Link>.
                 </Notice>
               )}
             </div>

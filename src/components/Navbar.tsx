@@ -51,7 +51,7 @@ export default function Navbar() {
         <Link to={session ? '/profile' : '/'} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <img
             src="/images/colorstack-gsu-logo.png"
-            alt="ColorStack GSU"
+            alt="ColorStack at GSU"
             className="nav-logo-img"
             style={{ display: 'block', width: 32, height: 32, borderRadius: '50%' }}
           />

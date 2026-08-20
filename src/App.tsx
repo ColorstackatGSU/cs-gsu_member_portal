@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Activate from './pages/Activate';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
+import Resume from './pages/Resume';
 import Settings from './pages/Settings';
 import NotFound from './pages/NotFound';
 
@@ -23,6 +24,14 @@ export default function App() {
             element={
               <RequireAuth>
                 <Dashboard />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="resume"
+            element={
+              <RequireAuth>
+                <Resume />
               </RequireAuth>
             }
           />
