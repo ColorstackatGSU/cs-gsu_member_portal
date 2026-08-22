@@ -7,7 +7,7 @@ import PhotoMosaic from './PhotoMosaic';
 import { useAuth } from '../auth/context';
 
 /** Routes that get the light photo-mosaic treatment instead of the dark app surface. */
-const AUTH_ROUTES = ['/login', '/activate'];
+const AUTH_ROUTES = ['/login', '/activate', '/forgot'];
 
 export default function Layout() {
   const { pathname } = useLocation();

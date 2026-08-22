@@ -150,6 +150,20 @@ export const activationApi = {
  * Members give two addresses on the form and remember whichever they please, but Supabase
  * only knows the school one. Resolving first is what lets either address sign in.
  */
+/** Forgotten passwords: the same three steps as activation, on their own endpoints. */
+export const passwordApi = {
+  requestCode: (email: string) =>
+    publicApi.post<{ firstName: string | null; sentTo: string; remaining: number }>(
+      '/auth/password/request-code',
+      { email },
+    ),
+  verifyCode: (email: string, code: string) =>
+    publicApi.post<void>('/auth/password/verify-code', { email, code }),
+  /** Replies with the address the account answers to, which is what signs in. */
+  reset: (email: string, code: string, password: string) =>
+    publicApi.post<{ email: string }>('/auth/password/reset', { email, code, password }),
+};
+
 export const authApi = {
   resolveEmail: (email: string) =>
     publicApi.post<{ email: string }>('/auth/resolve-email', { email }),

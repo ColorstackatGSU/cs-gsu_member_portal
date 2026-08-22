@@ -101,7 +101,13 @@ export default function Login() {
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <button type="submit" className="btn-primary" style={{ marginTop: 20, width: '100%' }} disabled={busy}>
+          <p style={{ marginTop: 10, textAlign: 'right' }}>
+            <Link to="/forgot" className="muted" style={{ fontSize: 12.5 }}>
+              Forgot your password?
+            </Link>
+          </p>
+
+          <button type="submit" className="btn-primary" style={{ marginTop: 14, width: '100%' }} disabled={busy}>
             {busy ? 'Signing in...' : 'Sign in'}
           </button>
 
