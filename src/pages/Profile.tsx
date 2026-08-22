@@ -185,24 +185,42 @@ export default function Profile() {
   return (
     <section className="portal-pad">
       <div className="container-wide" style={{ maxWidth: 820 }}>
-        <div className="card fade-in-up">
+        <div className="card fade-in-up" style={{ background: '#091024', color: '#ffffff', border: 'none' }}>
           <div className="identity">
-            <div className="avatar-slot">
-              {profile.avatarUrl ? (
-                <img className="avatar avatar-photo" src={profile.avatarUrl} alt="" />
-              ) : (
-                <div className="avatar" aria-hidden="true">{initials(profile)}</div>
-              )}
-              <button
-                type="button"
-                className="avatar-edit"
-                disabled={busy}
-                onClick={() => avatarInput.current?.click()}
+            <div style={{ flex: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div
+                className="avatar-slot"
+                onClick={() => !busy && avatarInput.current?.click()}
+                title={profile.avatarUrl ? 'Click to change photo' : 'Click to add photo'}
               >
-                {profile.avatarUrl ? 'Change' : 'Add photo'}
-              </button>
+                {profile.avatarUrl ? (
+                  <img className="avatar-photo" src={profile.avatarUrl} alt="" />
+                ) : (
+                  <div className="avatar-initials" aria-hidden="true">{initials(profile)}</div>
+                )}
+                <div className="avatar-overlay">
+                  {profile.avatarUrl ? 'Change' : 'Add photo'}
+                </div>
+              </div>
               {profile.avatarUrl && (
-                <button type="button" className="avatar-edit" disabled={busy} onClick={removeAvatar}>
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    void removeAvatar();
+                  }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    padding: '4px 0 0',
+                    fontSize: '11px',
+                    fontFamily: 'var(--mono)',
+                    color: 'rgba(255, 255, 255, 0.55)',
+                    textDecoration: 'underline',
+                    cursor: 'pointer',
+                  }}
+                >
                   Remove
                 </button>
               )}
@@ -218,56 +236,41 @@ export default function Profile() {
               />
             </div>
             <div style={{ flex: '1 1 240px', minWidth: 0 }}>
-              <h1
-                style={{
-                  fontSize: 'clamp(24px, 3.2vw, 34px)',
-                  fontWeight: 900,
-                  letterSpacing: '-0.035em',
-                  lineHeight: 0.98,
-                  textTransform: 'uppercase',
-                  margin: 0,
-                }}
-              >
+              <h1 style={{ fontSize: 'clamp(20px, 2.6vw, 25px)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0, color: '#ffffff' }}>
                 {[profile.firstName, profile.lastName].filter(Boolean).join(' ') || 'Your profile'}
               </h1>
-              <p
-                className="muted"
-                style={{
-                  fontFamily: 'var(--mono)',
-                  fontSize: 11.5,
-                  margin: '7px 0 0',
-                  wordBreak: 'break-word',
-                }}
-              >
+              <p style={{ fontSize: 13.5, margin: '3px 0 0', wordBreak: 'break-word', color: 'rgba(255, 255, 255, 0.7)' }}>
                 {profile.email}
               </p>
               <div className="chip-row">
-                {profile.classYear && <span className="chip">{profile.classYear}</span>}
-                {profile.majors && <span className="chip">{profile.majors}</span>}
-                {profile.gradTerm && profile.gradYear && (
-                  <span className="chip">{profile.gradTerm} {profile.gradYear}</span>
+                {profile.classYear && (
+                  <span className="chip" style={{ background: 'rgba(255, 255, 255, 0.12)', color: '#ffffff' }}>
+                    {profile.classYear}
+                  </span>
                 )}
-                {profile.resumeShared && <span className="chip chip-accent">Visible to sponsors</span>}
+                {profile.majors && (
+                  <span className="chip" style={{ background: 'rgba(255, 255, 255, 0.12)', color: '#ffffff' }}>
+                    {profile.majors}
+                  </span>
+                )}
+                {profile.gradTerm && profile.gradYear && (
+                  <span className="chip" style={{ background: 'rgba(255, 255, 255, 0.12)', color: '#ffffff' }}>
+                    {profile.gradTerm} {profile.gradYear}
+                  </span>
+                )}
+                {profile.resumeShared && (
+                  <span className="chip chip-accent" style={{ background: '#ffffff', color: '#091024' }}>
+                    Visible to sponsors
+                  </span>
+                )}
               </div>
             </div>
           </div>
 
           <div style={{ marginTop: 18 }}>
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'baseline',
-                marginBottom: 8,
-                fontFamily: 'var(--mono)',
-                fontSize: 10.5,
-                fontWeight: 700,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-              }}
-            >
-              <span className="muted">Profile complete</span>
-              <span>{pct}%</span>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 7, fontSize: 12.5 }}>
+              <span style={{ color: 'rgba(255, 255, 255, 0.7)' }}>Profile complete</span>
+              <span style={{ fontWeight: 600, color: '#ffffff' }}>{pct}%</span>
             </div>
             <div
               className="meter"
@@ -276,8 +279,9 @@ export default function Profile() {
               aria-valuemin={0}
               aria-valuemax={100}
               aria-label="Profile completeness"
+              style={{ background: 'rgba(255, 255, 255, 0.12)' }}
             >
-              <div className="meter-fill" style={{ width: `${pct}%` }} />
+              <div className="meter-fill" style={{ width: `${pct}%`, background: '#ffffff' }} />
             </div>
           </div>
         </div>

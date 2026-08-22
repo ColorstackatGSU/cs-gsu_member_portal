@@ -16,8 +16,6 @@ import Notice from '../components/Notice';
 
 type Step = 'email' | 'code' | 'password' | 'done';
 
-const STEPS: Step[] = ['email', 'code', 'password'];
-
 function message(e: unknown): string {
   return e instanceof ApiError ? e.message : 'Something went wrong. Try again in a moment.';
 }
@@ -120,11 +118,13 @@ export default function Activate() {
 
   return (
     <section className="auth-pad">
-      <div className="container-wide" style={{ maxWidth: 470 }}>
-        <div className="fade-in-up auth-masthead">
-          <p className="section-eyebrow">
-            {step === 'done' ? 'Welcome in' : `Step ${STEPS.indexOf(step) + 1} of ${STEPS.length}`}
-          </p>
+      <div className="auth-layout mx-auto w-full" style={{ maxWidth: 1120 }}>
+        <div className="auth-copy auth-copy-card fade-in-up">
+          {step === 'done' && (
+            <p className="section-eyebrow" style={{ marginBottom: 14 }}>
+              Welcome in
+            </p>
+          )}
           <h1
             className="auth-heading"
             style={{ fontSize: 'clamp(28px, 3.9vw, 40px)', fontWeight: 900, margin: 0 }}
@@ -136,7 +136,8 @@ export default function Activate() {
           </p>
         </div>
 
-        <div className="auth-card fade-in-up fade-delay-1" style={{ marginTop: 18 }}>
+        <div className="auth-form-column fade-in-up fade-delay-1">
+        <div className="auth-card auth-form-card">
           {step === 'email' && (
             <form
               onSubmit={(e) => {
@@ -157,8 +158,7 @@ export default function Activate() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-              />
-              <button type="submit" className="btn-primary" style={{ marginTop: 20, width: '100%' }} disabled={busy}>
+              />               <button type="submit" className="btn-primary" style={{ marginTop: 28, width: '100%' }} disabled={busy}>
                 {busy ? 'Sending...' : 'Send my code'}
               </button>
 
@@ -207,7 +207,7 @@ export default function Activate() {
               <button
                 type="submit"
                 className="btn-primary"
-                style={{ marginTop: 20, width: '100%' }}
+                style={{ marginTop: 28, width: '100%' }}
                 disabled={busy || code.length !== 6}
               >
                 {busy ? 'Checking...' : 'Verify'}
@@ -220,7 +220,7 @@ export default function Activate() {
               )}
               {note && !error && <Notice style={{ marginTop: 16 }}>{note}</Notice>}
 
-              <p className="muted" style={{ marginTop: 12, fontSize: 13, textAlign: 'center' }}>
+              <p className="muted" style={{ marginTop: 18, fontSize: 13, textAlign: 'center' }}>
                 Didn't get it? Check spam, then{' '}
                 <button
                   type="button"
@@ -262,7 +262,7 @@ export default function Activate() {
                 onChange={(e) => setPassword(e.target.value)}
               />
 
-              <label className="field-label" htmlFor="confirm-password" style={{ marginTop: 16 }}>
+              <label className="field-label" htmlFor="confirm-password" style={{ marginTop: 24 }}>
                 Confirm password
               </label>
               <input
@@ -276,7 +276,7 @@ export default function Activate() {
                 onChange={(e) => setConfirm(e.target.value)}
               />
 
-              <button type="submit" className="btn-primary" style={{ marginTop: 20, width: '100%' }} disabled={busy}>
+              <button type="submit" className="btn-primary" style={{ marginTop: 28, width: '100%' }} disabled={busy}>
                 {busy ? 'Setting up...' : 'Create my account'}
               </button>
 
@@ -305,8 +305,7 @@ export default function Activate() {
           )}
         </div>
 
-        <p style={{ position: 'relative', zIndex: 1, marginTop: 16, textAlign: 'center' }}>
-          {/* Sits on the mosaic rather than in the card, so it needs its own weight. */}
+        <p className="auth-back-link">
           <Link
             to="/login"
             style={{
@@ -323,6 +322,7 @@ export default function Activate() {
             &larr; Back to sign in
           </Link>
         </p>
+        </div>
       </div>
     </section>
   );

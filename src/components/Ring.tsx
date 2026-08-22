@@ -8,7 +8,7 @@ export default function Ring({ value }: { value: number }) {
     <div className="ring-stat">
       {/* Thick stroke, butt caps, no taper: the arc reads as a filled sector rather
           than a hairline, which is what makes it survive next to a block of text. */}
-      <svg width="64" height="64" viewBox="0 0 64 64" role="img" aria-label={`Profile ${value}% complete`}>
+      <svg width="64" height="64" viewBox="0 0 64 64" role="img" aria-label={`Profile ${value}% complete`} style={{ outline: 'none' }}>
         <circle className="ring-track" cx="32" cy="32" r={r} fill="none" strokeWidth="11" />
         <circle
           className="ring-fill"

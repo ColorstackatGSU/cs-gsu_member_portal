@@ -9,7 +9,7 @@ export default function HackerRankMark({ size = 34 }: { size?: number }) {
       alt="HackerRank"
       width={size}
       height={size}
-      style={{ flex: 'none', display: 'block', border: '2px solid var(--ink)' }}
+      style={{ flex: 'none', display: 'block', borderRadius: 0 }}
     />
   );
 }

@@ -1,12 +1,10 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
-import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import Footer from './Footer';
-import PhotoMosaic from './PhotoMosaic';
 import { useAuth } from '../auth/context';
 
-/** Routes that get the light photo-mosaic treatment instead of the dark app surface. */
+/** Routes that use the signed-out member-portal shell. */
 const AUTH_ROUTES = ['/login', '/activate', '/forgot'];
 
 export default function Layout() {
@@ -18,8 +16,6 @@ export default function Layout() {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [pathname]);
 
-  // The shell is for signed-in members only. Signed out, there is nowhere for a
-  // sidebar to navigate to, so those routes keep the floating pill.
   const isApp = !isAuth && Boolean(session);
 
   if (isApp) {
@@ -42,27 +38,33 @@ export default function Layout() {
     );
   }
 
+  if (isAuth) {
+    return (
+      <div className="auth-portal-shell">
+        <div className="auth-content-column">
+          <main><Outlet /></main>
+          <footer className="auth-actions">
+            <a href="https://colorstackatgsu.com" className="auth-action-secondary">Visit main site ↗</a>
+          </footer>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
-      className={isAuth ? 'auth-page' : undefined}
+      className={undefined}
       style={{
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
-        // The mosaic is fixed and only covers the viewport, so anything taller than
-        // one screen would otherwise expose the dark body colour underneath it.
-        background: isAuth ? '#dfe8f5' : 'var(--paper)',
+        background: 'var(--paper)',
       }}
     >
-      {isAuth && <PhotoMosaic />}
-      <Navbar />
       <main style={{ flex: 1 }}>
         <Outlet />
       </main>
 
-      {/* The auth pages are pinned to one viewport, so the footer would eat the
-          height the form needs. Its only real content is the contact address,
-          which those pages already surface in their own copy. */}
       {!isAuth && <Footer />}
     </div>
   );

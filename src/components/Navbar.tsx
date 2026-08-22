@@ -27,44 +27,45 @@ export default function Navbar() {
     <header
       style={{
         position: 'absolute',
-        top: 26,
+        top: 20,
         left: '50%',
         transform: 'translateX(-50%)',
         width: 'calc(100% - 32px)',
-        maxWidth: session ? 940 : 860,
+        maxWidth: session ? 780 : 680,
         zIndex: 50,
       }}
     >
       <nav
         className="nav-bar"
         style={{
-          padding: '8px 8px 8px 14px',
+          padding: '6px 8px 6px 16px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          gap: 12,
-          background: '#ffffff',
-          border: '3px solid var(--ink)',
-          borderRadius: 0,
-          boxShadow: 'var(--drop)',
+          gap: 10,
+          background: 'rgba(255, 255, 255, 0.95)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          border: 'none',
+          borderRadius: 999,
+          boxShadow: '0 12px 36px rgba(0, 0, 0, 0.15)',
         }}
       >
-        <Link to={session ? '/profile' : '/'} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <Link to={session ? '/profile' : '/'} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <img
             src="/images/colorstack-gsu-logo.png"
             alt="ColorStack at GSU"
             className="nav-logo-img"
-            style={{ display: 'block', width: 32, height: 32, border: '2px solid var(--ink)' }}
+            style={{ display: 'block', width: 28, height: 28, borderRadius: '50%' }}
           />
           <span
             className="nav-brand-text"
             style={{
-              fontFamily: 'var(--mono)',
-              fontWeight: 700,
-              fontSize: 12,
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              color: 'var(--ink)',
+              fontFamily: 'var(--display)',
+              fontWeight: 600,
+              fontSize: 14,
+              letterSpacing: '-0.01em',
+              color: '#091024',
             }}
           >
             Member Portal
@@ -75,10 +76,28 @@ export default function Navbar() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <div className="portal-tabs">
               <NavLink
+                to="/dashboard"
+                className={({ isActive }) => (isActive ? 'portal-tab portal-tab-active' : 'portal-tab')}
+              >
+                Dashboard
+              </NavLink>
+              <NavLink
                 to="/profile"
                 className={({ isActive }) => (isActive ? 'portal-tab portal-tab-active' : 'portal-tab')}
               >
                 Profile
+              </NavLink>
+              <NavLink
+                to="/resume"
+                className={({ isActive }) => (isActive ? 'portal-tab portal-tab-active' : 'portal-tab')}
+              >
+                Resume
+              </NavLink>
+              <NavLink
+                to="/events"
+                className={({ isActive }) => (isActive ? 'portal-tab portal-tab-active' : 'portal-tab')}
+              >
+                Events
               </NavLink>
               <NavLink
                 to="/settings"
@@ -87,7 +106,20 @@ export default function Navbar() {
                 Settings
               </NavLink>
             </div>
-            <button type="button" onClick={onSignOut} className="btn-secondary btn-sm">
+            <button
+              type="button"
+              onClick={onSignOut}
+              style={{
+                fontFamily: 'var(--mono)',
+                fontSize: 11,
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+                fontWeight: 500,
+                padding: '7px 14px',
+                borderRadius: 999,
+                color: 'rgba(9, 16, 36, 0.65)',
+              }}
+            >
               Sign out
             </button>
           </div>

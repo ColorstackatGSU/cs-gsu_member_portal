@@ -75,17 +75,7 @@ export default function Dashboard() {
           <h1 className="page-title">
             {greeting()}, {name}
           </h1>
-          <p
-            className="muted"
-            style={{
-              margin: '12px 0 0',
-              fontFamily: 'var(--mono)',
-              fontSize: 11.5,
-              fontWeight: 600,
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-            }}
-          >
+          <p className="muted" style={{ fontSize: 14.5, margin: '8px 0 0' }}>
             {todo.length === 0
               ? 'Nothing needs you today'
               : `${todo.length} thing${todo.length === 1 ? '' : 's'} left to finish setting up`}
@@ -94,7 +84,7 @@ export default function Dashboard() {
 
         <div className="app-columns">
           <div style={{ display: 'grid', gap: 20 }}>
-            <div className="card fade-in-up fade-delay-1">
+            <div className="card profile-completeness-card fade-in-up fade-delay-1">
               <div className="card-head" style={{ display: 'block', marginBottom: 18 }}>
                 <h2 className="card-title">
                   {todo.length === 0 ? 'You are all set' : 'Suggested next steps'}
@@ -136,18 +126,7 @@ export default function Dashboard() {
             <div className="card fade-in-up fade-delay-2">
               <div className="card-head">
                 <h2 className="card-title">Your details</h2>
-                <Link
-                  to="/profile"
-                  className="text-link"
-                  style={{
-                    fontFamily: 'var(--mono)',
-                    fontSize: 10.5,
-                    fontWeight: 700,
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    flex: 'none',
-                  }}
-                >
+                <Link to="/profile" style={{ fontSize: 13, color: 'var(--gsu-blue)' }}>
                   Edit &rarr;
                 </Link>
               </div>

@@ -58,21 +58,20 @@ export default function Login() {
 
   return (
     <section className="auth-pad">
-      <div className="container-wide" style={{ maxWidth: 470 }}>
-        <div className="fade-in-up auth-masthead">
-          <p className="section-eyebrow">Member Portal</p>
+      <div className="auth-layout mx-auto w-full" style={{ maxWidth: 1120 }}>
+        <div className="auth-copy auth-copy-card fade-in-up">
           <h1
             className="auth-heading"
             style={{ fontSize: 'clamp(32px, 4.4vw, 46px)', fontWeight: 900, margin: 0 }}
           >
             Sign in
           </h1>
-          <p className="auth-sub" style={{ marginTop: 8, fontSize: 14 }}>
+          <p className="auth-sub" style={{ marginTop: 12, fontSize: 14 }}>
             Welcome back. Use the email and password you set up.
           </p>
         </div>
 
-        <form className="auth-card fade-in-up fade-delay-1" style={{ marginTop: 18 }} onSubmit={onSubmit}>
+        <form className="auth-card auth-form-card fade-in-up fade-delay-1" onSubmit={onSubmit}>
           <label className="field-label" htmlFor="email">
             Email address
           </label>
@@ -87,7 +86,7 @@ export default function Login() {
             onChange={(e) => setEmail(e.target.value)}
           />
 
-          <label className="field-label" htmlFor="password" style={{ marginTop: 16 }}>
+          <label className="field-label" htmlFor="password" style={{ marginTop: 24 }}>
             Password
           </label>
           <input
@@ -117,15 +116,13 @@ export default function Login() {
             </Notice>
           )}
 
-          <div className="divider-or">First time here?</div>
-
-          <Link to="/activate" className="btn-secondary" style={{ width: '100%' }}>
+          <Link to="/activate" className="btn-secondary" style={{ width: '100%', marginTop: 14 }}>
             Activate your account
           </Link>
 
           <p
             className="muted auth-fineprint"
-            style={{ marginTop: 12, fontSize: 12.5, lineHeight: 1.5, textAlign: 'center' }}
+            style={{ marginTop: 18, fontSize: 12.5, lineHeight: 1.5, textAlign: 'center' }}
           >
             Fill out the member form first. We'll email you a one-time code, then you pick a password.
           </p>

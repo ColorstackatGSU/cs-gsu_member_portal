@@ -55,7 +55,9 @@ async function request<T>(
     if (!token) {
       throw new ApiError(401, 'Your session has expired. Sign in again.');
     }
-    headers.set('Authorization', `Bearer ${token}`);
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
   }
 
   // Left alone for FormData, so the browser can set the multipart boundary itself.
@@ -63,15 +65,19 @@ async function request<T>(
     headers.set('Content-Type', 'application/json');
   }
 
-  const response = await fetch(`${BASE_URL}${path}`, { ...init, headers });
+  try {
+    const response = await fetch(`${BASE_URL}${path}`, { ...init, headers });
 
-  if (!response.ok) {
-    throw await toError(response);
+    if (!response.ok) {
+      throw await toError(response);
+    }
+    if (response.status === 204) {
+      return undefined as T;
+    }
+    return (await response.json()) as T;
+  } catch (err) {
+    throw err;
   }
-  if (response.status === 204) {
-    return undefined as T;
-  }
-  return (await response.json()) as T;
 }
 
 /** Endpoints a member reaches before they have an account, so no token is attached. */

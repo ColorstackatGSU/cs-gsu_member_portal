@@ -2,7 +2,10 @@ const CONTACT_EMAIL = 'official@colorstackatgsu.com';
 
 export default function Footer() {
   return (
-    <footer className="portal-footer">
+    <footer
+      className="portal-footer"
+      style={{ borderTop: '1px solid var(--line)', padding: '32px 0', color: 'rgba(9, 16, 36, 0.65)' }}
+    >
       <div
         className="container-wide"
         style={{
@@ -19,7 +22,9 @@ export default function Footer() {
         }}
       >
         <span>ColorStack at Georgia State University</span>
-        <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+        <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: 'var(--gsu-blue)' }}>
+          {CONTACT_EMAIL}
+        </a>
       </div>
     </footer>
   );

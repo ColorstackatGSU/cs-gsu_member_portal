@@ -93,7 +93,7 @@ const NAV = [
   },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ style }: { style?: React.CSSProperties }) {
   const { signOut } = useAuth();
   const navigate = useNavigate();
 
@@ -103,7 +103,7 @@ export default function Sidebar() {
   }
 
   return (
-    <aside className="app-sidebar">
+    <aside className="app-sidebar" style={style}>
       <div className="app-sidebar-brand">
         <img src="/images/colorstack-gsu-logo.png" alt="" />
         <span>
