@@ -145,10 +145,22 @@ export default function Resume() {
   return (
     <section className="portal-pad">
       <div className="container-wide" style={{ maxWidth: 820 }}>
-        <div className="fade-in-up">
+        <div className="fade-in-up page-head">
           <p className="section-eyebrow" style={{ marginBottom: 12 }}>Member Portal</p>
           <h1 className="page-title">Resume</h1>
-          <p className="card-sub" style={{ marginTop: 6 }}>PDF, up to 5 MB.</p>
+          <p
+            className="muted"
+            style={{
+              margin: '12px 0 0',
+              fontFamily: 'var(--mono)',
+              fontSize: 11,
+              fontWeight: 600,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+            }}
+          >
+            PDF &middot; 5 MB max
+          </p>
         </div>
 
         {error && <Notice kind="error" style={{ marginTop: 18 }}>{error}</Notice>}

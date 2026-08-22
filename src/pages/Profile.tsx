@@ -218,10 +218,27 @@ export default function Profile() {
               />
             </div>
             <div style={{ flex: '1 1 240px', minWidth: 0 }}>
-              <h1 style={{ fontSize: 'clamp(20px, 2.6vw, 25px)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>
+              <h1
+                style={{
+                  fontSize: 'clamp(24px, 3.2vw, 34px)',
+                  fontWeight: 900,
+                  letterSpacing: '-0.035em',
+                  lineHeight: 0.98,
+                  textTransform: 'uppercase',
+                  margin: 0,
+                }}
+              >
                 {[profile.firstName, profile.lastName].filter(Boolean).join(' ') || 'Your profile'}
               </h1>
-              <p className="muted" style={{ fontSize: 13.5, margin: '3px 0 0', wordBreak: 'break-word' }}>
+              <p
+                className="muted"
+                style={{
+                  fontFamily: 'var(--mono)',
+                  fontSize: 11.5,
+                  margin: '7px 0 0',
+                  wordBreak: 'break-word',
+                }}
+              >
                 {profile.email}
               </p>
               <div className="chip-row">
@@ -236,9 +253,21 @@ export default function Profile() {
           </div>
 
           <div style={{ marginTop: 18 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 7, fontSize: 12.5 }}>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'baseline',
+                marginBottom: 8,
+                fontFamily: 'var(--mono)',
+                fontSize: 10.5,
+                fontWeight: 700,
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+              }}
+            >
               <span className="muted">Profile complete</span>
-              <span style={{ fontWeight: 600 }}>{pct}%</span>
+              <span>{pct}%</span>
             </div>
             <div
               className="meter"
@@ -459,7 +488,17 @@ export default function Profile() {
         </form>
 
         <p style={{ marginTop: 18 }}>
-          <Link to="/settings" className="muted" style={{ fontSize: 13 }}>
+          <Link
+            to="/settings"
+            className="text-link"
+            style={{
+              fontFamily: 'var(--mono)',
+              fontSize: 11,
+              fontWeight: 700,
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+            }}
+          >
             Sharing and account settings &rarr;
           </Link>
         </p>

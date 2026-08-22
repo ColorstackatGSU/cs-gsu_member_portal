@@ -59,13 +59,11 @@ export default function Login() {
   return (
     <section className="auth-pad">
       <div className="container-wide" style={{ maxWidth: 470 }}>
-        <div className="fade-in-up" style={{ position: 'relative', zIndex: 1 }}>
-          <p className="section-eyebrow" style={{ marginBottom: 14 }}>
-            Member Portal
-          </p>
+        <div className="fade-in-up auth-masthead">
+          <p className="section-eyebrow">Member Portal</p>
           <h1
             className="auth-heading"
-            style={{ fontSize: 'clamp(28px, 3.6vw, 38px)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}
+            style={{ fontSize: 'clamp(32px, 4.4vw, 46px)', fontWeight: 900, margin: 0 }}
           >
             Sign in
           </h1>

@@ -48,11 +48,9 @@ export default function Settings() {
   return (
     <section className="portal-pad">
       <div className="container-wide" style={{ maxWidth: 680 }}>
-        <div className="fade-in-up">
+        <div className="fade-in-up page-head">
           <p className="section-eyebrow" style={{ marginBottom: 14 }}>Member Portal</p>
-          <h1 style={{ fontSize: 'clamp(24px, 3.2vw, 32px)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>
-            Settings
-          </h1>
+          <h1 className="page-title">Settings</h1>
         </div>
 
         {error && (
@@ -80,7 +78,15 @@ export default function Settings() {
                   onChange={(e) => toggle(e.target.checked)}
                 />
                 <span className="switch-track" />
-                <span style={{ fontSize: 14.5 }}>
+                <span
+                  style={{
+                    fontFamily: 'var(--mono)',
+                    fontSize: 12,
+                    fontWeight: 700,
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                  }}
+                >
                   {profile.resumeShared ? 'Visible to sponsors' : 'Private'}
                 </span>
               </label>

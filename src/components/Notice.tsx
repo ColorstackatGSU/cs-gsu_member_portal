@@ -37,13 +37,18 @@ export default function Notice({ kind = 'info', children, onDismiss, style }: No
           onClick={onDismiss}
           aria-label="Dismiss"
           style={{
+            flex: 'none',
             background: 'none',
-            border: 'none',
+            border: '2px solid var(--ink)',
             cursor: 'pointer',
             color: 'inherit',
-            opacity: 0.7,
-            fontSize: 18,
+            fontFamily: 'var(--mono)',
+            fontSize: 14,
             lineHeight: 1,
+            width: 22,
+            height: 22,
+            display: 'grid',
+            placeItems: 'center',
             padding: 0,
           }}
         >

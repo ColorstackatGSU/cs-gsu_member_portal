@@ -121,13 +121,13 @@ export default function Activate() {
   return (
     <section className="auth-pad">
       <div className="container-wide" style={{ maxWidth: 470 }}>
-        <div className="fade-in-up" style={{ position: 'relative', zIndex: 1 }}>
-          <p className="section-eyebrow" style={{ marginBottom: 14 }}>
+        <div className="fade-in-up auth-masthead">
+          <p className="section-eyebrow">
             {step === 'done' ? 'Welcome in' : `Step ${STEPS.indexOf(step) + 1} of ${STEPS.length}`}
           </p>
           <h1
             className="auth-heading"
-            style={{ fontSize: 'clamp(26px, 3.4vw, 34px)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}
+            style={{ fontSize: 'clamp(28px, 3.9vw, 40px)', fontWeight: 900, margin: 0 }}
           >
             {heading}
           </h1>
@@ -305,12 +305,22 @@ export default function Activate() {
           )}
         </div>
 
-        <p style={{ position: 'relative', zIndex: 1, marginTop: 14, textAlign: 'center' }}>
+        <p style={{ position: 'relative', zIndex: 1, marginTop: 16, textAlign: 'center' }}>
+          {/* Sits on the mosaic rather than in the card, so it needs its own weight. */}
           <Link
             to="/login"
-            style={{ fontSize: 13, color: 'var(--gsu-blue)', textDecoration: 'underline', fontWeight: 500 }}
+            style={{
+              fontFamily: 'var(--mono)',
+              fontSize: 11,
+              fontWeight: 700,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color: 'var(--ink)',
+              textDecoration: 'underline',
+              textUnderlineOffset: 3,
+            }}
           >
-            Back to sign in
+            &larr; Back to sign in
           </Link>
         </p>
       </div>

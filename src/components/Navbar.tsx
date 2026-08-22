@@ -4,12 +4,15 @@ import { useAuth } from '../auth/context';
 const SITE_URL = 'https://colorstackatgsu.com';
 
 /**
- * The main site's floating white pill.
+ * The bar the signed-out pages float at the top.
  *
  * It carries two different jobs depending on who is looking. Signed out, it is branding
  * plus a way back to the main site. Signed in, it becomes the portal's actual navigation:
  * the member needs a way to reach settings and, more importantly, a visible way to sign
  * out. A portal with no sign-out button is a portal nobody trusts on a shared laptop.
+ *
+ * Square, black-edged and opaque rather than a frosted pill: it sits over a moving wall
+ * of photos, and a hard block is the only thing that reliably holds against it.
  */
 export default function Navbar() {
   const { session, signOut } = useAuth();
@@ -24,7 +27,7 @@ export default function Navbar() {
     <header
       style={{
         position: 'absolute',
-        top: 30,
+        top: 26,
         left: '50%',
         transform: 'translateX(-50%)',
         width: 'calc(100% - 32px)',
@@ -35,17 +38,15 @@ export default function Navbar() {
       <nav
         className="nav-bar"
         style={{
-          padding: '8px 12px 8px 20px',
+          padding: '8px 8px 8px 14px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           gap: 12,
-          background: 'rgba(255, 255, 255, 0.92)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          border: 'none',
-          borderRadius: 999,
-          boxShadow: '0 12px 36px rgba(0, 0, 0, 0.15)',
+          background: '#ffffff',
+          border: '3px solid var(--ink)',
+          borderRadius: 0,
+          boxShadow: 'var(--drop)',
         }}
       >
         <Link to={session ? '/profile' : '/'} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -53,16 +54,17 @@ export default function Navbar() {
             src="/images/colorstack-gsu-logo.png"
             alt="ColorStack at GSU"
             className="nav-logo-img"
-            style={{ display: 'block', width: 32, height: 32, borderRadius: '50%' }}
+            style={{ display: 'block', width: 32, height: 32, border: '2px solid var(--ink)' }}
           />
           <span
             className="nav-brand-text"
             style={{
-              fontFamily: 'var(--display)',
-              fontWeight: 600,
-              fontSize: 15,
-              letterSpacing: '-0.01em',
-              color: '#091024',
+              fontFamily: 'var(--mono)',
+              fontWeight: 700,
+              fontSize: 12,
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color: 'var(--ink)',
             }}
           >
             Member Portal
@@ -85,37 +87,12 @@ export default function Navbar() {
                 Settings
               </NavLink>
             </div>
-            <button
-              type="button"
-              onClick={onSignOut}
-              style={{
-                fontFamily: 'var(--mono)',
-                fontSize: 11,
-                letterSpacing: '0.06em',
-                textTransform: 'uppercase',
-                fontWeight: 500,
-                padding: '7px 14px',
-                borderRadius: 999,
-                color: 'rgba(9, 16, 36, 0.55)',
-              }}
-            >
+            <button type="button" onClick={onSignOut} className="btn-secondary btn-sm">
               Sign out
             </button>
           </div>
         ) : (
-          <a
-            href={SITE_URL}
-            style={{
-              fontFamily: 'var(--mono)',
-              fontSize: 11,
-              letterSpacing: '0.04em',
-              textTransform: 'uppercase',
-              padding: '8px 18px',
-              borderRadius: 999,
-              color: 'rgba(9, 16, 36, 0.75)',
-              fontWeight: 500,
-            }}
-          >
+          <a href={SITE_URL} className="btn-secondary btn-sm">
             Main site
           </a>
         )}

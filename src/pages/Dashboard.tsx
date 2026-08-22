@@ -70,15 +70,25 @@ export default function Dashboard() {
   return (
     <section className="portal-pad">
       <div className="container-wide" style={{ maxWidth: 1100 }}>
-        <div className="fade-in-up" style={{ marginBottom: 24 }}>
+        <div className="fade-in-up page-head">
           <p className="section-eyebrow" style={{ marginBottom: 12 }}>Dashboard</p>
-          <h1 style={{ fontSize: 'clamp(24px, 3.2vw, 32px)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>
-            {greeting()}, {name}.
+          <h1 className="page-title">
+            {greeting()}, {name}
           </h1>
-          <p className="muted" style={{ fontSize: 14.5, margin: '8px 0 0', color: 'rgba(255,255,255,0.55)' }}>
+          <p
+            className="muted"
+            style={{
+              margin: '12px 0 0',
+              fontFamily: 'var(--mono)',
+              fontSize: 11.5,
+              fontWeight: 600,
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+            }}
+          >
             {todo.length === 0
-              ? 'Nothing needs you today.'
-              : `${todo.length} thing${todo.length === 1 ? '' : 's'} left to finish setting up.`}
+              ? 'Nothing needs you today'
+              : `${todo.length} thing${todo.length === 1 ? '' : 's'} left to finish setting up`}
           </p>
         </div>
 
@@ -126,7 +136,18 @@ export default function Dashboard() {
             <div className="card fade-in-up fade-delay-2">
               <div className="card-head">
                 <h2 className="card-title">Your details</h2>
-                <Link to="/profile" style={{ fontSize: 13, color: 'var(--gsu-sky)' }}>
+                <Link
+                  to="/profile"
+                  className="text-link"
+                  style={{
+                    fontFamily: 'var(--mono)',
+                    fontSize: 10.5,
+                    fontWeight: 700,
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                    flex: 'none',
+                  }}
+                >
                   Edit &rarr;
                 </Link>
               </div>
