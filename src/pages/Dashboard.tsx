@@ -197,7 +197,7 @@ export default function Dashboard() {
                 <h2 className="card-title" style={{ fontSize: 15 }}>Resume</h2>
               </div>
               <p style={{ margin: 0, fontSize: 14.5, fontWeight: 600 }}>
-                {profile.hasResume ? 'resume.pdf' : 'Not uploaded'}
+                {profile.hasResume ? profile.resumeFilename : 'Not uploaded'}
               </p>
               <p className="card-sub" style={{ margin: '4px 0 0' }}>
                 {profile.hasResume && profile.resumeUploadedAt

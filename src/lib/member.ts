@@ -25,6 +25,8 @@ export type MemberProfile = {
   allergies: string | null;
   postGradPlan: string | null;
   hasResume: boolean;
+  /** The name the member uploaded. Null only when there is no resume. */
+  resumeFilename: string | null;
   resumeUploadedAt: string | null;
   resumeShared: boolean;
   /** A signed link that expires, or null when there is no picture. */
@@ -40,6 +42,7 @@ export type ProfileEdits = Omit<
   | 'personalEmail'
   | 'avatarUrl'
   | 'hasResume'
+  | 'resumeFilename'
   | 'resumeUploadedAt'
   | 'resumeShared'
   | 'activatedAt'

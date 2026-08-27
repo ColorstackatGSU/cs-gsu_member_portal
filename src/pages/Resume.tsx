@@ -35,6 +35,7 @@ export default function Resume() {
   const [error, setError] = useState<string | null>(null);
   const [scoreError, setScoreError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const polls = useRef(0);
   const fileInput = useRef<HTMLInputElement>(null);
 
@@ -83,22 +84,32 @@ export default function Resume() {
     }
   }
 
-  async function open() {
-    setError(null);
-    try {
-      const { url } = await memberApi.resumeUrl();
-      // A short-lived signed URL, so it is opened rather than stored anywhere.
-      window.open(url, '_blank', 'noopener');
-    } catch (err) {
-      setError(message(err));
+  // The same short-lived signed URL as before, held in state so the <iframe> below can
+  // render the file in place. Nothing is stored: the link expires on its own, and the
+  // bytes only ever live in the viewer.
+  const loadPreview = useCallback(
+    () =>
+      memberApi
+        .resumeUrl()
+        .then(({ url }) => setPreviewUrl(url))
+        .catch(() => setPreviewUrl(null)),
+    [],
+  );
+
+  // Keyed on resumeUploadedAt as well as hasResume, so replacing a file re-signs rather
+  // than leaving the previous one on screen.
+  useEffect(() => {
+    if (profile?.hasResume) {
+      void loadPreview();
     }
-  }
+  }, [profile?.hasResume, profile?.resumeUploadedAt, loadPreview]);
 
   async function remove() {
     setError(null);
     setBusy(true);
     try {
       setProfile(await memberApi.deleteResume());
+      setPreviewUrl(null);
       await refreshScore();
     } catch (err) {
       setError(message(err));
@@ -175,8 +186,8 @@ export default function Resume() {
 
           <div className="resume-drop">
             <div style={{ flex: '1 1 220px' }}>
-              <p style={{ margin: 0, fontSize: 14.5, fontWeight: 600 }}>
-                {profile.hasResume ? 'resume.pdf' : 'No resume yet'}
+              <p style={{ margin: 0, fontSize: 14.5, fontWeight: 600, overflowWrap: 'anywhere' }}>
+                {profile.hasResume ? profile.resumeFilename : 'No resume yet'}
               </p>
               <p className="card-sub" style={{ margin: '3px 0 0' }}>
                 {profile.hasResume && profile.resumeUploadedAt
@@ -187,7 +198,6 @@ export default function Resume() {
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
               {profile.hasResume ? (
                 <>
-                  <button type="button" className="btn-secondary btn-sm" onClick={open}>View</button>
                   <button
                     type="button"
                     className="btn-secondary btn-sm"
@@ -236,7 +246,26 @@ export default function Resume() {
           </p>
         </div>
 
-        <div className="card fade-in-up fade-delay-2" style={{ marginTop: 18 }}>
+        {profile.hasResume && (
+          <div
+            className="card fade-in-up fade-delay-2"
+            style={{ marginTop: 18, padding: 0, overflow: 'hidden' }}
+          >
+            {previewUrl ? (
+              <iframe
+                src={`${previewUrl}#view=FitH`}
+                title={profile.resumeFilename ?? 'Your resume'}
+                style={{ display: 'block', width: '100%', height: 720, border: 0 }}
+              />
+            ) : (
+              // The signed link is one request away; showing the frame's shape beats
+              // showing nothing, since this is the tallest thing on the page.
+              <div className="skeleton" style={{ height: 720, borderRadius: 0 }} />
+            )}
+          </div>
+        )}
+
+        <div className="card fade-in-up fade-delay-3" style={{ marginTop: 18 }}>
           <div className="hr-banner">
             <HackerRankMark size={34} />
             <span className="hr-banner-text">
