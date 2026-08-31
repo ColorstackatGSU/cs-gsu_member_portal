@@ -1346,3 +1346,15 @@ textarea.field-input { resize: vertical; min-height: 82px; line-height: 1.55; }
   background: var(--ink);
   color: #ffffff;
 }
+
+/* Discord verification. A handle in the profile field is a claim; this is set only
+   once somebody clicked Verify in the chapter server from that account and matched.
+   Green rather than the usual chip white, and it always carries the word — colour
+   never carries the meaning on its own. */
+.chip-verified {
+  gap: 5px;
+  background: var(--gsu-blue);
+  color: #ffffff;
+  border-color: var(--ink);
+}
+.chip-verified svg { width: 11px; height: 11px; flex: none; }

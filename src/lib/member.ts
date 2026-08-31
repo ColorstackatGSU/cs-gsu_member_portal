@@ -22,6 +22,9 @@ export type MemberProfile = {
   linkedinUrl: string | null;
   githubUrl: string | null;
   discordUsername: string | null;
+  /** Set when this member clicked Verify in the chapter Discord and was matched. Read
+   *  only: it is proof, so it is set by verification rather than by the profile form. */
+  discordVerifiedAt: string | null;
   allergies: string | null;
   postGradPlan: string | null;
   hasResume: boolean;
@@ -40,6 +43,7 @@ export type ProfileEdits = Omit<
   | 'id'
   | 'email'
   | 'personalEmail'
+  | 'discordVerifiedAt'
   | 'avatarUrl'
   | 'hasResume'
   | 'resumeFilename'

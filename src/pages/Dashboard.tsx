@@ -6,6 +6,7 @@ import { completeness, suggestions } from '../lib/progress';
 import { ApiError } from '../lib/api';
 import Notice from '../components/Notice';
 import Ring from '../components/Ring';
+import VerifiedBadge from '../components/VerifiedBadge';
 
 /**
  * The landing page for a signed-in member.
@@ -160,7 +161,11 @@ export default function Dashboard() {
                   k="Graduates"
                   v={profile.gradTerm && profile.gradYear ? `${profile.gradTerm} ${profile.gradYear}` : null}
                 />
-                <Row k="Discord" v={profile.discordUsername} />
+                <Row
+                  k="Discord"
+                  v={profile.discordUsername}
+                  after={<VerifiedBadge verifiedAt={profile.discordVerifiedAt} />}
+                />
               </div>
             </div>
           </div>
@@ -215,13 +220,23 @@ export default function Dashboard() {
   );
 }
 
-function Row({ k, v }: { k: string; v: string | null | undefined }) {
+function Row({
+  k,
+  v,
+  after,
+}: {
+  k: string;
+  v: string | null | undefined;
+  /** Sits after the value. Only the Discord row uses it, for the verified badge. */
+  after?: React.ReactNode;
+}) {
   const empty = v === null || v === undefined || v.trim() === '';
   return (
     <div className="spec-row">
       <span className="spec-key">{k}</span>
       <span className={empty ? 'spec-val spec-val-empty' : 'spec-val'}>
         {empty ? 'Not set' : v}
+        {!empty && after}
       </span>
     </div>
   );

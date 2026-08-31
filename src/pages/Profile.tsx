@@ -8,6 +8,7 @@ import { ApiError } from '../lib/api';
 import Field from '../components/Field';
 import { GRAD_TERMS, gradYears } from '../lib/graduation';
 import Notice from '../components/Notice';
+import VerifiedBadge from '../components/VerifiedBadge';
 
 /**
  * Everything the member can change about themselves. The resume has its own page.
@@ -439,13 +440,36 @@ export default function Profile() {
             <div className="field-grid">
               <Field id="linkedinUrl" label="LinkedIn" type="url" value={form.linkedinUrl ?? ''} onChange={(v) => setText('linkedinUrl', v)} />
               <Field id="githubUrl" label="GitHub" type="url" value={form.githubUrl ?? ''} onChange={(v) => setText('githubUrl', v)} />
-              <Field
-                id="discordUsername"
-                label="Discord"
-                value={form.discordUsername ?? ''}
-                onChange={(v) => setText('discordUsername', v)}
-                hint="For server verification."
-              />
+              {/* The one field on this page whose value the chapter server acts on.
+                  Verification matches this against the account that clicks Verify,
+                  so a member who changed their Discord handle fixes it here — which
+                  is the whole reason the field is editable at all. */}
+              <div>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: 10,
+                  }}
+                >
+                  <label className="field-label" htmlFor="discordUsername">
+                    Discord
+                  </label>
+                  <VerifiedBadge verifiedAt={profile?.discordVerifiedAt ?? null} />
+                </div>
+                <input
+                  id="discordUsername"
+                  className="field-input"
+                  value={form.discordUsername ?? ''}
+                  onChange={(e) => setText('discordUsername', e.target.value)}
+                />
+                <p className="muted" style={{ fontSize: 12.5, marginTop: 6, lineHeight: 1.45 }}>
+                  {profile?.discordVerifiedAt
+                    ? 'Your Discord account is verified in the chapter server. Changing this name here will not remove your access.'
+                    : 'This is the name we match on in the chapter server. Type it exactly as Discord shows it, then click Verify Membership in the server to get your roles.'}
+                </p>
+              </div>
             </div>
           </div>
 
