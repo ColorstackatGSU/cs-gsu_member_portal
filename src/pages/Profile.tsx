@@ -6,6 +6,7 @@ import type { MemberProfile } from '../lib/member';
 import { completeness } from '../lib/progress';
 import { ApiError } from '../lib/api';
 import Field from '../components/Field';
+import { GRAD_TERMS, gradYears } from '../lib/graduation';
 import Notice from '../components/Notice';
 
 /**
@@ -335,6 +336,9 @@ export default function Profile() {
                   ))}
                 </select>
               </Field>
+              {/* No blank option on either of these. GraduationGate will not let a member
+                  past without both, so offering "not sure" here would only bounce them
+                  straight back to it. */}
               <Field id="gradTerm" label="Graduation term">
                 <select
                   id="gradTerm"
@@ -342,23 +346,31 @@ export default function Profile() {
                   value={form.gradTerm ?? ''}
                   onChange={(e) => setText('gradTerm', e.target.value)}
                 >
-                  <option value="">Not sure yet</option>
-                  <option value="Spring">Spring</option>
-                  <option value="Summer">Summer</option>
-                  <option value="Fall">Fall</option>
+                  {GRAD_TERMS.map((t) => (
+                    <option key={t} value={t}>
+                      {t}
+                    </option>
+                  ))}
                 </select>
               </Field>
-              <Field
-                id="gradYear"
-                label="Graduation year"
-                inputMode="numeric"
-                value={form.gradYear === null ? '' : String(form.gradYear)}
-                placeholder="2027"
-                onChange={(v) => {
-                  const n = Number.parseInt(v, 10);
-                  set('gradYear', v.trim() === '' || Number.isNaN(n) ? null : n);
-                }}
-              />
+              {/* A dropdown rather than free text: the old numeric input ran parseInt over
+                  whatever was typed, so "2027A" saved silently as 2027. */}
+              <Field id="gradYear" label="Graduation year">
+                <select
+                  id="gradYear"
+                  className="field-input"
+                  value={form.gradYear === null ? '' : String(form.gradYear)}
+                  onChange={(e) =>
+                    set('gradYear', e.target.value === '' ? null : Number(e.target.value))
+                  }
+                >
+                  {gradYears().map((y) => (
+                    <option key={y} value={String(y)}>
+                      {y}
+                    </option>
+                  ))}
+                </select>
+              </Field>
             </div>
 
             {/* Changing the address you can sign in with is not a profile edit, so it

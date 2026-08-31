@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AuthProvider, RequireAuth } from './auth/AuthProvider';
+import GraduationGate from './components/GraduationGate';
 import Layout from './components/Layout';
 import Login from './pages/Login';
 import Activate from './pages/Activate';
@@ -22,38 +23,22 @@ export default function App() {
           <Route path="login" element={<Login />} />
           <Route path="activate" element={<Activate />} />
           <Route path="forgot" element={<ForgotPassword />} />
+          {/* Grouped so the gate mounts once for the whole signed-in portal and reads
+              the profile a single time, rather than refetching on every navigation. */}
           <Route
-            path="dashboard"
             element={
               <RequireAuth>
-                <Dashboard />
+                <GraduationGate />
               </RequireAuth>
             }
-          />
-          <Route
-            path="events"
-            element={
-              <RequireAuth>
-                <Events />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="resume"
-            element={
-              <RequireAuth>
-                <Resume />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="profile"
-            element={
-              <RequireAuth>
-                <Profile />
-              </RequireAuth>
-            }
-          />
+          >
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="events" element={<Events />} />
+            <Route path="resume" element={<Resume />} />
+            <Route path="profile" element={<Profile />} />
+          </Route>
+          {/* Deliberately outside the gate. A member who does not want to answer can
+              still reach their account and sign out instead of being stuck. */}
           <Route
             path="settings"
             element={
