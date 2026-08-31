@@ -127,7 +127,16 @@ export default function Login() {
             className="muted auth-fineprint"
             style={{ marginTop: 12, fontSize: 12.5, lineHeight: 1.5, textAlign: 'center' }}
           >
-            Fill out the member form first. We'll email you a one-time code, then you pick a password.
+            Fill out the{' '}
+            <a
+              href="https://forms.gle/GaMnRiAadtNspBr86"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ textDecoration: 'underline' }}
+            >
+              member form
+            </a>{' '}
+            first. We'll email you a one-time code, then you pick a password.
           </p>
         </form>
       </div>
