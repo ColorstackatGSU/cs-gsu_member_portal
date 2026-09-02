@@ -520,7 +520,15 @@
     box-shadow: var(--drop-lg);
   }
 
-  .auth-card a { color: var(--gsu-cool-dim); text-decoration: underline; text-underline-offset: 2px; }
+  /* Prose links inside the card, and only those. The :not() is load bearing: an
+     anchor styled as a button is more specific here (0-1-1) than .btn-primary is
+     (0-1-0), so without it every link-button in a card came out with dark blue
+     underlined text on a dark blue fill and the label vanished into it. */
+  .auth-card a:not([class*='btn-']) {
+    color: var(--gsu-cool-dim);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
 }
 
 /* Text sitting directly on the mosaic rather than inside the card. */
