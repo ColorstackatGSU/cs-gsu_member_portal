@@ -166,7 +166,7 @@ export default function InvolvementFair() {
                 onChange={(e) => setStudentEmail(e.target.value)}
               />
               <p className="muted" style={{ fontSize: 12.5, marginTop: 6, lineHeight: 1.45 }}>
-                {domainHint}
+                {domainHint} We use it to match you to your membership.
               </p>
             </div>
 
@@ -184,7 +184,7 @@ export default function InvolvementFair() {
                 onChange={(e) => setEmail(e.target.value)}
               />
               <p className="muted" style={{ fontSize: 12.5, marginTop: 6, lineHeight: 1.45 }}>
-                We will email both addresses.
+                This is where we will send it.
               </p>
             </div>
 
