@@ -29,11 +29,13 @@ export type FairSignUp = {
    */
   audience: 'new' | 'unclaimed' | 'member' | 'member_no_resume';
   /**
-   * False when the address was already emailed inside the cooldown, or when the send
-   * itself failed. Attendance is recorded either way, which is why this rides on a
-   * success rather than throwing.
+   * What happened to the email, which is not a yes or no.
+   *
+   * already-sent is the common one at a busy table: a person gets exactly one email per
+   * event, forever, so a rescan updates their attendance and sends nothing. Attendance is
+   * recorded in every case, which is why none of these throw.
    */
-  emailed: boolean;
+  email: 'sent' | 'already-sent' | 'failed' | 'blocked';
   sentTo: string;
   /** The same link the email carries, so someone whose mail is slow can tap it here. */
   formUrl: string;

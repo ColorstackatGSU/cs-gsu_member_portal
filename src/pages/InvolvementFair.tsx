@@ -299,16 +299,19 @@ function Marked({
         <div className="auth-card fade-in-up fade-delay-2" style={{ marginTop: 16 }}>
           <p style={{ margin: 0, fontSize: 15, lineHeight: 1.5 }}>{next.lead}</p>
 
-          {result.emailed ? (
-            <p className="muted" style={{ fontSize: 13.5, marginTop: 8, lineHeight: 1.5 }}>
-              Sent to {result.sentTo}. Give it a minute, and check spam.
-            </p>
-          ) : (
-            <p className="muted" style={{ fontSize: 13.5, marginTop: 8, lineHeight: 1.5 }}>
-              We have you on the list. If no email turns up, use the button below. It is
-              the same link.
-            </p>
-          )}
+          <p className="muted" style={{ fontSize: 13.5, marginTop: 8, lineHeight: 1.5 }}>
+            {{
+              sent: `Sent to ${result.sentTo}. Give it a minute, and check spam.`,
+              // Everyone gets exactly one, so this is the honest thing to say rather than
+              // implying another is on its way. Common at a busy table: people rescan.
+              'already-sent': `We already emailed ${result.sentTo}. We only send this once, `
+                + 'so check that inbox, or use the button below.',
+              failed: 'We have you on the list, but the email did not go out. Use the button '
+                + 'below, it is the same link.',
+              blocked: 'We have you on the list. Use the button below to carry on now, it is '
+                + 'the same link.',
+            }[result.email]}
+          </p>
 
           {result.formUrl && (
             <a
