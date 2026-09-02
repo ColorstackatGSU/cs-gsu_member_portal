@@ -6,8 +6,16 @@ import Footer from './Footer';
 import PhotoMosaic from './PhotoMosaic';
 import { useAuth } from '../auth/context';
 
-/** Routes that get the light photo-mosaic treatment instead of the dark app surface. */
-const AUTH_ROUTES = ['/login', '/activate', '/forgot'];
+/**
+ * Routes that get the light photo-mosaic treatment instead of the dark app surface.
+ *
+ * /involvement-fair is in here despite not being an auth route, and for the same two
+ * reasons the auth pages are: it is one short form on one screen, and it is seen by people
+ * who are not signed in. It also has to keep the shell OFF for the case that would
+ * otherwise break it — an officer signed in on their own phone, handing it round a queue,
+ * would otherwise get the member sidebar wrapped around a stranger's signup form.
+ */
+const AUTH_ROUTES = ['/login', '/activate', '/forgot', '/involvement-fair'];
 
 export default function Layout() {
   const { pathname } = useLocation();

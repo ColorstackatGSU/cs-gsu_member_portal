@@ -76,6 +76,7 @@ async function request<T>(
 
 /** Endpoints a member reaches before they have an account, so no token is attached. */
 export const publicApi = {
+  get: <T>(path: string) => request<T>(path, {}, { auth: false }),
   post: <T>(path: string, body: unknown) =>
     request<T>(path, { method: 'POST', body: JSON.stringify(body) }, { auth: false }),
 };

@@ -4,6 +4,7 @@ import GraduationGate from './components/GraduationGate';
 import Layout from './components/Layout';
 import Login from './pages/Login';
 import Activate from './pages/Activate';
+import InvolvementFair from './pages/InvolvementFair';
 import ForgotPassword from './pages/ForgotPassword';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
@@ -23,6 +24,10 @@ export default function App() {
           <Route path="login" element={<Login />} />
           <Route path="activate" element={<Activate />} />
           <Route path="forgot" element={<ForgotPassword />} />
+          {/* The QR code on the tabling cloth. Public, and the only route in this app
+              aimed at people who are not members yet — it records attendance and mails
+              them the membership form rather than trying to sign them up here. */}
+          <Route path="involvement-fair" element={<InvolvementFair />} />
           {/* Grouped so the gate mounts once for the whole signed-in portal and reads
               the profile a single time, rather than refetching on every navigation. */}
           <Route

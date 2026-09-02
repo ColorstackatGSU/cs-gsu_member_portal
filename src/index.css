@@ -1358,3 +1358,174 @@ textarea.field-input { resize: vertical; min-height: 82px; line-height: 1.55; }
   border-color: var(--ink);
 }
 .chip-verified svg { width: 11px; height: 11px; flex: none; }
+
+/* ===========================================================================
+   INVOLVEMENT FAIR
+   =========================================================================== */
+
+/* The confirmation an attendee holds up to an officer across a folding table.
+   Same black plate as the auth masthead, because it is the same job — type that
+   has to survive being set over a wall of photographs — but taller and centred,
+   since this screen has one thing to say and is read from a metre away. */
+.fair-marked {
+  position: relative;
+  z-index: 1;
+  background: var(--ink);
+  color: #ffffff;
+  border: 3px solid var(--ink);
+  box-shadow: var(--drop-lg);
+  padding: 26px 20px 24px;
+  text-align: center;
+}
+
+.fair-marked .section-eyebrow { color: rgba(255, 255, 255, 0.72); }
+.fair-marked .section-eyebrow::before { background: var(--gsu-yellow); }
+
+.fair-marked-title {
+  font-size: clamp(34px, 8vw, 52px);
+  font-weight: 900;
+  margin: 0;
+}
+
+/* The name is the part an officer actually checks against the person in front of
+   them, so it outranks everything but the verdict itself. */
+.fair-marked-name {
+  font-family: var(--display);
+  font-size: clamp(19px, 4.4vw, 24px);
+  font-weight: 800;
+  margin: 16px 0 0;
+  letter-spacing: -0.01em;
+}
+
+.fair-marked-time {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 6px 0 0;
+}
+
+
+/* ============ THE MARK ============
+   A check draws itself, spins, and lands as the chapter logo.
+
+   It is doing a real job rather than being flourish. An officer waving a queue
+   past a table needs to tell "this person just finished" from "this person has
+   had a screenshot open since lunch", and a sequence that plays exactly once on
+   arrival is the difference. The logo at the end is the part they recognise from
+   four feet away, which a bare tick never would be.
+
+   Three beats, overlapping so it reads as one object rather than three events:
+     0.00s  ring sweeps, tick strokes on
+     0.70s  the whole check spins up and shrinks away
+     0.85s  the logo comes out of the same spin and settles
+
+   The check leaves clockwise and the logo arrives clockwise out of the same
+   rotation, which is what sells it as a transformation instead of a crossfade. */
+.fair-mark {
+  position: relative;
+  width: clamp(96px, 26vw, 122px);
+  height: clamp(96px, 26vw, 122px);
+  margin: 0 auto 20px;
+}
+
+.fair-mark > * {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---- the check ---- */
+
+.fair-check {
+  overflow: visible;
+  animation: fair-check-exit 0.5s cubic-bezier(0.5, 0, 0.75, 0.4) 0.7s forwards;
+}
+
+.fair-check-ring,
+.fair-check-tick {
+  fill: none;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+
+.fair-check-ring {
+  stroke: var(--gsu-yellow);
+  stroke-width: 7;
+  /* 2πr for r=52, rounded up so no hairline gap shows at the join. */
+  stroke-dasharray: 327;
+  stroke-dashoffset: 327;
+  /* Starts at twelve o'clock rather than three, so the sweep reads as a sweep. */
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  animation: fair-draw 0.42s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+}
+
+.fair-check-tick {
+  stroke: #ffffff;
+  stroke-width: 9;
+  stroke-dasharray: 72;
+  stroke-dashoffset: 72;
+  /* Overlaps the ring rather than waiting for it: the overlap is what stops the
+     two strokes reading as two separate events. */
+  animation: fair-draw 0.3s cubic-bezier(0.3, 0.9, 0.4, 1) 0.3s forwards;
+}
+
+@keyframes fair-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Accelerating out of rest — ease-in, not ease-out — so the spin looks like it is
+   being flung rather than winding down. */
+@keyframes fair-check-exit {
+  0%   { transform: rotate(0deg) scale(1); opacity: 1; }
+  60%  { transform: rotate(400deg) scale(0.55); opacity: 0.85; }
+  100% { transform: rotate(620deg) scale(0.1); opacity: 0; }
+}
+
+/* ---- the logo ---- */
+
+/* The real asset rather than a redrawn approximation. It is the chapter's mark and
+   the one thing on this screen nobody should be looking at a near-miss of. */
+.fair-logo {
+  object-fit: contain;
+  border: 3px solid #ffffff;
+  opacity: 0;
+  transform: rotate(-260deg) scale(0.1);
+  animation: fair-logo-enter 0.62s cubic-bezier(0.16, 1.3, 0.4, 1) 0.85s forwards;
+}
+
+/* Picks the spin up where the check dropped it and overshoots a touch before
+   settling, which is the whole reason this reads as fun rather than as a loading
+   state that finished. */
+@keyframes fair-logo-enter {
+  0%   { opacity: 0; transform: rotate(-260deg) scale(0.1); }
+  55%  { opacity: 1; transform: rotate(8deg) scale(1.12); }
+  100% { opacity: 1; transform: rotate(0deg) scale(1); }
+}
+
+/* The plate lands under the mark rather than with it, so the eye goes to the
+   spin first and the words second. */
+.fair-marked {
+  animation: fair-settle 0.34s cubic-bezier(0, 0.7, 0.3, 1) both;
+}
+
+@keyframes fair-settle {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Reduced motion gets the destination, not a degraded version of the journey:
+   the logo, sitting there, and no check at all. Nothing in the sequence carries
+   meaning that only movement conveys. */
+@media (prefers-reduced-motion: reduce) {
+  .fair-check { display: none; }
+  .fair-logo {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+  .fair-marked { opacity: 1; transform: none; animation: none; }
+}
