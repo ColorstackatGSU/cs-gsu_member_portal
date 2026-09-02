@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../auth/context';
 import { activationApi } from '../lib/member';
 import { ApiError } from '../lib/api';
@@ -8,6 +8,17 @@ import Notice from '../components/Notice';
 
 /**
  * Setting up an account, once. Email, then the code we mail, then a password.
+ *
+ * There are two ways in, and the second one is not a convenience. Most people arrive here
+ * already holding a code, because submitting the intake form mails one immediately. For
+ * them the first step is not just redundant, it is destructive: asking for a code issues a
+ * new one and invalidates the one in their hand, so the code they were carefully typing in
+ * from the email had been dead since before they opened the page. They then burn a second
+ * of three daily codes discovering that.
+ *
+ * So an ?email= parameter, which is what the code email links to, starts at the code box
+ * and sends nothing. "I already have a code" does the same for anybody who found this page
+ * on their own.
  *
  * Every failure message comes from the API rather than being written here. The server
  * knows whether the address is a member, whether it is already claimed and how many codes
@@ -25,9 +36,15 @@ function message(e: unknown): string {
 export default function Activate() {
   const { signIn } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
-  const [step, setStep] = useState<Step>('email');
-  const [email, setEmail] = useState('');
+  // Read once, as initial state rather than in an effect: arriving from the email means
+  // starting at the code box, and a redirect after the first paint would flash the very
+  // screen we are trying to keep people away from.
+  const linkedEmail = searchParams.get('email')?.trim() ?? '';
+
+  const [step, setStep] = useState<Step>(linkedEmail ? 'code' : 'email');
+  const [email, setEmail] = useState(linkedEmail);
   const [code, setCode] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
@@ -113,7 +130,15 @@ export default function Activate() {
 
   const blurb = {
     email: 'Use the email you put on the membership form. School or personal, either works.',
-    code: sent ? `We sent a 6-digit code to ${sent.sentTo}. It expires in 10 minutes.` : '',
+    // Two different situations. We sent one just now, or they already had one and came
+    // straight here, in which case claiming we just sent something would be a lie and
+    // would also stop them looking at the older email that actually has their code.
+    code: sent
+      ? `We sent a 6-digit code to ${sent.sentTo}.`
+      // Names the address, because this is the branch where nobody chose it on this
+      // screen: it came out of a link, and a wrong one otherwise fails at Verify with
+      // nothing on the page explaining which address was even being checked.
+      : `Enter the 6-digit code we emailed to ${email}.`,
     password: 'Pick a password. This is how you will sign in from now on.',
     done: 'Your account is ready and you are signed in.',
   }[step];
@@ -161,6 +186,38 @@ export default function Activate() {
               <button type="submit" className="btn-primary" style={{ marginTop: 20, width: '100%' }} disabled={busy}>
                 {busy ? 'Sending...' : 'Send my code'}
               </button>
+
+              {/* The way out for somebody who submitted the form, was mailed a code, and
+                  found this page on their own. Without it the only route forward issues a
+                  new code and kills theirs. Sends nothing: it just moves to the box. */}
+              <p className="muted" style={{ marginTop: 12, fontSize: 13, textAlign: 'center' }}>
+                Already got a code from us?{' '}
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!email.trim()) {
+                      // verify-code is checked against an address, so we cannot skip ahead
+                      // without one. Says what to do rather than just refusing.
+                      setError('Put your email in first, then we can check your code.');
+                      return;
+                    }
+                    setError(null);
+                    setNote(null);
+                    setStep('code');
+                  }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    padding: 0,
+                    font: 'inherit',
+                    color: 'var(--gsu-blue)',
+                    textDecoration: 'underline',
+                    cursor: 'pointer',
+                  }}
+                >
+                  enter it instead
+                </button>
+              </p>
 
               {error ? (
                 <Notice kind="error" style={{ marginTop: 16 }}>
@@ -219,6 +276,27 @@ export default function Activate() {
                 </Notice>
               )}
               {note && !error && <Notice style={{ marginTop: 16 }}>{note}</Notice>}
+
+              {!sent && (
+                <p className="muted" style={{ marginTop: 12, fontSize: 13, textAlign: 'center' }}>
+                  Not your address?{' '}
+                  <button
+                    type="button"
+                    onClick={() => { setError(null); setNote(null); setCode(''); setStep('email'); }}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      padding: 0,
+                      font: 'inherit',
+                      color: 'var(--gsu-blue)',
+                      textDecoration: 'underline',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    start again
+                  </button>
+                </p>
+              )}
 
               <p className="muted" style={{ marginTop: 12, fontSize: 13, textAlign: 'center' }}>
                 Didn't get it? Check spam, then{' '}
