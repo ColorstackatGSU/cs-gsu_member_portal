@@ -254,10 +254,10 @@ function Marked({
   const name = result.firstName?.trim();
   const time = (at ?? new Date()).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 
-  // The three people who reach this screen need three different next steps. See
-  // FairService for why the backend draws the same distinction.
+  // The four people who reach this screen need four different next steps. The backend
+  // decides which of them this is; see FairService for how and why.
   const next = {
-    none: {
+    new: {
       lead: 'Check your email for the membership form.',
       cta: 'Open the form now',
     },
@@ -265,11 +265,19 @@ function Marked({
       lead: 'You have already filled in the form, so all that is left is a password.',
       cta: 'Set up my account',
     },
-    activated: {
+    member: {
       lead: 'You are already a member with an account set up. Nothing to do.',
       cta: 'Open the member portal',
     },
-  }[result.memberStatus];
+    // The only one of the four that asks for something. It says what the resume is for,
+    // because "upload your resume" on its own reads as admin, and sponsors reading it is
+    // the entire reason to bother.
+    member_no_resume: {
+      lead: 'You are already a member, but you have not uploaded a resume yet. That is the '
+        + 'part sponsors see, and members without one are not in the resume book.',
+      cta: 'Upload my resume',
+    },
+  }[result.audience];
 
   return (
     <section className="auth-pad">
@@ -297,7 +305,7 @@ function Marked({
             </p>
           ) : (
             <p className="muted" style={{ fontSize: 13.5, marginTop: 8, lineHeight: 1.5 }}>
-              We have you on the list. If no email turns up, use the button below — it is
+              We have you on the list. If no email turns up, use the button below. It is
               the same link.
             </p>
           )}

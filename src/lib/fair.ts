@@ -19,8 +19,15 @@ export type FairEvent = {
 export type FairSignUp = {
   firstName: string | null;
   eventName: string;
-  /** none, unclaimed (form filled, no password yet), or activated. */
-  memberStatus: 'none' | 'unclaimed' | 'activated';
+  /**
+   * Who the backend decided we are talking to. Derived server side and sent as one value
+   * rather than as a member status plus a resume flag, so this screen and the email cannot
+   * drift into disagreeing about which of these somebody is.
+   *
+   * member_no_resume is an activated member with nothing in the resume book, which is the
+   * one group here that gets asked for something rather than congratulated.
+   */
+  audience: 'new' | 'unclaimed' | 'member' | 'member_no_resume';
   /**
    * False when the address was already emailed inside the cooldown, or when the send
    * itself failed. Attendance is recorded either way, which is why this rides on a
