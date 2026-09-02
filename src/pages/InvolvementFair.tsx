@@ -184,7 +184,7 @@ export default function InvolvementFair() {
                 onChange={(e) => setEmail(e.target.value)}
               />
               <p className="muted" style={{ fontSize: 12.5, marginTop: 6, lineHeight: 1.45 }}>
-                The one you actually read over the summer. We send to both.
+                We will email both addresses.
               </p>
             </div>
 
