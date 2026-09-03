@@ -277,8 +277,10 @@
 @media (max-height: 800px) {
   .auth-page main { padding: 78px 0 28px; }
   .auth-page .auth-card { padding: 22px; }
-  .auth-page .auth-card .divider-or { margin: 14px 0; }
   .auth-page .auth-sub { margin-top: 6px; }
+  .auth-activate-banner { margin-bottom: 16px; padding: 12px 14px; }
+  .auth-activate-text { margin-bottom: 10px; font-size: 13px; }
+  .auth-card .auth-activate-btn { padding: 10px 14px; font-size: 11.5px; }
 }
 
 @media (max-height: 700px) {
@@ -287,8 +289,12 @@
   .auth-page .auth-sub,
   .auth-page .auth-fineprint { display: none; }
   .auth-page .section-eyebrow { margin-bottom: 9px; }
-  .auth-page .auth-card .divider-or { margin: 11px 0; }
+  .auth-activate-banner { margin-bottom: 12px; padding: 10px 12px; }
+  .auth-activate-text { margin-bottom: 8px; font-size: 12px; }
+  .auth-card .auth-activate-btn { padding: 8px 12px; font-size: 11px; }
 }
+
+
 
 @layer components {
   .container-wide {
@@ -393,6 +399,37 @@
     box-shadow: none;
     border-color: var(--muted);
   }
+
+  /* Accent button in brand yellow for high-priority calls-to-action like account activation */
+  .btn-accent {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 13px 20px;
+    background: var(--gsu-yellow);
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    border-radius: 0;
+    box-shadow: var(--drop);
+    transition: transform 0.08s linear, box-shadow 0.08s linear, background 0.1s linear;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+  .btn-accent:hover:not(:disabled) { background: #ffe033; }
+  .btn-accent:active:not(:disabled) { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--ink); }
+  .btn-accent:disabled {
+    cursor: not-allowed;
+    background: var(--paper-2);
+    color: var(--faint);
+    box-shadow: none;
+    border-color: var(--muted);
+  }
+
 
   /* Inline actions inside cards and list rows, where a full-size button shouts. */
   .btn-sm {
@@ -524,12 +561,81 @@
      anchor styled as a button is more specific here (0-1-1) than .btn-primary is
      (0-1-0), so without it every link-button in a card came out with dark blue
      underlined text on a dark blue fill and the label vanished into it. */
-  .auth-card a:not([class*='btn-']) {
+  .auth-card a:not([class*='btn-']):not(.auth-activate-btn) {
     color: var(--gsu-cool-dim);
     text-decoration: underline;
     text-underline-offset: 2px;
   }
+  .auth-card .btn-primary,
+  .auth-card .btn-secondary,
+  .auth-card .btn-accent,
+  .auth-card .btn-sm {
+    text-decoration: none;
+  }
+  .auth-card .btn-accent {
+    color: var(--ink);
+  }
+
+  /* Activation callout banner for new members */
+  .auth-activate-banner {
+    background: var(--gsu-yellow);
+    border: 2px solid var(--ink);
+    border-left: 8px solid var(--ink);
+    box-shadow: var(--drop);
+    padding: 16px 18px;
+    margin-bottom: 22px;
+  }
+
+  .auth-activate-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin: 0 0 6px 0;
+  }
+
+  .auth-activate-text {
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: var(--ink);
+    margin: 0 0 12px 0;
+  }
+
+  .auth-card .auth-activate-btn {
+    width: 100%;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 12px 18px;
+    background: var(--ink);
+    color: #ffffff;
+    border: 2px solid var(--ink);
+    border-radius: 0;
+    box-shadow: var(--drop);
+    transition: transform 0.08s linear, box-shadow 0.08s linear, background 0.1s linear;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+  .auth-card .auth-activate-btn:hover {
+    background: #ffffff;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .auth-card .auth-activate-btn:active {
+    background: #ffffff;
+    color: var(--ink);
+    transform: translate(3px, 3px);
+    box-shadow: 0 0 0 var(--ink);
+  }
 }
+
 
 /* Text sitting directly on the mosaic rather than inside the card. */
 .auth-page .auth-sub { color: var(--muted); }
@@ -1114,7 +1220,7 @@ textarea.field-input { resize: vertical; min-height: 82px; line-height: 1.55; }
   .card { padding: 18px 16px; }
   .avatar { width: 50px; height: 50px; font-size: 18px; }
   .save-bar { position: static; }
-  .btn-primary, .btn-secondary { justify-content: center; }
+  .btn-primary, .btn-secondary, .btn-accent { justify-content: center; }
 }
 
 /* A read-only value that has to sit in a field grid next to real inputs, with its own

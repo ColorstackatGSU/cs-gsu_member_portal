@@ -81,6 +81,16 @@ export default function Login() {
         </div>
 
         <form className="auth-card fade-in-up fade-delay-1" style={{ marginTop: 18 }} onSubmit={onSubmit}>
+          <div className="auth-activate-banner">
+            <p className="auth-activate-tag">First time here?</p>
+            <p className="auth-activate-text">
+              New members must activate their account prior to signing in.
+            </p>
+            <Link to="/activate" className="auth-activate-btn">
+              Activate your account &rarr;
+            </Link>
+          </div>
+
           {/* Above the password fields on purpose. For anybody whose personal address is a
               Google account this is one tap and no code, and it renders nothing at all
               when the backend has no client configured. */}
@@ -127,31 +137,16 @@ export default function Login() {
 
           {(error || oauthProblem) && (
             <Notice kind="error" style={{ marginTop: 16 }}>
-              {error ?? oauthProblem}
+              <div>{error ?? oauthProblem}</div>
+              <div style={{ marginTop: 6, fontSize: 12.5 }}>
+                First time here? Make sure to{' '}
+                <Link to="/activate" style={{ fontWeight: 700, textDecoration: 'underline' }}>
+                  activate your account first
+                </Link>
+                .
+              </div>
             </Notice>
           )}
-
-          <div className="divider-or">First time here?</div>
-
-          <Link to="/activate" className="btn-secondary" style={{ width: '100%' }}>
-            Activate your account
-          </Link>
-
-          <p
-            className="muted auth-fineprint"
-            style={{ marginTop: 12, fontSize: 12.5, lineHeight: 1.5, textAlign: 'center' }}
-          >
-            Fill out the{' '}
-            <a
-              href="https://forms.gle/GaMnRiAadtNspBr86"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ textDecoration: 'underline' }}
-            >
-              member form
-            </a>{' '}
-            first. We'll email you a one-time code, then you pick a password.
-          </p>
 
           {/* Below the fold of a short form, but present: signing in is the moment these
               actually apply to somebody. */}
