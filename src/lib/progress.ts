@@ -63,16 +63,6 @@ export function suggestions(p: MemberProfile): Suggestion[] {
     });
   }
 
-  if (!p.resumeShared) {
-    out.push({
-      id: 'sharing',
-      title: 'Turn on sponsor visibility',
-      body: 'Sponsors cannot see you right now.',
-      to: '/settings',
-      cta: 'Review sharing',
-      urgent: true,
-    });
-  }
 
   if (!filled(p, 'linkedinUrl')) {
     out.push({

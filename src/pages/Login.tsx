@@ -152,6 +152,17 @@ export default function Login() {
             </a>{' '}
             first. We'll email you a one-time code, then you pick a password.
           </p>
+
+          {/* Below the fold of a short form, but present: signing in is the moment these
+              actually apply to somebody. */}
+          <p
+            className="muted auth-fineprint"
+            style={{ marginTop: 10, fontSize: 11.5, textAlign: 'center' }}
+          >
+            <Link to="/privacy" style={{ textDecoration: 'underline' }}>Privacy policy</Link>
+            {' · '}
+            <Link to="/terms" style={{ textDecoration: 'underline' }}>Terms</Link>
+          </p>
         </form>
       </div>
     </section>

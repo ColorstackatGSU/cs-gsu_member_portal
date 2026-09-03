@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const CONTACT_EMAIL = 'official@colorstackatgsu.com';
 
 export default function Footer() {
@@ -19,7 +21,13 @@ export default function Footer() {
         }}
       >
         <span>ColorStack at Georgia State University</span>
-        <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+        {/* Reachable from every signed-in page, not just by URL. A policy nobody can find
+            is a policy nobody has read. */}
+        <span style={{ display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'center' }}>
+          <Link to="/privacy">Privacy</Link>
+          <Link to="/terms">Terms</Link>
+          <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+        </span>
       </div>
     </footer>
   );

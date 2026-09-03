@@ -6,6 +6,8 @@ import Login from './pages/Login';
 import Activate from './pages/Activate';
 import InvolvementFair from './pages/InvolvementFair';
 import AuthCallback from './pages/AuthCallback';
+import Privacy from './pages/Privacy';
+import Terms from './pages/Terms';
 import ForgotPassword from './pages/ForgotPassword';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
@@ -32,6 +34,10 @@ export default function App() {
           {/* Where Google sign-in lands. Swaps the handoff code for a session and moves
               on; nothing here is a decision the member makes. */}
           <Route path="auth/callback" element={<AuthCallback />} />
+          {/* Public and unauthenticated: Google's consent screen links straight to these,
+              so they have to render for somebody who has never signed in. */}
+          <Route path="privacy" element={<Privacy />} />
+          <Route path="terms" element={<Terms />} />
           {/* Grouped so the gate mounts once for the whole signed-in portal and reads
               the profile a single time, rather than refetching on every navigation. */}
           <Route

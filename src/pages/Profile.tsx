@@ -249,7 +249,7 @@ export default function Profile() {
                 {profile.gradTerm && profile.gradYear && (
                   <span className="chip">{profile.gradTerm} {profile.gradYear}</span>
                 )}
-                {profile.resumeShared && <span className="chip chip-accent">Visible to sponsors</span>}
+                {profile.hasResume && <span className="chip chip-accent">Visible to sponsors</span>}
               </div>
             </div>
           </div>

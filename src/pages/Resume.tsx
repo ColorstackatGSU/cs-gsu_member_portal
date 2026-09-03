@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { memberApi } from '../lib/member';
 import type { MemberProfile, ResumeScoreResult } from '../lib/member';
 import { ApiError } from '../lib/api';
@@ -179,8 +178,8 @@ export default function Resume() {
         <div className="card fade-in-up fade-delay-1" style={{ marginTop: 18 }}>
           <div className="card-head">
             <h2 className="card-title">Your file</h2>
-            <span className={profile.resumeShared ? 'pill pill-on' : 'pill pill-off'}>
-              {profile.resumeShared ? 'Shared with sponsors' : 'Private'}
+            <span className={profile.hasResume ? 'pill pill-on' : 'pill pill-off'}>
+              {profile.hasResume ? 'Shared with sponsors' : 'Not uploaded'}
             </span>
           </div>
 
@@ -240,9 +239,8 @@ export default function Resume() {
           />
 
           <p className="card-sub" style={{ marginTop: 14 }}>
-            {profile.resumeShared ? 'Automatically shared with sponsors' : 'Private'}.{' '}
-            <Link to="/settings" style={{ textDecoration: 'underline' }}>Change in settings</Link>.
-            {uploadsLeft < 5 && ` ${uploadsLeft} of 5 uploads left today.`}
+            Resumes go in the book we share with our sponsors, which is what the book is
+            for.{uploadsLeft < 5 ? ` ${uploadsLeft} of 5 uploads left today.` : ''}
           </p>
         </div>
 

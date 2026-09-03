@@ -22,23 +22,10 @@ export default function Settings() {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<MemberProfile | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     memberApi.load().then(setProfile).catch((e) => setError(message(e)));
   }, []);
-
-  async function toggle(shared: boolean) {
-    setError(null);
-    setBusy(true);
-    try {
-      setProfile(await memberApi.setResumeShared(shared));
-    } catch (e) {
-      setError(message(e));
-    } finally {
-      setBusy(false);
-    }
-  }
 
   async function onSignOut() {
     await signOut();
@@ -67,36 +54,25 @@ export default function Settings() {
             <div className="card fade-in-up fade-delay-1" style={{ marginTop: 20 }}>
               <div className="card-head" style={{ display: 'block', marginBottom: 16 }}>
                 <h2 className="card-title">Sponsor visibility</h2>
-                <p className="card-sub">Your resume goes in the sponsor resume book.</p>
+                <p className="card-sub">
+                  Every member's resume goes in the book we share with our sponsors. That is
+                  what the resume book is, and it is one of the reasons the chapter has
+                  sponsors at all, so there is no switch here.
+                </p>
               </div>
 
-              <label className="switch">
-                <input
-                  type="checkbox"
-                  checked={profile.resumeShared}
-                  disabled={busy}
-                  onChange={(e) => toggle(e.target.checked)}
-                />
-                <span className="switch-track" />
-                <span
-                  style={{
-                    fontFamily: 'var(--mono)',
-                    fontSize: 12,
-                    fontWeight: 700,
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  {profile.resumeShared ? 'Visible to sponsors' : 'Private'}
-                </span>
-              </label>
-
-              {!profile.hasResume && profile.resumeShared && (
-                <Notice kind="warn" style={{ marginTop: 16 }}>
-                  No resume uploaded yet, so there is nothing to share.{' '}
+              {!profile.hasResume && (
+                <Notice kind="warn">
+                  You have not uploaded a resume, so there is nothing in the book for you.{' '}
                   <Link to="/resume" style={{ textDecoration: 'underline' }}>Upload one</Link>.
                 </Notice>
               )}
+
+              <p className="card-sub" style={{ marginTop: 12, marginBottom: 0 }}>
+                Not comfortable with that? Take your resume down on the{' '}
+                <Link to="/resume" style={{ textDecoration: 'underline' }}>resume page</Link>,
+                or write to official@colorstackatgsu.com and we will sort it out.
+              </p>
             </div>
 
             <div className="card fade-in-up fade-delay-2" style={{ marginTop: 20 }}>
