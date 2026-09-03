@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../auth/context';
 import { authApi } from '../lib/member';
 import Notice from '../components/Notice';
+import GoogleButton from '../components/GoogleButton';
+import { googleError } from '../lib/google';
 
 /**
  * The everyday path: email and password, no code.
@@ -23,10 +25,16 @@ export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [params] = useSearchParams();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+
+  // A failed Google sign-in comes back as a redirect with a reason on it, because the
+  // person is mid-flow in a browser tab and the backend has nowhere else to tell them.
+  // Read here rather than stored, so it clears the moment they try anything else.
+  const oauthProblem = googleError(params.get('oauth'), params.get('email'));
 
   // Where they were headed before the guard bounced them here, so signing in resumes
   // that rather than always landing on the dashboard.
@@ -73,6 +81,12 @@ export default function Login() {
         </div>
 
         <form className="auth-card fade-in-up fade-delay-1" style={{ marginTop: 18 }} onSubmit={onSubmit}>
+          {/* Above the password fields on purpose. For anybody whose personal address is a
+              Google account this is one tap and no code, and it renders nothing at all
+              when the backend has no client configured. */}
+          <GoogleButton />
+          <div className="divider-or">or use your password</div>
+
           <label className="field-label" htmlFor="email">
             Email address
           </label>
@@ -111,9 +125,9 @@ export default function Login() {
             {busy ? 'Signing in...' : 'Sign in'}
           </button>
 
-          {error && (
+          {(error || oauthProblem) && (
             <Notice kind="error" style={{ marginTop: 16 }}>
-              {error}
+              {error ?? oauthProblem}
             </Notice>
           )}
 

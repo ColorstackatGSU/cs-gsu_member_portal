@@ -15,7 +15,7 @@ import { useAuth } from '../auth/context';
  * otherwise break it — an officer signed in on their own phone, handing it round a queue,
  * would otherwise get the member sidebar wrapped around a stranger's signup form.
  */
-const AUTH_ROUTES = ['/login', '/activate', '/forgot', '/involvement-fair'];
+const AUTH_ROUTES = ['/login', '/activate', '/forgot', '/involvement-fair', '/auth/callback'];
 
 export default function Layout() {
   const { pathname } = useLocation();

@@ -5,6 +5,7 @@ import { useAuth } from '../auth/context';
 import { activationApi } from '../lib/member';
 import { ApiError } from '../lib/api';
 import Notice from '../components/Notice';
+import GoogleButton from '../components/GoogleButton';
 
 /**
  * Setting up an account, once. Email, then the code we mail, then a password.
@@ -169,6 +170,12 @@ export default function Activate() {
                 void request();
               }}
             >
+              {/* The shortcut past this whole screen. Google asserting the address live is
+                  stronger proof than a code we mail to that same address, so signing in
+                  this way activates the account outright and skips the code entirely. */}
+              <GoogleButton label="Activate with Google" />
+              <div className="divider-or">or use a code</div>
+
               <label className="field-label" htmlFor="email">
                 Email address
               </label>

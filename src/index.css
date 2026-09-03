@@ -1537,3 +1537,39 @@ textarea.field-input { resize: vertical; min-height: 82px; line-height: 1.55; }
   }
   .fair-marked { opacity: 1; transform: none; animation: none; }
 }
+
+/* ============ CONTINUE WITH GOOGLE ============
+   White, bordered and framed like everything else here, rather than Google's own
+   pill. Their guidelines require the real four-colour mark and legible wording;
+   they do not require the button chrome, and a rounded drop-shadowed control in
+   the middle of this page would read as something pasted in from another site.
+
+   Full width and above the password fields, because for anybody whose personal
+   address is a Google account this is the whole sign-in: one tap, no code. */
+.btn-google {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 13px 20px;
+  background: #ffffff;
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  box-shadow: var(--drop);
+  cursor: pointer;
+  transition: transform 0.08s linear, box-shadow 0.08s linear, background 0.1s linear;
+}
+
+/* Not the yellow the other secondary buttons take on hover: the four-colour mark
+   sits in this button and yellow behind it muddies the red and the green. */
+.btn-google:hover { background: var(--paper-2); }
+.btn-google:active { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--ink); }
+
+.btn-google svg { flex: none; }

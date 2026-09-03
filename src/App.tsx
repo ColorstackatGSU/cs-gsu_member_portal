@@ -5,6 +5,7 @@ import Layout from './components/Layout';
 import Login from './pages/Login';
 import Activate from './pages/Activate';
 import InvolvementFair from './pages/InvolvementFair';
+import AuthCallback from './pages/AuthCallback';
 import ForgotPassword from './pages/ForgotPassword';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
@@ -28,6 +29,9 @@ export default function App() {
               aimed at people who are not members yet — it records attendance and mails
               them the membership form rather than trying to sign them up here. */}
           <Route path="involvement-fair" element={<InvolvementFair />} />
+          {/* Where Google sign-in lands. Swaps the handoff code for a session and moves
+              on; nothing here is a decision the member makes. */}
+          <Route path="auth/callback" element={<AuthCallback />} />
           {/* Grouped so the gate mounts once for the whole signed-in portal and reads
               the profile a single time, rather than refetching on every navigation. */}
           <Route
