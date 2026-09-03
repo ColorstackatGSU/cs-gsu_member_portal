@@ -2,94 +2,112 @@ import { Link } from 'react-router-dom';
 import LegalPage, { LEGAL_UPDATED } from '../components/LegalPage';
 
 /**
- * Terms of service for the member portal, and the second link Google's consent screen asks
- * for.
+ * Terms of service, and the second link Google's consent screen asks for.
  *
- * Kept short and kept true. A student chapter portal does not need indemnification clauses
- * and an arbitration venue; it needs to say who may use it, what we will do, what we will
- * not, and what happens if somebody misuses it. Everything longer than that would be
- * copied from somewhere else and would not describe this.
+ * Plain, standard register, same as the privacy policy. Short because the portal is small,
+ * but every clause here describes something that is actually true of it.
  */
 export default function Terms() {
   return (
     <LegalPage title="Terms of service" eyebrow="Member Portal">
       <p className="legal-lede">
-        These cover the ColorStack at GSU member portal at members.colorstackatgsu.com. Using
-        it means you accept them.
+        These terms govern your use of the ColorStack at GSU member portal at
+        members.colorstackatgsu.com. By using the portal, you agree to them.
       </p>
       <p className="legal-meta">Last updated {LEGAL_UPDATED}</p>
 
-      <h2>Who can use it</h2>
+      <h2>1. Eligibility</h2>
       <p>
-        Members of ColorStack at Georgia State University. You become one by filling in the
-        membership form; the portal is where you manage what you gave us. Accounts are for
-        one person, and you should not share yours.
+        The portal is available to members of ColorStack at Georgia State University.
+        Membership begins when you submit the chapter membership form. Accounts are personal
+        to you and must not be shared or transferred.
       </p>
 
-      <h2>What we do</h2>
+      <h2>2. The service</h2>
+      <p>Through the portal we:</p>
       <ul>
-        <li>Keep your member profile and your resume.</li>
-        <li>Put your resume in the book we share with chapter sponsors.</li>
-        <li>Email you about the chapter, your account, and events.</li>
-        <li>Score your resume with an automated tool, if you ask for it.</li>
-      </ul>
-
-      <h2>What we ask of you</h2>
-      <ul>
-        <li>Give us information that is accurate, and keep it that way.</li>
-        <li>Upload a resume that is yours.</li>
+        <li>maintain your member profile and your resume;</li>
         <li>
-          Do not try to reach anybody else's account or data, and do not try to break the
-          portal. If you find a way to, please tell us instead of using it: write to{' '}
-          <a href="mailto:official@colorstackatgsu.com">official@colorstackatgsu.com</a>.
+          include your resume and contact information in the resume book made available to
+          chapter sponsors;
         </li>
-        <li>Follow GSU's student conduct rules, which apply here as anywhere else.</li>
+        <li>send you email about your account, chapter events and chapter programming; and</li>
+        <li>provide an automated resume assessment, at your request.</li>
       </ul>
 
-      <h2>Your resume and sponsors</h2>
+      <h2>3. Your responsibilities</h2>
+      <ul>
+        <li>Provide accurate information and keep it current.</li>
+        <li>Upload only a resume that is your own.</li>
+        <li>
+          Do not attempt to access another member's account or information, and do not
+          attempt to disrupt or circumvent the portal's security. If you discover a
+          vulnerability, report it to{' '}
+          <a href="mailto:official@colorstackatgsu.com">official@colorstackatgsu.com</a>{' '}
+          rather than exploiting it.
+        </li>
+        <li>Comply with the Georgia State University Student Code of Conduct.</li>
+      </ul>
+
+      <h2>4. Resume book and sponsors</h2>
       <p>
-        Uploading a resume puts it in the book we share with sponsoring companies. Remove it
-        and it comes out of the book. The{' '}
-        <Link to="/privacy">privacy policy</Link> says exactly what sponsors can and cannot
-        see.
+        Uploading a resume includes it in the resume book made available to sponsoring
+        companies, together with the information listed in our{' '}
+        <Link to="/privacy">privacy policy</Link>. Deleting your resume removes it from the
+        resume book.
       </p>
       <p>
-        We share it. What a sponsor does after that is between you and them, and we cannot
-        promise anybody a job, an interview or a reply.
+        Sponsors may contact you directly. We do not control and are not responsible for
+        what a sponsor does with information disclosed to them, and we make no
+        representation that participation will result in an interview, an offer or any
+        response.
       </p>
 
-      <h2>The resume score</h2>
+      <h2>5. Automated resume assessment</h2>
       <p>
-        It is a machine reading a PDF and guessing. It is there to be useful, not to be
-        right, and it is not advice from the chapter or from anybody who hires.
+        The resume assessment is generated automatically and is provided for general
+        guidance only. It is not professional, career or employment advice, and it does not
+        represent the view of the chapter or of any employer.
       </p>
 
-      <h2>What we do not promise</h2>
+      <h2>6. Availability and disclaimer</h2>
       <p>
-        This is run by students, for free, alongside coursework. It will sometimes be down,
-        and it may lose something. Keep your own copy of your resume. We provide the portal
-        as it is, and we are not liable for what you lose by relying on it.
+        The portal is operated by student volunteers and is provided free of charge, on an
+        "as is" and "as available" basis, without warranties of any kind. We do not warrant
+        that it will be uninterrupted, error free, or that information stored in it will not
+        be lost. You should keep your own copy of your resume.
       </p>
 
-      <h2>Ending it</h2>
+      <h2>7. Limitation of liability</h2>
       <p>
-        You can ask us to delete your account whenever you like. We can suspend an account
-        that is being used to harass people, break the portal, or misrepresent who somebody
-        is, and for a serious enough reason we will do it without warning.
+        To the fullest extent permitted by law, ColorStack at Georgia State University and
+        its officers are not liable for any indirect, incidental or consequential damages,
+        or for any loss of data, arising from your use of the portal.
       </p>
 
-      <h2>These terms changing</h2>
+      <h2>8. Suspension and termination</h2>
       <p>
-        If we change something that matters, we will email members. Carrying on using the
-        portal after that means you accept the change.
+        You may request deletion of your account at any time. We may suspend or terminate an
+        account that is used to harass others, to disrupt the portal, or to misrepresent
+        someone's identity, without prior notice where the circumstances warrant it.
       </p>
 
-      <h2>Not the university, and not ColorStack National</h2>
+      <h2>9. Changes to these terms</h2>
       <p>
-        ColorStack at GSU is a registered student organization. It is not Georgia State
-        University and not ColorStack Inc., and neither of them runs this portal or answers
-        for it.
+        We may update these terms from time to time. If we make a material change, we will
+        notify members by email. Continuing to use the portal after a change takes effect
+        constitutes acceptance of it.
       </p>
+
+      <h2>10. Relationship to the university and to ColorStack Inc.</h2>
+      <p>
+        ColorStack at Georgia State University is a registered student organization. It is
+        not Georgia State University and not ColorStack Inc. Neither operates the portal nor
+        is responsible for it.
+      </p>
+
+      <h2>11. Governing law</h2>
+      <p>These terms are governed by the laws of the State of Georgia.</p>
     </LegalPage>
   );
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { memberApi } from '../lib/member';
 import type { MemberProfile } from '../lib/member';
 import { ApiError } from '../lib/api';
@@ -46,36 +46,11 @@ export default function Settings() {
 
         {!profile ? (
           <div style={{ display: 'grid', gap: 20, marginTop: 20 }}>
-            <div className="skeleton" style={{ height: 190 }} />
             <div className="skeleton" style={{ height: 130 }} />
           </div>
         ) : (
           <>
             <div className="card fade-in-up fade-delay-1" style={{ marginTop: 20 }}>
-              <div className="card-head" style={{ display: 'block', marginBottom: 16 }}>
-                <h2 className="card-title">Sponsor visibility</h2>
-                <p className="card-sub">
-                  Every member's resume goes in the book we share with our sponsors. That is
-                  what the resume book is, and it is one of the reasons the chapter has
-                  sponsors at all, so there is no switch here.
-                </p>
-              </div>
-
-              {!profile.hasResume && (
-                <Notice kind="warn">
-                  You have not uploaded a resume, so there is nothing in the book for you.{' '}
-                  <Link to="/resume" style={{ textDecoration: 'underline' }}>Upload one</Link>.
-                </Notice>
-              )}
-
-              <p className="card-sub" style={{ marginTop: 12, marginBottom: 0 }}>
-                Not comfortable with that? Take your resume down on the{' '}
-                <Link to="/resume" style={{ textDecoration: 'underline' }}>resume page</Link>,
-                or write to official@colorstackatgsu.com and we will sort it out.
-              </p>
-            </div>
-
-            <div className="card fade-in-up fade-delay-2" style={{ marginTop: 20 }}>
               <div className="card-head" style={{ display: 'block', marginBottom: 18 }}>
                 <h2 className="card-title">Account</h2>
                 <p className="card-sub">Signed in as {profile.email}.</p>

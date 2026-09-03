@@ -30,6 +30,8 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  // The password form is one tap behind the three choices rather than the default view.
+  const [showPassword, setShowPassword] = useState(false);
 
   // A failed Google sign-in comes back as a redirect with a reason on it, because the
   // person is mid-flow in a browser tab and the backend has nowhere else to tell them.
@@ -76,89 +78,142 @@ export default function Login() {
             Sign in
           </h1>
           <p className="auth-sub" style={{ marginTop: 8, fontSize: 14 }}>
-            Welcome back. Use the email and password you set up.
+            Welcome back.
           </p>
         </div>
 
-        <form className="auth-card fade-in-up fade-delay-1" style={{ marginTop: 18 }} onSubmit={onSubmit}>
-          <div className="auth-activate-banner">
-            <p className="auth-activate-tag">First time here?</p>
-            <p className="auth-activate-text">
-              New members must activate their account prior to signing in.
-            </p>
-            <Link to="/activate" className="auth-activate-btn">
-              Activate your account &rarr;
-            </Link>
-          </div>
+        <div className="auth-card fade-in-up fade-delay-1" style={{ marginTop: 18 }}>
+          {/* Three doors, one visible choice each.
+              This used to be a password form with Google bolted above it and activation
+              bolted below, so the first thing a member saw was two text inputs whether or
+              not they were the person those inputs were for. Most are not: they either
+              have a Google account, or they have never set a password at all. The form
+              is still here, one tap in, for the people it belongs to. */}
+          {!showPassword ? (
+            <div style={{ display: 'grid', gap: 10 }}>
+              <GoogleButton label="Sign in with Google" />
 
-          {/* Above the password fields on purpose. For anybody whose personal address is a
-              Google account this is one tap and no code, and it renders nothing at all
-              when the backend has no client configured. */}
-          <GoogleButton />
-          <div className="divider-or">or use your password</div>
+              <button
+                type="button"
+                className="btn-secondary"
+                style={{ width: '100%' }}
+                onClick={() => setShowPassword(true)}
+              >
+                Sign in with password
+              </button>
 
-          <label className="field-label" htmlFor="email">
-            Email address
-          </label>
-          <input
-            id="email"
-            type="email"
-            className="field-input"
-            placeholder="you@student.gsu.edu"
-            autoComplete="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+              <Link to="/activate" className="btn-secondary" style={{ width: '100%' }}>
+                Activate account
+              </Link>
 
-          <label className="field-label" htmlFor="password" style={{ marginTop: 16 }}>
-            Password
-          </label>
-          <input
-            id="password"
-            type="password"
-            className="field-input"
-            placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
-            autoComplete="current-password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+              {(error || oauthProblem) && (
+                <Notice kind="error" style={{ marginTop: 6 }}>
+                  <div>{error ?? oauthProblem}</div>
+                  <div style={{ marginTop: 6, fontSize: 12.5 }}>
+                    First time here? Make sure to{' '}
+                    <Link to="/activate" style={{ fontWeight: 700, textDecoration: 'underline' }}>
+                      activate your account first
+                    </Link>
+                    .
+                  </div>
+                </Notice>
+              )}
 
-          <p style={{ marginTop: 10, textAlign: 'right' }}>
-            <Link to="/forgot" className="muted" style={{ fontSize: 12.5 }}>
-              Forgot your password?
-            </Link>
-          </p>
+              <p
+                className="muted auth-fineprint"
+                style={{ marginTop: 4, fontSize: 12.5, lineHeight: 1.5, textAlign: 'center' }}
+              >
+                New here? Fill out the{' '}
+                <a
+                  href="https://forms.gle/GaMnRiAadtNspBr86"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ textDecoration: 'underline' }}
+                >
+                  member form
+                </a>{' '}
+                first, then activate.
+              </p>
+            </div>
+          ) : (
+            <form onSubmit={onSubmit}>
+              <label className="field-label" htmlFor="email">
+                Email address
+              </label>
+              <input
+                id="email"
+                type="email"
+                className="field-input"
+                placeholder="you@student.gsu.edu"
+                autoComplete="email"
+                autoFocus
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
 
-          <button type="submit" className="btn-primary" style={{ marginTop: 14, width: '100%' }} disabled={busy}>
-            {busy ? 'Signing in...' : 'Sign in'}
-          </button>
+              <label className="field-label" htmlFor="password" style={{ marginTop: 16 }}>
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                className="field-input"
+                placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                autoComplete="current-password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
 
-          {(error || oauthProblem) && (
-            <Notice kind="error" style={{ marginTop: 16 }}>
-              <div>{error ?? oauthProblem}</div>
-              <div style={{ marginTop: 6, fontSize: 12.5 }}>
-                First time here? Make sure to{' '}
-                <Link to="/activate" style={{ fontWeight: 700, textDecoration: 'underline' }}>
-                  activate your account first
+              <p style={{ marginTop: 10, textAlign: 'right' }}>
+                <Link to="/forgot" className="muted" style={{ fontSize: 12.5 }}>
+                  Forgot your password?
                 </Link>
-                .
-              </div>
-            </Notice>
+              </p>
+
+              <button
+                type="submit"
+                className="btn-primary"
+                style={{ marginTop: 14, width: '100%' }}
+                disabled={busy}
+              >
+                {busy ? 'Signing in...' : 'Sign in'}
+              </button>
+
+              {error && (
+                <Notice kind="error" style={{ marginTop: 16 }}>
+                  <div>{error}</div>
+                  <div style={{ marginTop: 6, fontSize: 12.5 }}>
+                    First time here? Make sure to{' '}
+                    <Link to="/activate" style={{ fontWeight: 700, textDecoration: 'underline' }}>
+                      activate your account first
+                    </Link>
+                    .
+                  </div>
+                </Notice>
+              )}
+
+              <button
+                type="button"
+                className="btn-secondary btn-sm"
+                style={{ marginTop: 12, width: '100%' }}
+                onClick={() => { setShowPassword(false); setError(null); }}
+              >
+                Back
+              </button>
+            </form>
           )}
 
-          {/* Below the fold of a short form, but present: signing in is the moment these
-              actually apply to somebody. */}
           <p
             className="muted auth-fineprint"
-            style={{ marginTop: 10, fontSize: 11.5, textAlign: 'center' }}
+            style={{ marginTop: 14, fontSize: 11.5, textAlign: 'center' }}
           >
             <Link to="/privacy" style={{ textDecoration: 'underline' }}>Privacy policy</Link>
             {' · '}
             <Link to="/terms" style={{ textDecoration: 'underline' }}>Terms</Link>
           </p>
-        </form>
+        </div>
       </div>
     </section>
   );

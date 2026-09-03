@@ -180,25 +180,6 @@ export default function Dashboard() {
               </p>
             </div>
 
-            <div className="card fade-in-up fade-delay-2">
-              <div className="card-head" style={{ marginBottom: 12 }}>
-                <h2 className="card-title" style={{ fontSize: 15 }}>Sponsor visibility</h2>
-                <span className={profile.hasResume ? 'pill pill-on' : 'pill pill-off'}>
-                  {profile.hasResume ? 'In the book' : 'No resume'}
-                </span>
-              </div>
-              {/* Not a setting any more, so this reports rather than offering a choice.
-                  Whether a sponsor can find you now turns on one thing: is there a file. */}
-              <p className="card-sub" style={{ margin: 0 }}>
-                {profile.hasResume
-                  ? 'Your resume is in the book we share with our sponsors.'
-                  : 'Upload a resume and sponsors can find you.'}
-              </p>
-              <Link to="/resume" className="btn-secondary btn-sm" style={{ marginTop: 16 }}>
-                {profile.hasResume ? 'Replace it' : 'Upload one'}
-              </Link>
-            </div>
-
             <div className="card fade-in-up fade-delay-3">
               <div className="card-head" style={{ marginBottom: 12 }}>
                 <h2 className="card-title" style={{ fontSize: 15 }}>Resume</h2>
