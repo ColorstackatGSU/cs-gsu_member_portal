@@ -138,7 +138,7 @@ export default function ForgotPassword() {
                 id="email"
                 type="email"
                 className="field-input"
-                placeholder="you@student.gsu.edu"
+                placeholder="Enter your email address"
                 autoComplete="email"
                 autoFocus
                 required
