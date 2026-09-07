@@ -132,13 +132,13 @@ export default function ForgotPassword() {
               }}
             >
               <label className="field-label" htmlFor="email">
-                Email address
+                Personal or school email
               </label>
               <input
                 id="email"
                 type="email"
                 className="field-input"
-                placeholder="you@student.gsu.edu"
+                placeholder="Enter your email address"
                 autoComplete="email"
                 autoFocus
                 required
