@@ -177,7 +177,7 @@ export default function Activate() {
               <div className="divider-or">or use a code</div>
 
               <label className="field-label" htmlFor="email">
-                Email address
+                Personal or school email
               </label>
               <input
                 id="email"

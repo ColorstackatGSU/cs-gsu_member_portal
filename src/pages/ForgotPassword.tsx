@@ -132,7 +132,7 @@ export default function ForgotPassword() {
               }}
             >
               <label className="field-label" htmlFor="email">
-                Email address
+                Personal or school email
               </label>
               <input
                 id="email"

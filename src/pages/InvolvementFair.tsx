@@ -157,7 +157,7 @@ export default function InvolvementFair() {
                 id="fair-student"
                 type="email"
                 className="field-input"
-                placeholder="Enter your email address"
+                placeholder="you@student.gsu.edu"
                 autoComplete="email"
                 inputMode="email"
                 required
