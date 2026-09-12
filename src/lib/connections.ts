@@ -32,10 +32,11 @@ const SCOPE_LABELS: Record<string, string> = {
   phone: 'Your phone number',
   socials: 'Your LinkedIn and GitHub',
   discord: 'Your Discord username',
+  demographics: 'Your race and ethnicity',
   resume: 'A copy of your resume',
 };
 
-const SCOPE_ORDER = ['openid', 'profile', 'email', 'phone', 'socials', 'discord', 'resume'];
+const SCOPE_ORDER = ['openid', 'profile', 'email', 'phone', 'socials', 'discord', 'demographics', 'resume'];
 
 export function describeScopes(scopes: string[]): string[] {
   return [...scopes]

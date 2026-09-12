@@ -343,7 +343,7 @@ export default function Profile() {
                 type="tel"
                 value={form.phone ?? ''}
                 placeholder="(404) 555-0123"
-                hint="Optional. Used for event reminders, never shared with sponsors."
+                hint="Optional. Used for event reminders."
                 onChange={(v) => setText('phone', v)}
               />
               <Field
@@ -525,19 +525,12 @@ export default function Profile() {
             />
           </div>
 
-          {/* Its own card rather than a row in "About you", because it is the one field
-              here that goes nowhere: not to sponsors, not into an OAuth scope, not onto
-              anything another member can see. Saying so next to the checkboxes is worth
-              more than saying it in a privacy policy nobody opens. */}
+          {/* Its own card: a multi-select with an exclusive decline does not fit the
+              two-column field grid in "About you". */}
           <div className="card fade-in-up fade-delay-3" style={{ marginTop: 18 }}>
             <div className="card-head">
               <h2 className="card-title">Race and ethnicity</h2>
             </div>
-            <p className="muted" style={{ fontSize: 13.5, lineHeight: 1.5, marginBottom: 14 }}>
-              Used only for counting who the chapter serves, in impact reports and grant
-              applications. Never shared with sponsors, and never shown to other members.
-              Change it or clear it whenever you like.
-            </p>
             <fieldset style={{ border: 0, padding: 0, margin: 0, display: 'grid', gap: 10 }}>
               {RACE_ETHNICITY_OPTIONS.map((option) => (
                 <label

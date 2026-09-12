@@ -96,13 +96,7 @@ export default function EthnicityGate() {
         <div>
           <h1 className="page-title">How do you identify?</h1>
           <p className="muted" style={{ marginTop: 8, lineHeight: 1.55 }}>
-            We ask once. ColorStack exists to support Black, Latinx and Native students in
-            computing, and we report on how well we are doing that — to sponsors, to
-            national, and on every grant application. Right now we are estimating.
-          </p>
-          <p className="muted" style={{ marginTop: 8, lineHeight: 1.55 }}>
-            Select all that apply, or choose not to say. Either way you are through, and
-            this is never shared with sponsors or shown on your profile to anyone else.
+            Select all that apply.
           </p>
         </div>
 
