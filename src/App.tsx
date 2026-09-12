@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AuthProvider, RequireAuth } from './auth/AuthProvider';
 import GraduationGate from './components/GraduationGate';
+import EthnicityGate from './components/EthnicityGate';
 import Layout from './components/Layout';
 import Login from './pages/Login';
 import Activate from './pages/Activate';
@@ -14,6 +15,7 @@ import Profile from './pages/Profile';
 import Resume from './pages/Resume';
 import Events from './pages/Events';
 import Settings from './pages/Settings';
+import Authorize from './pages/Authorize';
 import NotFound from './pages/NotFound';
 
 export default function App() {
@@ -47,11 +49,24 @@ export default function App() {
               </RequireAuth>
             }
           >
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="events" element={<Events />} />
-            <Route path="resume" element={<Resume />} />
-            <Route path="profile" element={<Profile />} />
+            {/* Nested rather than combined so each gate stays one question with one
+                rule. Graduation comes first because it is the shorter ask; a member
+                carrying both gaps answers two dropdowns before the longer one. */}
+            <Route element={<EthnicityGate />}>
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="events" element={<Events />} />
+              <Route path="resume" element={<Resume />} />
+              <Route path="profile" element={<Profile />} />
+            </Route>
           </Route>
+          {/* The handoff for "Sign in with ColorStack at GSU" on another site.
+              Deliberately outside both gates, and this one matters: bouncing a member
+              into a demographic question on their way into a hackathon site would turn
+              "we ask once, politely" into "answer this to use that site", which is the
+              coercion EthnicityGate is written to avoid. It handles its own signed-out
+              case rather than using RequireAuth, because RequireAuth remembers only
+              location.pathname and this route cannot work without its query string. */}
+          <Route path="authorize" element={<Authorize />} />
           {/* Deliberately outside the gate. A member who does not want to answer can
               still reach their account and sign out instead of being stuck. */}
           <Route

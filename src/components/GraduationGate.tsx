@@ -132,7 +132,7 @@ export default function GraduationGate() {
               <option value="" disabled>
                 Select a year
               </option>
-              {gradYears().map((y) => (
+              {gradYears(undefined, profile.gradYear).map((y) => (
                 <option key={y} value={String(y)}>
                   {y}
                 </option>

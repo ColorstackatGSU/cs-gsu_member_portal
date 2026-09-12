@@ -14,10 +14,20 @@ export const GRAD_TERMS = ['Spring', 'Summer', 'Fall'] as const;
  * Years are generated rather than written down, because a hardcoded list is a list that
  * goes stale in August. The window reaches back a year for anyone finishing late and
  * forward far enough for a freshman on a five year path.
+ *
+ * `current` is whatever the member already has stored, and it is folded in when it falls
+ * outside that window. Without it the year dropdown repeats the bug the Year dropdown had
+ * for months: a stored value matching no <option> renders the field blank, so a member
+ * whose answer is perfectly valid — an alumnus at 2023, anyone the window has rolled past
+ * — is shown an empty required field and invited to replace a correct answer with a wrong
+ * one. The table accepts 1900 to 2100; this list has no business being narrower than what
+ * a member might already hold.
  */
-export function gradYears(now: Date = new Date()): number[] {
+export function gradYears(now: Date = new Date(), current?: number | null): number[] {
   const first = now.getFullYear() - 1;
-  return Array.from({ length: 10 }, (_, i) => first + i);
+  const window = Array.from({ length: 10 }, (_, i) => first + i);
+  if (current == null || window.includes(current)) return window;
+  return [...window, current].sort((a, b) => a - b);
 }
 
 /**

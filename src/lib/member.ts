@@ -12,9 +12,14 @@ export type MemberProfile = {
   id: string;
   email: string;
   personalEmail: string | null;
+  /** Digits, as the API normalised them. Optional and never gated. */
+  phone: string | null;
   firstName: string | null;
   lastName: string | null;
   pronouns: string | null;
+  /** Self-identified, multi-select. Null means never answered, which is what
+   *  EthnicityGate reads; ["Prefer not to say"] means asked and declined. */
+  raceEthnicity: string[] | null;
   majors: string | null;
   classYear: string | null;
   gradTerm: string | null;
@@ -51,9 +56,11 @@ export type ProfileEdits = Omit<
 >;
 
 export const EDITABLE_KEYS = [
+  'phone',
   'firstName',
   'lastName',
   'pronouns',
+  'raceEthnicity',
   'majors',
   'classYear',
   'gradTerm',

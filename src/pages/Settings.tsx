@@ -5,13 +5,19 @@ import type { MemberProfile } from '../lib/member';
 import { ApiError } from '../lib/api';
 import { useAuth } from '../auth/context';
 import Notice from '../components/Notice';
+import ConnectedSites from '../components/ConnectedSites';
 
 /**
- * Where a member changes their mind about sponsor visibility, and signs out.
+ * Where a member changes their mind about who can see what, and signs out.
  *
  * Sharing is on by default, so this page is where someone opts out rather than in. It has
  * its own page and its own endpoint rather than being a checkbox on the profile form:
  * saving a major should never be the thing that changes who can see a resume.
+ *
+ * Connected sites live here for the same reason. Revoking another site's access is the
+ * same kind of act as changing sponsor visibility — a decision about reach, made on
+ * purpose — and it belongs next to it rather than on the profile form or behind its own
+ * nav item most members would never have a reason to open.
  */
 function message(e: unknown): string {
   return e instanceof ApiError ? e.message : 'Something went wrong. Try again in a moment.';
@@ -59,6 +65,11 @@ export default function Settings() {
                 Sign out
               </button>
             </div>
+
+            {/* Loads independently of the profile above. A member whose profile failed to
+                load can still get in here and cut a site off, which is the one thing on
+                this page that might be urgent. */}
+            <ConnectedSites />
           </>
         )}
       </div>

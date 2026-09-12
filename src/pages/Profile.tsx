@@ -7,6 +7,7 @@ import { completeness } from '../lib/progress';
 import { ApiError } from '../lib/api';
 import Field from '../components/Field';
 import { GRAD_TERMS, gradYears } from '../lib/graduation';
+import { PREFER_NOT_TO_SAY, RACE_ETHNICITY_OPTIONS, toggleCategory } from '../lib/ethnicity';
 import Notice from '../components/Notice';
 import VerifiedBadge from '../components/VerifiedBadge';
 
@@ -21,7 +22,18 @@ import VerifiedBadge from '../components/VerifiedBadge';
  * getting that wrong silently wipes data.
  */
 
-const CLASS_YEARS = ['Freshman', 'Sophomore', 'Junior', 'Senior'];
+/**
+ * The five options the intake form's Year question actually offers.
+ *
+ * "Graduate Student" was missing here for as long as this page has existed, copied from a
+ * migration comment that claimed the form asked for four. It always asked for five, and
+ * IntakeMapper passes the answer straight through, so grad students' rows were right in
+ * the database the whole time — their value simply matched no <option>, the field
+ * rendered blank, and touching it replaced a correct answer with a wrong one.
+ *
+ * Keep this in step with the form, not with anything written about the form.
+ */
+const CLASS_YEARS = ['Freshman', 'Sophomore', 'Junior', 'Senior', 'Graduate Student'];
 
 function message(e: unknown): string {
   return e instanceof ApiError ? e.message : 'Something went wrong. Try again in a moment.';
@@ -68,6 +80,15 @@ export default function Profile() {
   function set<K extends keyof MemberProfile>(key: K, value: MemberProfile[K]) {
     setSaved(false);
     setForm((f) => (f ? { ...f, [key]: value } : f));
+  }
+
+  /**
+   * Unticking the last box means "no answer", not an empty list. The API maps [] to null
+   * anyway, but keeping the form in the shape the profile arrives in is what stops a
+   * saved-then-reloaded page from looking different to a freshly loaded one.
+   */
+  function setEthnicity(next: string[]) {
+    set('raceEthnicity', next.length === 0 ? null : next);
   }
 
   /** Empty inputs mean "no answer", not an empty string, so the column clears properly. */
@@ -317,6 +338,15 @@ export default function Profile() {
                 </div>
               </Field>
               <Field
+                id="phone"
+                label="Phone"
+                type="tel"
+                value={form.phone ?? ''}
+                placeholder="(404) 555-0123"
+                hint="Optional. Used for event reminders, never shared with sponsors."
+                onChange={(v) => setText('phone', v)}
+              />
+              <Field
                 id="pronouns"
                 label="Pronouns"
                 value={form.pronouns ?? ''}
@@ -365,7 +395,7 @@ export default function Profile() {
                     set('gradYear', e.target.value === '' ? null : Number(e.target.value))
                   }
                 >
-                  {gradYears().map((y) => (
+                  {gradYears(undefined, form.gradYear).map((y) => (
                     <option key={y} value={String(y)}>
                       {y}
                     </option>
@@ -493,6 +523,51 @@ export default function Profile() {
               onChange={(v) => setText('allergies', v)}
               style={{ marginTop: 16 }}
             />
+          </div>
+
+          {/* Its own card rather than a row in "About you", because it is the one field
+              here that goes nowhere: not to sponsors, not into an OAuth scope, not onto
+              anything another member can see. Saying so next to the checkboxes is worth
+              more than saying it in a privacy policy nobody opens. */}
+          <div className="card fade-in-up fade-delay-3" style={{ marginTop: 18 }}>
+            <div className="card-head">
+              <h2 className="card-title">Race and ethnicity</h2>
+            </div>
+            <p className="muted" style={{ fontSize: 13.5, lineHeight: 1.5, marginBottom: 14 }}>
+              Used only for counting who the chapter serves, in impact reports and grant
+              applications. Never shared with sponsors, and never shown to other members.
+              Change it or clear it whenever you like.
+            </p>
+            <fieldset style={{ border: 0, padding: 0, margin: 0, display: 'grid', gap: 10 }}>
+              {RACE_ETHNICITY_OPTIONS.map((option) => (
+                <label
+                  key={option}
+                  style={{ display: 'flex', gap: 10, alignItems: 'flex-start', lineHeight: 1.4 }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={(form.raceEthnicity ?? []).includes(option)}
+                    onChange={() => setEthnicity(toggleCategory(form.raceEthnicity ?? [], option))}
+                    style={{ marginTop: 3 }}
+                  />
+                  <span>{option}</span>
+                </label>
+              ))}
+              <hr style={{ border: 0, borderTop: '1px solid var(--line)', margin: '4px 0' }} />
+              <label
+                style={{ display: 'flex', gap: 10, alignItems: 'flex-start', lineHeight: 1.4 }}
+              >
+                <input
+                  type="checkbox"
+                  checked={(form.raceEthnicity ?? []).includes(PREFER_NOT_TO_SAY)}
+                  onChange={() =>
+                    setEthnicity(toggleCategory(form.raceEthnicity ?? [], PREFER_NOT_TO_SAY))
+                  }
+                  style={{ marginTop: 3 }}
+                />
+                <span>{PREFER_NOT_TO_SAY}</span>
+              </label>
+            </fieldset>
           </div>
 
           {/* Only once something has changed. */}
