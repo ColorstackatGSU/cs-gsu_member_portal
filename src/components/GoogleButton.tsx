@@ -5,8 +5,8 @@ import { googleApi } from '../lib/google';
  * "Continue with Google".
  *
  * Renders nothing at all until the backend says a client is configured. A button that
- * always appears and sometimes explains it is not set up is worse than no button: at a
- * fair, on a phone, a dead control reads as a broken site.
+ * always appears and sometimes explains it is not set up is worse than no button: on a
+ * phone, a dead control reads as a broken site.
  *
  * The mark is Google's own four-colour G, inline. Their branding guidelines require the
  * real mark rather than a redrawn one, and a dependency for a single 18px SVG is not a

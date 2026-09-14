@@ -1,4 +1,7 @@
 {
+  "redirects": [
+    { "source": "/involvement-fair", "destination": "https://forms.gle/GaMnRiAadtNspBr86", "permanent": false }
+  ],
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
   "headers": [
     {
