@@ -6,6 +6,7 @@ import type { MemberProfile } from '../lib/member';
 import { completeness } from '../lib/progress';
 import { ApiError } from '../lib/api';
 import Field from '../components/Field';
+import MajorsField from '../components/MajorsField';
 import { GRAD_TERMS, gradYears } from '../lib/graduation';
 import { PREFER_NOT_TO_SAY, RACE_ETHNICITY_OPTIONS, toggleCategory } from '../lib/ethnicity';
 import Notice from '../components/Notice';
@@ -257,7 +258,7 @@ export default function Profile() {
                 className="muted"
                 style={{
                   fontFamily: 'var(--mono)',
-                  fontSize: 11.5,
+                  fontSize: 12.5,
                   margin: '7px 0 0',
                   wordBreak: 'break-word',
                 }}
@@ -266,7 +267,9 @@ export default function Profile() {
               </p>
               <div className="chip-row">
                 {profile.classYear && <span className="chip">{profile.classYear}</span>}
-                {profile.majors && <span className="chip">{profile.majors}</span>}
+                {profile.majors?.split(',').map((m) => m.trim()).filter(Boolean).map((m) => (
+                  <span key={m} className="chip">{m}</span>
+                ))}
                 {profile.gradTerm && profile.gradYear && (
                   <span className="chip">{profile.gradTerm} {profile.gradYear}</span>
                 )}
@@ -283,7 +286,7 @@ export default function Profile() {
                 alignItems: 'baseline',
                 marginBottom: 8,
                 fontFamily: 'var(--mono)',
-                fontSize: 10.5,
+                fontSize: 11.5,
                 fontWeight: 700,
                 letterSpacing: '0.14em',
                 textTransform: 'uppercase',
@@ -353,7 +356,7 @@ export default function Profile() {
                 placeholder="she/her, he/him, they/them"
                 onChange={(v) => setText('pronouns', v)}
               />
-              <Field id="majors" label="Major(s)" value={form.majors ?? ''} onChange={(v) => setText('majors', v)} />
+              <MajorsField value={form.majors} onChange={(v) => set('majors', v)} />
               <Field id="classYear" label="Year">
                 <select
                   id="classYear"
@@ -494,7 +497,7 @@ export default function Profile() {
                   value={form.discordUsername ?? ''}
                   onChange={(e) => setText('discordUsername', e.target.value)}
                 />
-                <p className="muted" style={{ fontSize: 12.5, marginTop: 6, lineHeight: 1.45 }}>
+                <p className="muted" style={{ fontSize: 13.5, marginTop: 6, lineHeight: 1.45 }}>
                   {profile?.discordVerifiedAt
                     ? 'Your Discord account is verified in the chapter server. Changing this name here will not remove your access.'
                     : 'This is the name we match on in the chapter server. Type it exactly as Discord shows it, then click Verify Membership in the server to get your roles.'}
@@ -566,7 +569,7 @@ export default function Profile() {
           {/* Only once something has changed. */}
           {(dirty || saved) && (
             <div className="save-bar fade-in-up" style={{ marginTop: 18 }}>
-              <span className="muted" style={{ fontSize: 13.5 }}>
+              <span className="muted" style={{ fontSize: 14.5 }}>
                 {dirty ? 'Unsaved changes' : 'Saved'}
               </span>
               <div style={{ display: 'flex', gap: 8 }}>
@@ -597,7 +600,7 @@ export default function Profile() {
             className="text-link"
             style={{
               fontFamily: 'var(--mono)',
-              fontSize: 11,
+              fontSize: 12,
               fontWeight: 700,
               letterSpacing: '0.1em',
               textTransform: 'uppercase',

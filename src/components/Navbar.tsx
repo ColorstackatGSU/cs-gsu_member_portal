@@ -61,7 +61,7 @@ export default function Navbar() {
             style={{
               fontFamily: 'var(--mono)',
               fontWeight: 700,
-              fontSize: 12,
+              fontSize: 13,
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
               color: 'var(--ink)',

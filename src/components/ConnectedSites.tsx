@@ -73,7 +73,7 @@ export default function ConnectedSites() {
       {connections === null ? (
         <div className="skeleton" style={{ height: 90 }} />
       ) : connections.length === 0 ? (
-        <p className="muted" style={{ fontSize: 14, lineHeight: 1.55, margin: 0 }}>
+        <p className="muted" style={{ fontSize: 15, lineHeight: 1.55, margin: 0 }}>
           None yet. When you use &ldquo;Sign in with ColorStack at GSU&rdquo; somewhere
           else, it will appear here and you can disconnect it at any time.
         </p>
@@ -95,19 +95,19 @@ export default function ConnectedSites() {
                 }}
               >
                 <div>
-                  <strong style={{ fontSize: 15.5 }}>{connection.clientName}</strong>
+                  <strong style={{ fontSize: 16.5 }}>{connection.clientName}</strong>
                   {since && (
-                    <p className="muted" style={{ fontSize: 12.5, margin: '3px 0 0' }}>
+                    <p className="muted" style={{ fontSize: 13.5, margin: '3px 0 0' }}>
                       Connected {since}
                     </p>
                   )}
                 </div>
 
                 <div>
-                  <p className="muted" style={{ fontSize: 12.5, margin: '0 0 5px' }}>
+                  <p className="muted" style={{ fontSize: 13.5, margin: '0 0 5px' }}>
                     This site can see:
                   </p>
-                  <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13.5, lineHeight: 1.5 }}>
+                  <ul style={{ margin: 0, paddingLeft: 18, fontSize: 14.5, lineHeight: 1.5 }}>
                     {describeScopes(connection.scopes).map((label) => (
                       <li key={label}>{label}</li>
                     ))}
@@ -116,7 +116,7 @@ export default function ConnectedSites() {
 
                 {isConfirming ? (
                   <div style={{ display: 'grid', gap: 10 }}>
-                    <p style={{ fontSize: 13.5, lineHeight: 1.5, margin: 0 }}>
+                    <p style={{ fontSize: 14.5, lineHeight: 1.5, margin: 0 }}>
                       Disconnect {connection.clientName}? It will lose access immediately,
                       and will have to ask again the next time you sign in there.
                       {keepsACopy(connection.scopes) && (

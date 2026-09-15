@@ -81,7 +81,7 @@ export default function Dashboard() {
             style={{
               margin: '12px 0 0',
               fontFamily: 'var(--mono)',
-              fontSize: 11.5,
+              fontSize: 12.5,
               fontWeight: 600,
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
@@ -114,7 +114,7 @@ export default function Dashboard() {
                       <path d="M20 6 9 17l-5-5" />
                     </svg>
                   </span>
-                  <p style={{ margin: 0, fontSize: 14.5 }}>
+                  <p style={{ margin: 0, fontSize: 15.5 }}>
                     Profile complete, resume uploaded, shared with sponsors.
                   </p>
                 </div>
@@ -124,7 +124,7 @@ export default function Dashboard() {
                     <div className="todo-row" key={s.id}>
                       <span className={s.urgent ? 'todo-dot todo-dot-urgent' : 'todo-dot'} aria-hidden="true" />
                       <div style={{ minWidth: 0, flex: '1 1 260px' }}>
-                        <p style={{ margin: 0, fontSize: 14.5, fontWeight: 600 }}>{s.title}</p>
+                        <p style={{ margin: 0, fontSize: 15.5, fontWeight: 600 }}>{s.title}</p>
                         <p className="card-sub" style={{ margin: '3px 0 0' }}>{s.body}</p>
                       </div>
                       <Link to={s.to} className="btn-secondary btn-sm">{s.cta}</Link>
@@ -142,7 +142,7 @@ export default function Dashboard() {
                   className="text-link"
                   style={{
                     fontFamily: 'var(--mono)',
-                    fontSize: 10.5,
+                    fontSize: 11.5,
                     fontWeight: 700,
                     letterSpacing: '0.1em',
                     textTransform: 'uppercase',
@@ -155,7 +155,7 @@ export default function Dashboard() {
               <div className="spec-list">
                 <Row k="Name" v={[profile.firstName, profile.lastName].filter(Boolean).join(' ')} />
                 <Row k="School email" v={profile.email} />
-                <Row k="Major" v={profile.majors} />
+                <Row k={profile.majors?.includes(',') ? 'Majors' : 'Major'} v={profile.majors} />
                 <Row k="Year" v={profile.classYear} />
                 <Row
                   k="Graduates"
@@ -182,9 +182,9 @@ export default function Dashboard() {
 
             <div className="card fade-in-up fade-delay-3">
               <div className="card-head" style={{ marginBottom: 12 }}>
-                <h2 className="card-title" style={{ fontSize: 15 }}>Resume</h2>
+                <h2 className="card-title" style={{ fontSize: 16 }}>Resume</h2>
               </div>
-              <p style={{ margin: 0, fontSize: 14.5, fontWeight: 600 }}>
+              <p style={{ margin: 0, fontSize: 15.5, fontWeight: 600 }}>
                 {profile.hasResume ? profile.resumeFilename : 'Not uploaded'}
               </p>
               <p className="card-sub" style={{ margin: '4px 0 0' }}>

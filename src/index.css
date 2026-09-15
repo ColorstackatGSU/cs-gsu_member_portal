@@ -30,21 +30,26 @@
   --gsu-steel: #374057;
   --gsu-yellow: #FFD400;
 
-  --ink: #000000;
-  --ink-soft: #14161a;
+  /* Near-black, not #000. Pure black rules and offsets on pale paper vibrate after a
+     while; this still reads as black and stops doing that. */
+  --ink: #1b1e24;
+  --ink-soft: #2a2e36;
   --muted: #4a4f57;
   --faint: #6d737c;
-  --paper: #e9e7e1;   /* concrete, so a white card reads as a card */
-  --paper-2: #dedbd3;
+  --paper: #efede8;   /* concrete, so a white card reads as a card */
+  --paper-2: #e3e0d9;
   --surface: #ffffff;
 
-  --line: #000000;
-  --line-strong: #000000;
+  --line: var(--ink);
+  --line-strong: var(--ink);
   --hairline: rgba(0, 0, 0, 0.14);
 
   /* Hard shadows. No blur, no colour, no opacity. */
   --drop: 3px 3px 0 var(--ink);
   --drop-lg: 6px 6px 0 var(--ink);
+  /* For surfaces that sit still. Buttons keep the full offset, because pressing into it
+     is their feedback; a page of cards all wearing it is what made screens heavy. */
+  --drop-quiet: 3px 3px 0 rgba(27, 30, 36, 0.16);
 
   --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
   --display: 'Archivo', 'Helvetica Neue', Arial, system-ui, sans-serif;
@@ -58,6 +63,7 @@
   html { scroll-behavior: smooth; overflow-x: clip; width: 100%; }
   body {
     font-family: var(--display);
+    font-size: 16px;
     background: var(--paper);
     color: var(--ink);
     overflow-x: clip;
@@ -110,9 +116,9 @@
    A filled square rather than a rule: it reads as a bullet on a spec sheet. */
 .section-eyebrow {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 12.5px;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ink);
   display: flex;
@@ -200,7 +206,7 @@
   border-radius: 0;
   display: block;
   flex-shrink: 0;
-  filter: grayscale(1) contrast(1.25);
+  filter: grayscale(1);
 }
 
 /* Six columns is dense on a phone: the tiles get too small to read as photos.
@@ -214,7 +220,7 @@
 .mosaic-wash {
   position: absolute;
   inset: 0;
-  background: rgba(233, 231, 225, 0.74);
+  background: rgba(239, 237, 232, 0.8);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -296,9 +302,9 @@
   /* ============ FIELDS ============ */
   .field-label {
     font-family: var(--mono);
-    font-size: 10.5px;
+    font-size: 12px;
     font-weight: 700;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--ink);
     display: block;
@@ -308,7 +314,7 @@
   .field-input {
     width: 100%;
     font-family: var(--display);
-    font-size: 15px;
+    font-size: 16px;
     padding: 11px 13px;
     background: #ffffff;
     color: var(--ink);
@@ -336,9 +342,9 @@
      travel is the only feedback needed and it costs nothing. */
   .btn-primary {
     font-family: var(--mono);
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
     padding: 13px 20px;
     background: var(--gsu-blue);
@@ -365,9 +371,9 @@
 
   .btn-secondary {
     font-family: var(--mono);
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
     padding: 13px 20px;
     background: #ffffff;
@@ -395,9 +401,9 @@
   /* Accent button in brand yellow for high-priority calls-to-action like account activation */
   .btn-accent {
     font-family: var(--mono);
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 800;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
     padding: 13px 20px;
     background: var(--gsu-yellow);
@@ -424,8 +430,8 @@
 
   /* Inline actions inside cards and list rows, where a full-size button shouts. */
   .btn-sm {
-    font-size: 10.5px;
-    letter-spacing: 0.09em;
+    font-size: 12px;
+    letter-spacing: 0.06em;
     padding: 8px 12px;
     box-shadow: 2px 2px 0 var(--ink);
     flex: none;
@@ -492,7 +498,7 @@
     background: #ffffff;
     border-radius: 0;
     padding: 12px 14px;
-    font-size: 13.5px;
+    font-size: 14.5px;
     line-height: 1.5;
     color: var(--ink);
   }
@@ -519,7 +525,7 @@
     background: var(--gsu-yellow);
     border-radius: 0;
     padding: 12px 14px;
-    font-size: 13.5px;
+    font-size: 14.5px;
     line-height: 1.5;
     color: var(--ink);
   }
@@ -531,7 +537,7 @@
     background: #ffe4e4;
     border-radius: 0;
     padding: 12px 14px;
-    font-size: 13.5px;
+    font-size: 14.5px;
     line-height: 1.5;
     color: var(--ink);
   }
@@ -622,35 +628,9 @@
   isolation: isolate;
 }
 
-/* The grid the layout is built on, drawn. Faint enough to read as paper stock
-   rather than as content, and it lines the rest of the page up by eye. */
-.app-shell::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background-image:
-    linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-  background-size: 88px 88px;
-  pointer-events: none;
-}
-
-/* A chapter photo behind every signed-in page, fixed so it does not scroll, grey
-   and faint enough to read as texture rather than picture. */
-.app-shell::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background-image: url('/images/mosaic/v1/summit-group.webp');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  filter: grayscale(1) contrast(1.3);
-  opacity: 0.035;
-  pointer-events: none;
-}
+/* No texture behind the signed-in pages. There used to be a drawn grid plus a 480px
+   chapter photo stretched to cover the window under a contrast filter, a 3-4x upscale
+   at laptop sizes: it read as grain and noise behind every card. */
 
 .app-sidebar {
   position: sticky;
@@ -661,7 +641,7 @@
   flex-direction: column;
   gap: 6px;
   padding: 20px 14px;
-  border-right: 3px solid var(--ink);
+  border-right: 2px solid var(--ink);
   background: var(--surface);
   /* Its own scroller, so a short laptop window in landscape can still reach sign out
      instead of having it clipped off the bottom. */
@@ -676,7 +656,7 @@
   gap: 10px;
   padding: 2px 4px 16px;
   margin-bottom: 14px;
-  border-bottom: 3px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
 }
 
 /* Square, with a black edge. The logo was the only round thing in the interface. */
@@ -690,9 +670,9 @@
 
 .app-sidebar-brand span {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 11.5px;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   line-height: 1.35;
 }
@@ -707,9 +687,9 @@
   border: 2px solid transparent;
   border-radius: 0;
   font-family: var(--mono);
-  font-size: 11.5px;
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.09em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--ink-soft);
   transition: background 0.1s linear, color 0.1s linear, border-color 0.1s linear;
@@ -723,7 +703,7 @@
   border-color: var(--ink);
   color: #ffffff;
   font-weight: 700;
-  box-shadow: var(--drop);
+  box-shadow: var(--drop-quiet);
 }
 .app-nav-link-active:hover { background: var(--gsu-blue); border-color: var(--ink); color: #ffffff; }
 
@@ -733,11 +713,11 @@
   flex-direction: column;
   gap: 3px;
   padding-top: 14px;
-  border-top: 3px solid var(--ink);
+  border-top: 2px solid var(--ink);
 }
 
 /* Sign out is a nav row too, but it must not read as a destination. */
-.app-nav-link-quiet { color: var(--faint); font-size: 10.5px; width: 100%; text-align: left; }
+.app-nav-link-quiet { color: var(--muted); font-size: 11.5px; width: 100%; text-align: left; }
 .app-nav-link-quiet:hover { background: var(--ink); color: #ffffff; border-color: var(--ink); }
 
 /* The strip above the page content, holding the chapter mark on the right. */
@@ -747,7 +727,7 @@
   justify-content: flex-end;
   gap: 16px;
   padding: 12px 40px;
-  border-bottom: 2px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
   background: var(--surface);
 }
 
@@ -760,48 +740,105 @@
 }
 .app-topbar-logo span {
   font-family: var(--mono);
-  font-size: 10.5px;
+  font-size: 11.5px;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink);
 }
 
-/* Below this the nav becomes a scrollable row pinned to the top, the one place
-   it can go without stealing content width. */
+/* Below this the sidebar splits in two. The brand, main site and sign out become a slim
+   sticky header, and the five destinations become a tab bar pinned to the bottom of the
+   screen. It used to be one sideways-scrolling row, which put Resume, Settings and sign
+   out off the edge of a phone with nothing to say they were there. */
 @media (max-width: 900px) {
-  .app-shell { grid-template-columns: minmax(0, 1fr); }
+  .app-shell {
+    grid-template-columns: minmax(0, 1fr);
+    /* Room for the tab bar, so the footer is never stuck underneath it. */
+    padding-bottom: calc(62px + env(safe-area-inset-bottom));
+  }
   .app-sidebar {
-    position: static;
+    position: sticky;
+    top: 0;
+    z-index: 30;
     height: auto;
     flex-direction: row;
     align-items: center;
-    gap: 6px;
-    overflow-x: auto;
-    padding: 10px 14px;
+    gap: 8px;
+    overflow: visible;
+    padding: 8px 12px 8px 16px;
     border-right: none;
-    border-bottom: 3px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
   }
   .app-sidebar-brand {
-    padding: 0 10px 0 0;
-    margin-bottom: 0;
+    padding: 0;
+    margin: 0;
     border-bottom: none;
-    border-right: 3px solid var(--ink);
   }
-  .app-sidebar-brand span { display: none; }
-  .app-nav { flex-direction: row; gap: 4px; }
-  .app-nav-link { white-space: nowrap; padding: 8px 11px; }
-  .app-nav-link-active { box-shadow: 2px 2px 0 var(--ink); }
+  .app-sidebar-brand img { width: 30px; height: 30px; }
+  .app-sidebar-brand span { font-size: 12px; }
+
   .app-sidebar-foot {
     margin-top: 0;
     margin-left: auto;
     flex-direction: row;
+    gap: 2px;
     padding-top: 0;
-    padding-left: 10px;
     border-top: none;
-    border-left: 3px solid var(--ink);
   }
-  .app-topbar { padding: 10px 18px; }
+  .app-sidebar-foot .app-nav-link {
+    flex-direction: row;
+    min-height: 0;
+    width: auto;
+    padding: 9px 10px;
+    font-size: 11.5px;
+  }
+  /* Main site shrinks to its icon; the label stays for screen readers. */
+  .app-sidebar-foot a .app-nav-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .app-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0;
+    background: var(--surface);
+    border-top: 2px solid var(--ink);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .app-nav-link {
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    min-height: 60px;
+    padding: 8px 2px;
+    border: none;
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  .app-nav-link svg { width: 21px; height: 21px; }
+  .app-nav-link:hover { border-color: transparent; }
+  .app-nav-link-active,
+  .app-nav-link-active:hover { box-shadow: none; }
+
+  /* The header above already carries the chapter mark. */
+  .app-topbar { display: none; }
+}
+
+@media (max-width: 360px) {
+  .app-sidebar-brand span { display: none; }
+  .app-nav-link { font-size: 10px; letter-spacing: 0; }
 }
 
 /* ============ CARDS ============ */
@@ -810,7 +847,7 @@
   border: 2px solid var(--ink);
   border-radius: 0;
   padding: 22px 24px;
-  box-shadow: var(--drop);
+  box-shadow: var(--drop-quiet);
 }
 
 .card-head {
@@ -820,12 +857,12 @@
   gap: 14px;
   margin-bottom: 16px;
   padding-bottom: 12px;
-  border-bottom: 2px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
 }
 
 .card-title {
   font-family: var(--display);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 800;
   letter-spacing: 0.01em;
   text-transform: uppercase;
@@ -833,7 +870,7 @@
 }
 
 .card-sub {
-  font-size: 13px;
+  font-size: 14.5px;
   line-height: 1.5;
   color: var(--muted);
   margin: 5px 0 0;
@@ -885,7 +922,7 @@
   flex: none;
   border-radius: 0;
   border: 2px solid var(--ink);
-  box-shadow: var(--drop);
+  box-shadow: var(--drop-quiet);
   display: grid;
   place-items: center;
   font-family: var(--display);
@@ -901,13 +938,15 @@
   display: inline-flex;
   align-items: center;
   padding: 4px 9px;
-  border: 1.5px solid var(--ink);
+  /* Whole pixels. 1.5px lands as 1 or 2 depending on position, so a row of chips came
+     out with uneven edges on a 1x screen. */
+  border: 1px solid var(--ink);
   border-radius: 0;
   background: #ffffff;
   font-family: var(--mono);
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--ink);
   white-space: nowrap;
@@ -918,9 +957,9 @@
 /* Small on/off state marker in a card header. */
 .pill {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 4px 9px;
   border: 2px solid var(--ink);
@@ -978,13 +1017,13 @@
 
 .spec-key {
   font-family: var(--mono);
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--muted);
 }
-.spec-val { font-size: 15px; font-weight: 600; word-break: break-word; }
+.spec-val { font-size: 16px; font-weight: 600; word-break: break-word; }
 .spec-val-empty { color: var(--faint); font-weight: 400; font-style: italic; }
 
 @media (max-width: 560px) {
@@ -1072,9 +1111,9 @@ textarea.field-input { resize: vertical; min-height: 82px; line-height: 1.55; }
 
 .save-bar .muted {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 11.5px;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ink);
 }
@@ -1092,7 +1131,7 @@ textarea.field-input { resize: vertical; min-height: 82px; line-height: 1.55; }
 
 /* ============ FOOTER ============ */
 .portal-footer {
-  border-top: 3px solid var(--ink);
+  border-top: 2px solid var(--ink);
   padding: 22px 0;
   background: var(--surface);
   color: var(--ink);
@@ -1137,7 +1176,7 @@ textarea.field-input { resize: vertical; min-height: 82px; line-height: 1.55; }
   border: 2px solid var(--ink);
   border-radius: 0;
   background: var(--paper);
-  font-size: 14.5px;
+  font-size: 15.5px;
 }
 
 /* An inline step that belongs to the card it is in, not a card of its own. */
@@ -1162,7 +1201,7 @@ textarea.field-input { resize: vertical; min-height: 82px; line-height: 1.55; }
 /* The rule under a page heading: thick, full width, and the thing that says a new
    page started. */
 .page-head {
-  border-bottom: 3px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
   padding-bottom: 14px;
   margin-bottom: 22px;
 }
@@ -1319,7 +1358,7 @@ textarea.field-input { resize: vertical; min-height: 82px; line-height: 1.55; }
 
 .score-marks-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
 
-.score-mark { position: relative; padding-left: 22px; font-size: 13.5px; line-height: 1.5; }
+.score-mark { position: relative; padding-left: 22px; font-size: 14.5px; line-height: 1.5; }
 .score-mark::before {
   position: absolute;
   left: 0;
@@ -1390,9 +1429,9 @@ textarea.field-input { resize: vertical; min-height: 82px; line-height: 1.55; }
   justify-content: center;
   gap: 10px;
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   padding: 13px 20px;
   background: #ffffff;

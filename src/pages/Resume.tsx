@@ -163,7 +163,7 @@ export default function Resume() {
             style={{
               margin: '12px 0 0',
               fontFamily: 'var(--mono)',
-              fontSize: 11,
+              fontSize: 12,
               fontWeight: 600,
               letterSpacing: '0.12em',
               textTransform: 'uppercase',
@@ -185,7 +185,7 @@ export default function Resume() {
 
           <div className="resume-drop">
             <div style={{ flex: '1 1 220px' }}>
-              <p style={{ margin: 0, fontSize: 14.5, fontWeight: 600, overflowWrap: 'anywhere' }}>
+              <p style={{ margin: 0, fontSize: 15.5, fontWeight: 600, overflowWrap: 'anywhere' }}>
                 {profile.hasResume ? profile.resumeFilename : 'No resume yet'}
               </p>
               <p className="card-sub" style={{ margin: '3px 0 0' }}>
@@ -284,7 +284,7 @@ export default function Resume() {
             <div className="score-working">
               <span className="spinner" aria-hidden="true" />
               <div>
-                <p style={{ margin: 0, fontSize: 14.5, fontWeight: 600 }}>Reading your resume</p>
+                <p style={{ margin: 0, fontSize: 15.5, fontWeight: 600 }}>Reading your resume</p>
                 <p className="card-sub" style={{ margin: '2px 0 0' }}>About twenty seconds.</p>
               </div>
             </div>
@@ -308,8 +308,8 @@ export default function Resume() {
                   <span className="score-figure-of">/ 100</span>
                 </div>
                 <div style={{ flex: '1 1 240px', minWidth: 0 }}>
-                  <p style={{ margin: 0, fontSize: 14.5, lineHeight: 1.55 }}>{score.summary}</p>
-                  <p className="muted" style={{ margin: '8px 0 0', fontSize: 12 }}>
+                  <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.55 }}>{score.summary}</p>
+                  <p className="muted" style={{ margin: '8px 0 0', fontSize: 13 }}>
                     {score.scoredAt && `Scored ${new Date(score.scoredAt).toLocaleDateString()}`}
                     {score.usedGithub && ' · your public GitHub was included'}
                   </p>
@@ -320,7 +320,7 @@ export default function Resume() {
                 {score.categories.map((c) => (
                   <div key={c.name} className="score-row">
                     <div className="score-row-head">
-                      <span style={{ fontWeight: 600, fontSize: 14 }}>{c.name}</span>
+                      <span style={{ fontWeight: 600, fontSize: 15 }}>{c.name}</span>
                       <span className="score-row-value">{c.score}</span>
                     </div>
                     <div className="meter" style={{ marginTop: 8 }}>

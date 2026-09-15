@@ -8,7 +8,7 @@ export default function NotFound() {
           <p
             style={{
               fontFamily: 'var(--mono)',
-              fontSize: 12,
+              fontSize: 13,
               fontWeight: 700,
               letterSpacing: '0.3em',
               textTransform: 'uppercase',
@@ -33,7 +33,7 @@ export default function NotFound() {
           <h1 className="page-title" style={{ marginTop: 18, fontSize: 'clamp(22px, 3.4vw, 30px)' }}>
             Page not found
           </h1>
-          <p className="card-sub" style={{ marginTop: 12, fontSize: 14 }}>
+          <p className="card-sub" style={{ marginTop: 12, fontSize: 15 }}>
             That page doesn't exist, or it hasn't been built yet.
           </p>
           <Link to="/dashboard" className="btn-primary" style={{ marginTop: 24 }}>

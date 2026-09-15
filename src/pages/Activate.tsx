@@ -157,7 +157,7 @@ export default function Activate() {
           >
             {heading}
           </h1>
-          <p className="auth-sub" style={{ marginTop: 8, fontSize: 14 }}>
+          <p className="auth-sub" style={{ marginTop: 8, fontSize: 15 }}>
             {blurb}
           </p>
         </div>
@@ -197,7 +197,7 @@ export default function Activate() {
               {/* The way out for somebody who submitted the form, was mailed a code, and
                   found this page on their own. Without it the only route forward issues a
                   new code and kills theirs. Sends nothing: it just moves to the box. */}
-              <p className="muted" style={{ marginTop: 12, fontSize: 13, textAlign: 'center' }}>
+              <p className="muted" style={{ marginTop: 12, fontSize: 14, textAlign: 'center' }}>
                 Already got a code from us?{' '}
                 <button
                   type="button"
@@ -285,7 +285,7 @@ export default function Activate() {
               {note && !error && <Notice style={{ marginTop: 16 }}>{note}</Notice>}
 
               {!sent && (
-                <p className="muted" style={{ marginTop: 12, fontSize: 13, textAlign: 'center' }}>
+                <p className="muted" style={{ marginTop: 12, fontSize: 14, textAlign: 'center' }}>
                   Not your address?{' '}
                   <button
                     type="button"
@@ -305,7 +305,7 @@ export default function Activate() {
                 </p>
               )}
 
-              <p className="muted" style={{ marginTop: 12, fontSize: 13, textAlign: 'center' }}>
+              <p className="muted" style={{ marginTop: 12, fontSize: 14, textAlign: 'center' }}>
                 Didn't get it? Check spam, then{' '}
                 <button
                   type="button"
@@ -396,7 +396,7 @@ export default function Activate() {
             to="/login"
             style={{
               fontFamily: 'var(--mono)',
-              fontSize: 11,
+              fontSize: 12,
               fontWeight: 700,
               letterSpacing: '0.12em',
               textTransform: 'uppercase',

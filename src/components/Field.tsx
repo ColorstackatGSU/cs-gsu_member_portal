@@ -57,7 +57,7 @@ export default function Field({
         />
       )}
       {hint && (
-        <p className="muted" style={{ fontSize: 12.5, marginTop: 6, lineHeight: 1.45 }}>
+        <p className="muted" style={{ fontSize: 13.5, marginTop: 6, lineHeight: 1.45 }}>
           {hint}
         </p>
       )}

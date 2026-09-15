@@ -12,6 +12,9 @@ const SITE_URL = 'https://colorstackatgsu.com';
  * for space in a pill. It also frees the top of the content column, which is where the
  * chapter mark now sits.
  *
+ * On a phone the destinations become a tab bar pinned to the bottom of the screen, where
+ * a thumb reaches them, and the brand, main site and sign out stay in a slim header.
+ *
  * Sign out stays visible rather than hiding behind a menu. A portal with no obvious way
  * out is a portal nobody trusts on a shared lab machine.
  */
@@ -123,7 +126,7 @@ export default function Sidebar() {
             }
           >
             {icon}
-            {label}
+            <span className="app-nav-label">{label}</span>
           </NavLink>
         ))}
       </nav>
@@ -135,7 +138,7 @@ export default function Sidebar() {
             <path d="M15 3h6v6" />
             <path d="M10 14 21 3" />
           </Icon>
-          Main site
+          <span className="app-nav-label">Main site</span>
         </a>
         <button type="button" onClick={onSignOut} className="app-nav-link app-nav-link-quiet">
           <Icon>
@@ -143,7 +146,7 @@ export default function Sidebar() {
             <path d="m16 17 5-5-5-5" />
             <path d="M21 12H9" />
           </Icon>
-          Sign out
+          <span className="app-nav-label">Sign out</span>
         </button>
       </div>
     </aside>

@@ -14,7 +14,7 @@ export default function Footer() {
           alignItems: 'center',
           justifyContent: 'space-between',
           fontFamily: 'var(--mono)',
-          fontSize: 10.5,
+          fontSize: 11.5,
           fontWeight: 600,
           letterSpacing: '0.14em',
           textTransform: 'uppercase',

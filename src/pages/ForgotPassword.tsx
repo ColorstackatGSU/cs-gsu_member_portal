@@ -118,7 +118,7 @@ export default function ForgotPassword() {
           >
             {heading}
           </h1>
-          <p className="auth-sub" style={{ marginTop: 8, fontSize: 14 }}>
+          <p className="auth-sub" style={{ marginTop: 8, fontSize: 15 }}>
             {blurb}
           </p>
         </div>
@@ -190,7 +190,7 @@ export default function ForgotPassword() {
               )}
               {note && !error && <Notice style={{ marginTop: 16 }}>{note}</Notice>}
 
-              <p className="muted" style={{ marginTop: 16, fontSize: 12.5, textAlign: 'center' }}>
+              <p className="muted" style={{ marginTop: 16, fontSize: 13.5, textAlign: 'center' }}>
                 {sent && sent.remaining > 0 ? (
                   <button type="button" className="link-button" disabled={busy} onClick={() => void request(true)}>
                     Send another code
@@ -256,7 +256,7 @@ export default function ForgotPassword() {
         </div>
 
         <p style={{ marginTop: 16, textAlign: 'center' }}>
-          <Link to="/login" className="muted" style={{ fontSize: 13 }}>
+          <Link to="/login" className="muted" style={{ fontSize: 14 }}>
             Back to sign in
           </Link>
         </p>

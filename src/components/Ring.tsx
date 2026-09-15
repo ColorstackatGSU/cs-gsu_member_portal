@@ -29,7 +29,7 @@ export default function Ring({ value }: { value: number }) {
           style={{
             margin: '5px 0 0',
             fontFamily: 'var(--mono)',
-            fontSize: 10,
+            fontSize: 11,
             fontWeight: 600,
             letterSpacing: '0.14em',
             textTransform: 'uppercase',

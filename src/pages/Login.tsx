@@ -77,7 +77,7 @@ export default function Login() {
           >
             Sign in
           </h1>
-          <p className="auth-sub" style={{ marginTop: 8, fontSize: 14 }}>
+          <p className="auth-sub" style={{ marginTop: 8, fontSize: 15 }}>
             Welcome back.
           </p>
         </div>
@@ -109,7 +109,7 @@ export default function Login() {
               {(error || oauthProblem) && (
                 <Notice kind="error" style={{ marginTop: 6 }}>
                   <div>{error ?? oauthProblem}</div>
-                  <div style={{ marginTop: 6, fontSize: 12.5 }}>
+                  <div style={{ marginTop: 6, fontSize: 13.5 }}>
                     First time here? Make sure to{' '}
                     <Link to="/activate" style={{ fontWeight: 700, textDecoration: 'underline' }}>
                       activate your account first
@@ -121,7 +121,7 @@ export default function Login() {
 
               <p
                 className="muted auth-fineprint"
-                style={{ marginTop: 4, fontSize: 12.5, lineHeight: 1.5, textAlign: 'center' }}
+                style={{ marginTop: 4, fontSize: 13.5, lineHeight: 1.5, textAlign: 'center' }}
               >
                 New here? Fill out the{' '}
                 <a
@@ -167,7 +167,7 @@ export default function Login() {
               />
 
               <p style={{ marginTop: 10, textAlign: 'right' }}>
-                <Link to="/forgot" className="muted" style={{ fontSize: 12.5 }}>
+                <Link to="/forgot" className="muted" style={{ fontSize: 13.5 }}>
                   Forgot your password?
                 </Link>
               </p>
@@ -184,7 +184,7 @@ export default function Login() {
               {error && (
                 <Notice kind="error" style={{ marginTop: 16 }}>
                   <div>{error}</div>
-                  <div style={{ marginTop: 6, fontSize: 12.5 }}>
+                  <div style={{ marginTop: 6, fontSize: 13.5 }}>
                     First time here? Make sure to{' '}
                     <Link to="/activate" style={{ fontWeight: 700, textDecoration: 'underline' }}>
                       activate your account first
@@ -207,7 +207,7 @@ export default function Login() {
 
           <p
             className="muted auth-fineprint"
-            style={{ marginTop: 14, fontSize: 11.5, textAlign: 'center' }}
+            style={{ marginTop: 14, fontSize: 12.5, textAlign: 'center' }}
           >
             <Link to="/privacy" style={{ textDecoration: 'underline' }}>Privacy policy</Link>
             {' · '}

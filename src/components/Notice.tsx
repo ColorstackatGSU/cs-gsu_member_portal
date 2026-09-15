@@ -43,7 +43,7 @@ export default function Notice({ kind = 'info', children, onDismiss, style }: No
             cursor: 'pointer',
             color: 'inherit',
             fontFamily: 'var(--mono)',
-            fontSize: 14,
+            fontSize: 15,
             lineHeight: 1,
             width: 22,
             height: 22,
