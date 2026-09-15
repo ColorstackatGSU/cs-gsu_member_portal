@@ -218,6 +218,4 @@ than a silently dropped field.
 4. DNS: CNAME `members` to Vercel.
 5. A password reset path. Supabase can send the email, but the same quota argument applies, so
    it probably belongs on the API alongside activation.
-6. The sponsor read path for the resume book. `resume_shared` is already recorded; the policy
-   that lets a sponsor read a file they do not own is not written.
-7. Event and hackathon registration, which is the reason the profile exists in this shape.
+6. Event and hackathon registration, which is the reason the profile exists in this shape.
