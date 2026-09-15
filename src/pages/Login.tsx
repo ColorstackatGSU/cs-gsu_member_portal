@@ -91,7 +91,7 @@ export default function Login() {
               is still here, one tap in, for the people it belongs to. */}
           {!showPassword ? (
             <div style={{ display: 'grid', gap: 10 }}>
-              <GoogleButton label="Sign in with Google" />
+              <GoogleButton label="Sign in with Google" returnTo={from} />
 
               <button
                 type="button"

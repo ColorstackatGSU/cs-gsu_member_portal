@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { googleApi } from '../lib/google';
+import { googleApi, takeGoogleReturnPath } from '../lib/google';
 import { ApiError } from '../lib/api';
 import Notice from '../components/Notice';
 
@@ -51,7 +51,13 @@ export default function AuthCallback() {
 
         // replace, not push: the handoff is spent, so leaving this URL in history gives a
         // Back button that lands on a sign-in that can never succeed again.
-        navigate(session.activated ? '/dashboard?welcome=1' : '/dashboard', { replace: true });
+        // A saved return path wins: it is usually /authorize, mid-way through signing into
+        // another site, and dropping the member on the dashboard would strand that flow.
+        const returnTo = takeGoogleReturnPath();
+        navigate(
+          returnTo ?? (session.activated ? '/dashboard?welcome=1' : '/dashboard'),
+          { replace: true },
+        );
       } catch (e: unknown) {
         setFailure(
           e instanceof ApiError

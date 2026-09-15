@@ -12,7 +12,14 @@ import { googleApi } from '../lib/google';
  * real mark rather than a redrawn one, and a dependency for a single 18px SVG is not a
  * trade worth making.
  */
-export default function GoogleButton({ label = 'Continue with Google' }: { label?: string }) {
+export default function GoogleButton({
+  label = 'Continue with Google',
+  returnTo,
+}: {
+  label?: string;
+  /** Where to land after sign-in, instead of the dashboard. */
+  returnTo?: string;
+}) {
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
@@ -32,7 +39,7 @@ export default function GoogleButton({ label = 'Continue with Google' }: { label
     <button
       type="button"
       className="btn-google"
-      onClick={() => googleApi.start()}
+      onClick={() => googleApi.start(returnTo)}
     >
       <GoogleMark />
       {label}

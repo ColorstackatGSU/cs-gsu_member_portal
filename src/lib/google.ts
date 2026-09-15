@@ -26,14 +26,43 @@ export const googleApi = {
   /** Whether the backend has a client configured. False hides the button entirely. */
   available: () => publicApi.get<{ enabled: boolean }>('/auth/google/available'),
 
-  /** Leaves the app. Everything after this happens at Google and then at /auth/callback. */
-  start: () => {
+  /**
+   * Leaves the app. Everything after this happens at Google and then at /auth/callback.
+   *
+   * `returnTo` is where the member was headed before being sent to sign in. Router state
+   * does not survive a trip through Google, so it is parked in sessionStorage and picked
+   * up again by the callback. This is what brings a member who started at /authorize (an
+   * external site's "Sign in with ColorStack at GSU") back to finish that sign-in.
+   */
+  start: (returnTo?: string) => {
+    try {
+      if (returnTo && isSafeReturnPath(returnTo)) sessionStorage.setItem(RETURN_KEY, returnTo);
+      else sessionStorage.removeItem(RETURN_KEY);
+    } catch { /* storage blocked: fall back to the dashboard */ }
     window.location.href = `${BASE_URL}/auth/google/start`;
   },
 
   claim: (handoff: string) =>
     publicApi.post<GoogleSession>('/auth/google/claim', { handoff }),
 };
+
+const RETURN_KEY = 'google.returnTo';
+
+/** Same-app paths only, so the callback cannot be turned into a redirect to anywhere. */
+function isSafeReturnPath(path: string): boolean {
+  return path.startsWith('/') && !path.startsWith('//') && !path.startsWith('/\\');
+}
+
+/** The path saved by start(), read once and cleared. */
+export function takeGoogleReturnPath(): string | null {
+  try {
+    const path = sessionStorage.getItem(RETURN_KEY);
+    sessionStorage.removeItem(RETURN_KEY);
+    return path && isSafeReturnPath(path) ? path : null;
+  } catch {
+    return null;
+  }
+}
 
 /**
  * What went wrong, in the member's words rather than OAuth's.
