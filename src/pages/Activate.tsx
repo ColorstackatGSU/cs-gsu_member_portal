@@ -173,7 +173,7 @@ export default function Activate() {
               {/* The shortcut past this whole screen. Google asserting the address live is
                   stronger proof than a code we mail to that same address, so signing in
                   this way activates the account outright and skips the code entirely. */}
-              <GoogleButton label="Activate with Google" />
+              <GoogleButton label="Continue with Google" />
               <div className="divider-or">or use a code</div>
 
               <label className="field-label" htmlFor="email">
@@ -233,14 +233,12 @@ export default function Activate() {
               ) : (
                 <Notice style={{ marginTop: 16 }}>
                   Not filled the{' '}
-                  <a
-                    href="https://forms.gle/GaMnRiAadtNspBr86"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ textDecoration: 'underline' }}
-                  >
+                  {/* Our own page rather than forms.gle: the form is the same, but on our
+                      page the step after it is written underneath, and coming back here is
+                      a button rather than something they have to remember to do. */}
+                  <Link to="/join" style={{ textDecoration: 'underline' }}>
                     membership form
-                  </a>{' '}
+                  </Link>{' '}
                   yet? Start there. Stuck? Email{' '}
                   <a href="mailto:official@colorstackatgsu.com" style={{ textDecoration: 'underline' }}>
                     official@colorstackatgsu.com

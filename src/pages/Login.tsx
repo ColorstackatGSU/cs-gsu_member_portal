@@ -91,6 +91,12 @@ export default function Login() {
               is still here, one tap in, for the people it belongs to. */}
           {!showPassword ? (
             <div style={{ display: 'grid', gap: 10 }}>
+              {/* Two groups, and the rule below them is doing real work. Everything above
+                  it is for somebody who already has an account; everything under it is for
+                  somebody who does not. Before the split, "Activate account" sat in the
+                  same stack as the sign-in buttons wearing the same grey, so the one
+                  question that actually decides which button you want — have you been here
+                  before? — was the one thing the card never asked. */}
               <GoogleButton label="Sign in with Google" returnTo={from} />
 
               <button
@@ -99,40 +105,48 @@ export default function Login() {
                 style={{ width: '100%' }}
                 onClick={() => setShowPassword(true)}
               >
-                Sign in with password
+                Sign in with email &amp; password
               </button>
-
-              <Link to="/activate" className="btn-secondary" style={{ width: '100%' }}>
-                Activate account
-              </Link>
 
               {(error || oauthProblem) && (
                 <Notice kind="error" style={{ marginTop: 6 }}>
                   <div>{error ?? oauthProblem}</div>
                   <div style={{ marginTop: 6, fontSize: 13.5 }}>
-                    First time here? Make sure to{' '}
+                    First time here? Set your account up with{' '}
                     <Link to="/activate" style={{ fontWeight: 700, textDecoration: 'underline' }}>
-                      activate your account first
+                      the code we emailed you
                     </Link>
-                    .
+                    , or{' '}
+                    <Link to="/join" style={{ fontWeight: 700, textDecoration: 'underline' }}>
+                      join the chapter
+                    </Link>{' '}
+                    if you have not filled the member form yet.
                   </div>
                 </Notice>
               )}
 
+              <div className="divider-or">New here?</div>
+
+              {/* Yellow, and the only yellow on the card. This is the one button on the
+                  page that leads somewhere new rather than back into an account, and it
+                  used to be four words of grey fine print under everything else. */}
+              <Link to="/join" className="btn-accent" style={{ width: '100%' }}>
+                Join the chapter
+              </Link>
+
+              {/* Its own button rather than a line inside the one above, because these are
+                  different people: this one has already filled the form and is holding a
+                  code, and sending them back through the form would only tell them they
+                  are already a member. */}
+              <Link to="/activate" className="btn-secondary btn-sm" style={{ width: '100%' }}>
+                Already joined? Set up my account
+              </Link>
+
               <p
                 className="muted auth-fineprint"
-                style={{ marginTop: 4, fontSize: 13.5, lineHeight: 1.5, textAlign: 'center' }}
+                style={{ marginTop: 4, fontSize: 13, lineHeight: 1.5, textAlign: 'center' }}
               >
-                New here? Fill out the{' '}
-                <a
-                  href="https://forms.gle/GaMnRiAadtNspBr86"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ textDecoration: 'underline' }}
-                >
-                  member form
-                </a>{' '}
-                first, then activate.
+                Joining is free and open to every Georgia State student.
               </p>
             </div>
           ) : (
@@ -185,11 +199,15 @@ export default function Login() {
                 <Notice kind="error" style={{ marginTop: 16 }}>
                   <div>{error}</div>
                   <div style={{ marginTop: 6, fontSize: 13.5 }}>
-                    First time here? Make sure to{' '}
+                    First time here? Set your account up with{' '}
                     <Link to="/activate" style={{ fontWeight: 700, textDecoration: 'underline' }}>
-                      activate your account first
+                      the code we emailed you
                     </Link>
-                    .
+                    , or{' '}
+                    <Link to="/join" style={{ fontWeight: 700, textDecoration: 'underline' }}>
+                      join the chapter
+                    </Link>{' '}
+                    if you have not filled the member form yet.
                   </div>
                 </Notice>
               )}

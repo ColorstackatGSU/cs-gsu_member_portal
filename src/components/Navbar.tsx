@@ -1,15 +1,18 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/context';
 
-const SITE_URL = 'https://colorstackatgsu.com';
-
 /**
  * The bar the signed-out pages float at the top.
  *
- * It carries two different jobs depending on who is looking. Signed out, it is branding
- * plus a way back to the main site. Signed in, it becomes the portal's actual navigation:
- * the member needs a way to reach settings and, more importantly, a visible way to sign
- * out. A portal with no sign-out button is a portal nobody trusts on a shared laptop.
+ * Signed out it is branding and nothing else. It used to carry a "Main site" button, which
+ * read as this portal's navigation rather than as a door out of it: somebody halfway
+ * through joining has no idea that the main site is a different site, so the button looked
+ * like a section of the thing they were already in. Every page that needs a way onwards
+ * now says so in its own words, in the place where the question comes up.
+ *
+ * Signed in, it becomes the portal's actual navigation: the member needs a way to reach
+ * settings and, more importantly, a visible way to sign out. A portal with no sign-out
+ * button is a portal nobody trusts on a shared laptop.
  *
  * Square, black-edged and opaque rather than a frosted pill: it sits over a moving wall
  * of photos, and a hard block is the only thing that reliably holds against it.
@@ -71,7 +74,7 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {session ? (
+        {session && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <div className="portal-tabs">
               <NavLink
@@ -91,10 +94,6 @@ export default function Navbar() {
               Sign out
             </button>
           </div>
-        ) : (
-          <a href={SITE_URL} className="btn-secondary btn-sm">
-            Main site
-          </a>
         )}
       </nav>
     </header>

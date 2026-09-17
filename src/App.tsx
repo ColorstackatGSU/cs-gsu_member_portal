@@ -5,6 +5,7 @@ import EthnicityGate from './components/EthnicityGate';
 import Layout from './components/Layout';
 import Login from './pages/Login';
 import Activate from './pages/Activate';
+import Join from './pages/Join';
 import AuthCallback from './pages/AuthCallback';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
@@ -27,6 +28,11 @@ export default function App() {
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="login" element={<Login />} />
           <Route path="activate" element={<Activate />} />
+          {/* The membership form, embedded, so joining and getting an account are one
+              tab rather than three hosts. Public: its whole audience is people with no
+              account yet. Deliberately not in Layout's AUTH_ROUTES — those are pinned to
+              one viewport and drop the footer, and this page is a long form that scrolls. */}
+          <Route path="join" element={<Join />} />
           <Route path="forgot" element={<ForgotPassword />} />
           {/* The QR code on the tabling cloth. Public, and the only route in this app
               aimed at people who are not members yet — it records attendance and mails

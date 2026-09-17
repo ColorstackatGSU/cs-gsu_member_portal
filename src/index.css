@@ -1624,3 +1624,169 @@ textarea.field-input { resize: vertical; min-height: 82px; line-height: 1.55; }
 .event-flyer:focus-visible .event-flyer-badge {
   transform: translateY(0);
 }
+
+/* ============ EMBEDDED MEMBERSHIP FORM (/join) ============ */
+/*
+  Google serves the form from its own origin, so the same-origin policy stops this page
+  reading how tall it is. Nothing can size the frame automatically; the height is a number
+  we pick, and the only real question is which way we would rather be wrong.
+
+  Too short and the frame grows its own scrollbar inside the page's. That is the thing
+  that makes these embeds miserable on a phone: two scroll regions stacked, and the one
+  under your thumb is usually the wrong one. Too tall and there is blank space below the
+  Next button. We take the blank space. It is untidy for a moment; the double scrollbar is
+  untidy for the entire form.
+
+  So: one height per breakpoint, tuned to the TALLEST page of the form, which is the
+  nine-question "about you" section (the graduation semester question alone is fourteen
+  radio options). Narrower screens need MORE height, not less, because the fields and
+  their labels wrap. That is why this is a set of media queries rather than the
+  padding-bottom aspect-ratio trick usually recommended for embeds: that trick ties height
+  to width, which is right for a video and exactly backwards for a form.
+
+  These four numbers are the whole knob. Retune them on a real phone rather than a
+  narrowed desktop window, and retune them if the form gains or loses questions. If the
+  page breaks are ever removed from the form, this collapses to a single taller value with
+  no dead space at all, which is the better shape for an embed.
+*/
+.form-embed-wrap {
+  /* Set per page from Join.tsx, with a fallback for the first paint and for the case
+     where the script has not run at all. */
+  --form-embed-page-h: 2000px;
+  /* What a narrower screen does to it. The same page needs more height when the fields
+     and their labels wrap, so this is a multiplier on the page's height rather than a
+     second set of absolute numbers that would have to be kept in step with the first. */
+  --form-embed-scale: 1;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  background: #ffffff;
+  border: 2px solid var(--ink);
+  box-shadow: var(--drop-lg);
+  /* The frame's own corners, so the white form never bleeds past the border. */
+  overflow: hidden;
+}
+
+.form-embed {
+  display: block;
+  width: 100%;
+  height: calc(var(--form-embed-page-h) * var(--form-embed-scale));
+  border: 0;
+  /* Google's page is white; matching it stops a flash of page colour while it loads. */
+  background: #ffffff;
+  /* The height changes as they move between pages of the form. Animating it stops the
+     card and everything under it jumping by a thousand pixels between one press of Next
+     and the next paint. */
+  transition: height 260ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .form-embed { transition: none; }
+}
+
+@media (max-width: 900px) { .form-embed-wrap { --form-embed-scale: 1.15; } }
+@media (max-width: 640px) { .form-embed-wrap { --form-embed-scale: 1.3; box-shadow: var(--drop); } }
+@media (max-width: 400px) { .form-embed-wrap { --form-embed-scale: 1.45; } }
+
+/* The "what happens next" card under the frame. Always present, because the page cannot
+   detect the submission and so must never rely on doing so. */
+.join-next {
+  width: 100%;
+  max-width: 760px;
+  margin: 28px auto 0;
+  background: var(--paper-2);
+  border: 2px solid var(--ink);
+  box-shadow: var(--drop);
+  padding: 24px;
+  transition: background 220ms ease, box-shadow 220ms ease;
+}
+
+/* Turned on once the frame has navigated as many times as the form has pages, which is a
+   hint that they have reached the end rather than a fact. It only ever brightens a card
+   that was already readable, so a false positive costs nothing. */
+.join-next-live {
+  background: var(--gsu-yellow);
+  box-shadow: var(--drop-lg);
+}
+
+.join-steps {
+  list-style: none;
+  margin: 0 0 20px;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.join-step {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: 12px;
+  align-items: start;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.join-step-num {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--ink);
+  background: #ffffff;
+  color: var(--ink);
+}
+
+@media (max-width: 640px) {
+  .join-next { padding: 18px; margin-top: 22px; }
+  .join-step { font-size: 14.5px; }
+}
+
+/* The masthead above the frame. Its own block rather than the auth pages' masthead: those
+   are pinned to a single viewport and hide their footer, and this page is deliberately
+   long and scrolls. */
+.join-hero {
+  background: var(--gsu-blue);
+  color: #ffffff;
+  padding: 116px 16px 44px; /* clears the floating navbar */
+  text-align: center;
+}
+
+.join-hero .section-eyebrow {
+  color: #ffffff;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.join-hero .section-eyebrow::before { background: var(--gsu-yellow); }
+
+.join-hero h1 {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(28px, 4.4vw, 44px);
+  font-weight: 900;
+  line-height: 1.05;
+}
+
+.join-hero p {
+  margin: 16px auto 0;
+  max-width: 620px;
+  font-size: 16px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.join-body { padding: 44px 16px 72px; }
+
+@media (max-width: 640px) {
+  .join-hero { padding: 100px 16px 36px; }
+  .join-hero p { font-size: 15px; }
+  .join-body { padding: 32px 14px 56px; }
+}
+
+/* The way out of the join page. A white block on the blue masthead: the button styles
+   already carry the border and the hard shadow, so this only has to place it. */
+.join-back { margin-bottom: 22px; }
