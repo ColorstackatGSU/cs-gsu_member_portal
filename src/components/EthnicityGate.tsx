@@ -26,6 +26,12 @@ import Notice from '../components/Notice';
  * declines is asked once and never again. A gate that only accepts a real answer is not
  * collecting self-identification, it is extracting it.
  *
+ * Both of those facts are now on the screen rather than only in this comment. The page
+ * used to say "How do you identify?" and "Select all that apply" and nothing else, which
+ * asks a member to hand over a demographic category on trust alone. Saying what the
+ * answer is for, and that declining is allowed, is what makes the difference between
+ * asking and demanding.
+ *
  * Mounted after GraduationGate so a member with both gaps answers the smaller question
  * first. Each gate loads the profile itself rather than sharing one fetch: two requests
  * on entry to the portal, against two components that can each be read, changed and
@@ -95,8 +101,18 @@ export default function EthnicityGate() {
       <div className="container-wide" style={{ maxWidth: 560, display: 'grid', gap: 20 }}>
         <div>
           <h1 className="page-title">How do you identify?</h1>
+          {/* Why we are asking, said before the question rather than not at all.
+              A demographic question with no stated purpose reads as a form to get
+              past, and the two things a member most wants to know standing here are
+              what the answer is for and whether they are allowed to decline. Both are
+              true and neither was on the screen. */}
           <p className="muted" style={{ marginTop: 8, lineHeight: 1.55 }}>
-            Select all that apply.
+            Select all that apply. We ask because this is the number ColorStack national,
+            grant committees and sponsors all want from us, and it is the one thing our
+            membership form has never collected.
+          </p>
+          <p className="muted" style={{ marginTop: 10, lineHeight: 1.55 }}>
+            You can decline, and that is a complete answer. Either way we only ask once.
           </p>
         </div>
 
