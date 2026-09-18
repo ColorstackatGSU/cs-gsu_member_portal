@@ -18,7 +18,7 @@ import { Link } from 'react-router-dom';
  *
  * What the iframe costs us is knowing when they are finished. Google's form is on Google's
  * origin and sends no postMessage, so there is no supported way to be told the form was
- * submitted — and the onload trick that gets passed around does not distinguish a
+ * submitted, and the onload trick that gets passed around does not distinguish a
  * submission from a page turn. So this page does not try to detect one. The next step is
  * written out below the frame, in full, from the moment the page opens, and it is correct
  * whether they read it before submitting or after.
@@ -33,8 +33,8 @@ import { Link } from 'react-router-dom';
  * above a screenful of blank white, which is what a single fixed height actually looks
  * like in practice.
  *
- * We cannot measure the page — it is Google's origin and the same-origin policy stops us
- * reading anything inside the frame — but we are told each time the frame navigates, so we
+ * We cannot measure the page, since it is Google's origin and the same-origin policy
+ * stops us reading anything inside the frame, but we are told each time it navigates, so we
  * can count which page they are probably on and size to that. Probably is the honest word:
  * pressing Back inside the form, or a validation error re-rendering a page, also counts.
  *
@@ -172,7 +172,7 @@ export default function Join() {
           </ol>
 
           <Link to="/activate" className="btn-primary" style={{ width: '100%' }}>
-            I&rsquo;ve submitted the form &mdash; set up my account
+            Submitted the form? Set up my account
           </Link>
 
           {/* The shortcut that skips the code entirely, mentioned here as well as on the

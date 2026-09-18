@@ -272,6 +272,22 @@ export default function Resume() {
             </span>
           </div>
 
+          {/* Said on the card itself, not buried in a help page. A number out of 100
+              sitting next to the file we tell members we share with sponsors invites
+              exactly one worry: that recruiters are seeing it and ranking them by it.
+              They are not: the sponsor-facing record carries name, program, timing,
+              LinkedIn, one contact address and whether a resume exists, and no score
+              column. Note the wording is careful to say the SCORE is private rather
+              than the resume, because the resume genuinely is shared. */}
+          <div className="score-privacy">
+            <span className="score-privacy-tag">Private</span>
+            <p className="score-privacy-text">
+              <strong>This score is only for you.</strong> Sponsors never see it. They see
+              your resume itself, not the number or the feedback below it. Officers get a
+              resume book, not a leaderboard.
+            </p>
+          </div>
+
           {scoreError && <Notice kind="error" style={{ marginTop: 16 }}>{scoreError}</Notice>}
 
           {scoring && !scoring.available ? (

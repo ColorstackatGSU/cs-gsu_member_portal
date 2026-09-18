@@ -95,8 +95,8 @@ export default function Login() {
                   it is for somebody who already has an account; everything under it is for
                   somebody who does not. Before the split, "Activate account" sat in the
                   same stack as the sign-in buttons wearing the same grey, so the one
-                  question that actually decides which button you want — have you been here
-                  before? — was the one thing the card never asked. */}
+                  question that actually decides which button you want (have you been here
+                  before?) was the one thing the card never asked. */}
               <GoogleButton label="Sign in with Google" returnTo={from} />
 
               <button
