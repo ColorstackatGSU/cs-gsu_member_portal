@@ -103,9 +103,156 @@ export default function Events() {
                 </div>
               </a>
             </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
+            <div style={{ display: 'grid', gap: 12, alignContent: 'start' }}>
+              <div>
+                <h3 style={{ fontSize: 16, fontWeight: 800, textTransform: 'uppercase', margin: '0 0 4px 0' }}>
+                  GSU Tech Clubs - Resume Workshop
+                </h3>
+                <p className="card-sub" style={{ margin: 0 }}>
+                  Get the ins and outs of perfecting your resume and standing out to recruiters.
+                </p>
+              </div>
+              <a 
+                href=""
+                target="_blank"
+                rel="noopener noreferrer"
+                className="event-flyer"
+                aria-label="View GSU Tech Clubs - Resume Workshop on PIN"
+              >
+                <div className="event-flyer-media">
+                  <img 
+                    src="/images/resume_workshop_1_2026.png" 
+                    alt="GSU Tech Clubs - Resume Workshop" 
+                    className="event-flyer-img"
+                  />
+                  <div className="event-flyer-overlay">
+                    <span className="event-flyer-badge">
+                      Link to PIN
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M7 17L17 7" />
+                        <path d="M7 7h10v10" />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+
+            <div style={{ display: 'grid', gap: 12, alignContent: 'start' }}>
+              <div>
+                <h3 style={{ fontSize: 16, fontWeight: 800, textTransform: 'uppercase', margin: '0 0 4px 0' }}>
+                  Equifax X Colorstack & CS Club
+                </h3>
+                <p className="card-sub" style={{ margin: 0 }}>
+                  An event built to introduce students to Equifax, Technical Career Paths, and 2027 Internship and Rotational Opportunities.
+                </p>
+              </div>
+              <a 
+                href="https://pin.gsu.edu/event/12793088"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="event-flyer"
+                aria-label="View Equifax X Colorstack & CS Club on PIN"
+              >
+                <div className="event-flyer-media">
+                  <img 
+                    src="/images/equifax_colorstack.png" 
+                    alt="Equifax x ColorStack Panel Flyer" 
+                    className="event-flyer-img"
+                  />
+                  <div className="event-flyer-overlay">
+                    <span className="event-flyer-badge">
+                      Link to PIN
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M7 17L17 7" />
+                        <path d="M7 7h10v10" />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </a>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
+            <div style={{ display: 'grid', gap: 12, alignContent: 'start' }}>
+              <div>
+                <h3 style={{ fontSize: 16, fontWeight: 800, textTransform: 'uppercase', margin: '0 0 4px 0' }}>
+                  Progsu x ColorStack Tech League
+                </h3>
+                <p className="card-sub" style={{ margin: 0 }}>
+                  A semester-long, team-based competition. Teams of 3-4 tackle 5 milestones, rack up points pn the leaderboard, and finish with a Capstone Hackathon.
+                </p>
+              </div>
+              <a 
+                href=""
+                target="_blank"
+                rel="noopener noreferrer"
+                className="event-flyer"
+                aria-label="View Progsu x ColorStack Tech League"
+              >
+                <div className="event-flyer-media">
+                  <img 
+                    src="/images/tech_league_3.jpg" 
+                    alt="Progsu x ColorStack Tech League" 
+                    className="event-flyer-img"
+                  />
+                  <div className="event-flyer-overlay">
+                    <span className="event-flyer-badge">
+                      To Be Announced
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M7 17L17 7" />
+                        <path d="M7 7h10v10" />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
+            <div style={{ display: 'grid', gap: 12, alignContent: 'start' }}>
+              <div>
+                <h3 style={{ fontSize: 16, fontWeight: 800, textTransform: 'uppercase', margin: '0 0 4px 0' }}>
+                  ColorStack X NVIDIA
+                </h3>
+                <p className="card-sub" style={{ margin: 0 }}>
+                  Explore the future of technology and hear from an NVIDIA engineering leader about the innovation shaping our industry..
+                </p>
+              </div>
+              <a 
+                href="https://pin.gsu.edu/event/12793269"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="event-flyer"
+                aria-label="View ColorStack X NVIDIA on PIN"
+              >
+                <div className="event-flyer-media">
+                  <img 
+                    src="/images/colorstackxnvidia_placeholder.png" 
+                    alt="ColorStack X NVIDIA Flyer" 
+                    className="event-flyer-img"
+                  />
+                  <div className="event-flyer-overlay">
+                    <span className="event-flyer-badge">
+                      Link to PIN
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M7 17L17 7" />
+                        <path d="M7 7h10v10" />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+
+            </div>
           </div>
         </div>
-      </div>
     </section>
   );
 }
