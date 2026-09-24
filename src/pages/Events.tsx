@@ -180,7 +180,7 @@ export default function Events() {
             <div style={{ display: 'grid', gap: 12, alignContent: 'start' }}>
               <div>
                 <h3 style={{ fontSize: 16, fontWeight: 800, textTransform: 'uppercase', margin: '0 0 4px 0' }}>
-                  Progsu x ColorStack Tech League
+                  CS Club X progsu X ColorStack Tech League
                 </h3>
                 <p className="card-sub" style={{ margin: 0 }}>
                   A semester-long, team-based competition. Teams of 3-4 tackle 5 milestones, rack up points pn the leaderboard, and finish with a Capstone Hackathon.
@@ -191,12 +191,12 @@ export default function Events() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="event-flyer"
-                aria-label="View Progsu x ColorStack Tech League"
+                aria-label="View CS Club X progsu X ColorStack Tech League"
               >
                 <div className="event-flyer-media">
                   <img 
                     src="/images/tech_league_3.jpg" 
-                    alt="Progsu x ColorStack Tech League" 
+                    alt="CS Club X progsu X ColorStack Tech League" 
                     className="event-flyer-img"
                   />
                   <div className="event-flyer-overlay">
@@ -212,7 +212,7 @@ export default function Events() {
               </a>
             </div>
           </div>
-
+{/* 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
             <div style={{ display: 'grid', gap: 12, alignContent: 'start' }}>
               <div>
@@ -248,7 +248,7 @@ export default function Events() {
                 </div>
               </a>
             </div>
-          </div>
+          </div> */}
 
             </div>
           </div>
