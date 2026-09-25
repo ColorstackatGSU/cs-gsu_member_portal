@@ -212,7 +212,7 @@ export default function Events() {
               </a>
             </div>
           </div>
-{/* 
+
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
             <div style={{ display: 'grid', gap: 12, alignContent: 'start' }}>
               <div>
@@ -232,7 +232,7 @@ export default function Events() {
               >
                 <div className="event-flyer-media">
                   <img 
-                    src="/images/colorstackxnvidia_placeholder.png" 
+                    src="/images/colorstackgsu_nvidia.png" 
                     alt="ColorStack X NVIDIA Flyer" 
                     className="event-flyer-img"
                   />
@@ -248,7 +248,7 @@ export default function Events() {
                 </div>
               </a>
             </div>
-          </div> */}
+          </div>
 
             </div>
           </div>
