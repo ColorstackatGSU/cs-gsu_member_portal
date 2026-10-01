@@ -187,7 +187,7 @@ export default function Events() {
                 </p>
               </div>
               <a 
-                href=""
+                href="https://pin.gsu.edu/event/12815571"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="event-flyer"
@@ -201,7 +201,7 @@ export default function Events() {
                   />
                   <div className="event-flyer-overlay">
                     <span className="event-flyer-badge">
-                      To Be Announced
+                      Link To Pin
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <path d="M7 17L17 7" />
                         <path d="M7 7h10v10" />
