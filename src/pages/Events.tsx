@@ -220,25 +220,34 @@ export default function Events() {
                   ColorStack X NVIDIA
                 </h3>
                 <p className="card-sub" style={{ margin: 0 }}>
-                  Explore the future of technology and hear from an NVIDIA engineering leader about the innovation shaping our industry..
+                  Explore the future of technology and hear from an NVIDIA engineering leader about the innovation shaping our industry.
+                  Registration is required, and the link is for GSU students only, so please don't share it publicly.{' '}
+                  <a
+                    href="https://nvidia.eightfold.ai/events/candidate/landing?plannedEventId=XR3pxKjw2"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-link"
+                  >
+                    Register with NVIDIA ↗
+                  </a>
                 </p>
               </div>
-              <a 
-                href="https://pin.gsu.edu/event/12793269"
+              <a
+                href="https://nvidia.eightfold.ai/events/candidate/landing?plannedEventId=XR3pxKjw2"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="event-flyer"
-                aria-label="View ColorStack X NVIDIA on PIN"
+                aria-label="Register for ColorStack X NVIDIA"
               >
                 <div className="event-flyer-media">
-                  <img 
-                    src="/images/colorstackgsu_nvidia.png" 
-                    alt="ColorStack X NVIDIA Flyer" 
+                  <img
+                    src="/images/colorstackgsu_nvidia_oct8.webp"
+                    alt="ColorStack X NVIDIA Flyer"
                     className="event-flyer-img"
                   />
                   <div className="event-flyer-overlay">
                     <span className="event-flyer-badge">
-                      Link to PIN
+                      Register
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <path d="M7 17L17 7" />
                         <path d="M7 7h10v10" />
