@@ -39,6 +39,10 @@ export type MemberProfile = {
   /** A signed link that expires, or null when there is no picture. */
   avatarUrl: string | null;
   activatedAt: string | null;
+  /** Chapter email. True unless the member opted out in Settings. */
+  emailOptIn: boolean;
+  /** Chapter texts. False until the member turns them on, which needs a phone. */
+  smsOptIn: boolean;
 };
 
 /** Everything a member may change. Mirrors UpdateProfileBody.java. */
@@ -53,6 +57,8 @@ export type ProfileEdits = Omit<
   | 'resumeFilename'
   | 'resumeUploadedAt'
   | 'activatedAt'
+  | 'emailOptIn'
+  | 'smsOptIn'
 >;
 
 export const EDITABLE_KEYS = [
@@ -118,6 +124,9 @@ export type ResumeScoreResult = { available: boolean; score: ResumeScore };
 export const memberApi = {
   load: () => api.get<MemberProfile>('/members/me'),
   save: (edits: ProfileEdits) => api.put<MemberProfile>('/members/me', edits),
+  /** Its own call, not part of save: editing a profile never changes what you receive. */
+  saveMessagePreferences: (prefs: { emailOptIn: boolean; smsOptIn: boolean }) =>
+    api.put<MemberProfile>('/members/me/message-preferences', prefs),
   /** Sends a code to the NEW address. Nothing changes until confirmEmail succeeds. */
   requestEmailChange: (email: string) =>
     api.post<void>('/members/me/personal-email', { email }),

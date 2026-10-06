@@ -346,7 +346,7 @@ export default function Profile() {
                 type="tel"
                 value={form.phone ?? ''}
                 placeholder="(404) 555-0123"
-                hint="Optional. Used for event reminders."
+                hint="Optional. We only text you if you turn texts on in Settings."
                 onChange={(v) => setText('phone', v)}
               />
               <Field

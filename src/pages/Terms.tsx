@@ -31,11 +31,33 @@ export default function Terms() {
           include your resume and contact information in the resume book made available to
           chapter sponsors;
         </li>
-        <li>send you email about your account, chapter events and chapter programming; and</li>
+        <li>send you email about your account, chapter events and chapter programming;</li>
+        <li>send you text messages, if you turn them on; and</li>
         <li>provide an automated resume assessment, at your request.</li>
       </ul>
 
-      <h2>3. Your responsibilities</h2>
+      <h2>3. Email and text messages</h2>
+      <p>
+        When you become a member you are added to the chapter's email list, and we will
+        send you email about chapter events and chapter programming at your student and
+        personal email addresses. You may opt out at any time from the settings page of the
+        portal, or by replying to any such email and asking to be removed. Opting out does
+        not affect your membership.
+      </p>
+      <p>
+        Opting out does not stop email that is necessary to operate your account, such as
+        verification codes, password resets, and notices about changes to your account or to
+        these terms.
+      </p>
+      <p>
+        We send text messages only if you provide a phone number and turn text messages on
+        in the settings page. Text messages are not turned on by default. Message frequency
+        varies, and message and data rates may apply. You may stop them at any time by
+        replying STOP to any message or by turning them off in the settings page. Agreeing
+        to receive text messages is not a condition of membership.
+      </p>
+
+      <h2>4. Your responsibilities</h2>
       <ul>
         <li>Provide accurate information and keep it current.</li>
         <li>Upload only a resume that is your own.</li>
@@ -49,7 +71,7 @@ export default function Terms() {
         <li>Comply with the Georgia State University Student Code of Conduct.</li>
       </ul>
 
-      <h2>4. Resume book and sponsors</h2>
+      <h2>5. Resume book and sponsors</h2>
       <p>
         Uploading a resume includes it in the resume book made available to sponsoring
         companies, together with the information listed in our{' '}
@@ -63,14 +85,14 @@ export default function Terms() {
         response.
       </p>
 
-      <h2>5. Automated resume assessment</h2>
+      <h2>6. Automated resume assessment</h2>
       <p>
         The resume assessment is generated automatically and is provided for general
         guidance only. It is not professional, career or employment advice, and it does not
         represent the view of the chapter or of any employer.
       </p>
 
-      <h2>6. Availability and disclaimer</h2>
+      <h2>7. Availability and disclaimer</h2>
       <p>
         The portal is operated by student volunteers and is provided free of charge, on an
         "as is" and "as available" basis, without warranties of any kind. We do not warrant
@@ -78,35 +100,35 @@ export default function Terms() {
         be lost. You should keep your own copy of your resume.
       </p>
 
-      <h2>7. Limitation of liability</h2>
+      <h2>8. Limitation of liability</h2>
       <p>
         To the fullest extent permitted by law, ColorStack at Georgia State University and
         its officers are not liable for any indirect, incidental or consequential damages,
         or for any loss of data, arising from your use of the portal.
       </p>
 
-      <h2>8. Suspension and termination</h2>
+      <h2>9. Suspension and termination</h2>
       <p>
         You may request deletion of your account at any time. We may suspend or terminate an
         account that is used to harass others, to disrupt the portal, or to misrepresent
         someone's identity, without prior notice where the circumstances warrant it.
       </p>
 
-      <h2>9. Changes to these terms</h2>
+      <h2>10. Changes to these terms</h2>
       <p>
         We may update these terms from time to time. If we make a material change, we will
         notify members by email. Continuing to use the portal after a change takes effect
         constitutes acceptance of it.
       </p>
 
-      <h2>10. Relationship to the university and to ColorStack Inc.</h2>
+      <h2>11. Relationship to the university and to ColorStack Inc.</h2>
       <p>
         ColorStack at Georgia State University is a registered student organization. It is
         not Georgia State University and not ColorStack Inc. Neither operates the portal nor
         is responsible for it.
       </p>
 
-      <h2>11. Governing law</h2>
+      <h2>12. Governing law</h2>
       <p>These terms are governed by the laws of the State of Georgia.</p>
     </LegalPage>
   );
