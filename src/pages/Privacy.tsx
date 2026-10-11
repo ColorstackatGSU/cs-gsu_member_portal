@@ -77,28 +77,34 @@ export default function Privacy() {
         The chapter maintains a resume book that is made available to companies that sponsor
         ColorStack at GSU. If you have uploaded a resume, it is included.
       </p>
-      <p>Sponsors at eligible sponsorship levels can view the following about each member:</p>
+      <p>
+        Sponsors at eligible sponsorship levels can view the following about each member, and
+        can be given a copy of it as files:
+      </p>
       <ul>
         <li>name;</li>
         <li>major or majors, class year, and expected graduation;</li>
         <li>LinkedIn profile, if provided;</li>
         <li>
-          an email address for contacting you, which is your personal email address where
-          you have provided one and otherwise your student email address; and
+          your student email address and, where you have provided one, your personal email
+          address; and
         </li>
         <li>your resume, if you have uploaded one.</li>
       </ul>
       <p>
-        Sponsors may contact you directly using that address. Sponsors cannot view your
+        Sponsors may contact you directly using those addresses. Sponsors cannot view your
         Discord username, dietary restrictions, stated interests, plans after graduation, or
         your original form submission.
       </p>
       <p>
         Inclusion in the resume book is a condition of the member portal and cannot be
         disabled individually. If you do not want your resume shared with sponsors, you may
-        delete it from the resume page at any time, which removes it from the resume book.
-        Deleting your resume does not affect your membership. To have your contact
-        information withheld from sponsors, contact us at the address in section 1.
+        delete it from the resume page at any time, which removes it from the resume book
+        and from any copy provided to a sponsor afterward. We cannot recall a copy a sponsor
+        has already received. We keep a record of each copy provided, and you can ask us
+        which sponsors have received one. Deleting your resume does not affect your
+        membership. To have your email addresses withheld from sponsors, contact us at the
+        address in section 1.
       </p>
 
       <h2>5. Signing in with Google</h2>

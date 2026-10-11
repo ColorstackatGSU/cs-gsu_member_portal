@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom';
  */
 
 /** One date for both pages, so they cannot drift and disagree about when they changed. */
-export const LEGAL_UPDATED = 'October 5, 2026';
+export const LEGAL_UPDATED = 'October 9, 2026';
 
 export default function LegalPage({
   title,

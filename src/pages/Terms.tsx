@@ -75,8 +75,10 @@ export default function Terms() {
       <p>
         Uploading a resume includes it in the resume book made available to sponsoring
         companies, together with the information listed in our{' '}
-        <Link to="/privacy">privacy policy</Link>. Deleting your resume removes it from the
-        resume book.
+        <Link to="/privacy">privacy policy</Link>. Sponsors may view the resume book in
+        their portal or be given a copy of it as files. Deleting your resume removes it from
+        the resume book and from any copy provided afterward, but not from a copy a sponsor
+        has already received.
       </p>
       <p>
         Sponsors may contact you directly. We do not control and are not responsible for
