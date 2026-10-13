@@ -5,9 +5,9 @@ const ORIGIN = 'https://members.colorstackatgsu.com';
 
 const PUBLIC_PAGES: Record<string, { title: string; description: string }> = {
   '/': {
-    title: 'ColorStack at GSU Member Portal | Join and Sign In',
+    title: 'ColorStack at GSU Member Portal | Sign In',
     description:
-      'Join ColorStack at Georgia State University, activate your member account, and access your profile, resume, and chapter events.',
+      'Sign in to your ColorStack at Georgia State University member account, or join the chapter to get started.',
   },
   '/join': {
     title: 'Join ColorStack at GSU | Member Portal',

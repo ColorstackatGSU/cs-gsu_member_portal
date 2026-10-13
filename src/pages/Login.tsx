@@ -78,7 +78,7 @@ export default function Login() {
             Sign in
           </h1>
           <p className="auth-sub" style={{ marginTop: 8, fontSize: 15 }}>
-            Welcome back.
+            Sign in to your ColorStack at GSU member account.
           </p>
         </div>
 
