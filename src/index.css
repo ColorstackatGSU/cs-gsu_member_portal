@@ -1791,6 +1791,83 @@ textarea.field-input { resize: vertical; min-height: 82px; line-height: 1.55; }
    already carry the border and the hard shadow, so this only has to place it. */
 .join-back { margin-bottom: 22px; }
 
+/* Public entry point. Strong type and numbered steps carry the page without
+   making the sign-in flow look like a marketing site. */
+.home-hero {
+  background: var(--gsu-blue);
+  color: #fff;
+  padding: 156px 0 88px;
+}
+
+.home-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(250px, 0.65fr);
+  align-items: end;
+  gap: clamp(32px, 6vw, 96px);
+}
+
+.home-hero .section-eyebrow { color: #fff; }
+.home-hero .section-eyebrow::before { background: var(--gsu-yellow); }
+.home-hero h1 {
+  max-width: 850px;
+  margin: 0;
+  font-size: clamp(46px, 7.8vw, 112px);
+  line-height: 0.96;
+  letter-spacing: -0.055em;
+}
+.home-lede {
+  max-width: 670px;
+  margin: 26px 0 0;
+  font-size: clamp(17px, 2vw, 21px);
+  line-height: 1.5;
+}
+.home-actions { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 32px; }
+.home-note {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 28px;
+  background: var(--gsu-yellow);
+  color: var(--ink);
+  border: 3px solid var(--ink);
+  box-shadow: 8px 8px 0 var(--ink);
+  transform: rotate(2deg);
+}
+.home-note-label,
+.home-step-number {
+  font: 800 12px var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.home-note strong { font-size: clamp(24px, 2.5vw, 34px); line-height: 1.1; }
+.home-note > span:last-child { font-weight: 700; }
+.home-steps { padding: 74px 0 100px; }
+.home-steps h2 { margin: 0 0 28px; font-size: clamp(32px, 4vw, 48px); }
+.home-step-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 3px solid var(--ink); }
+.home-step { padding: 28px; background: #fff; }
+.home-step + .home-step { border-left: 3px solid var(--ink); }
+.home-step-number { display: block; color: var(--gsu-blue); font-size: 18px; margin-bottom: 36px; }
+.home-step h3 { margin: 0 0 12px; font-size: 25px; }
+.home-step p { margin: 0 0 20px; color: var(--muted); }
+.home-step a { font-family: var(--mono); font-size: 12px; font-weight: 800; text-decoration: underline; text-underline-offset: 4px; }
+.home-step a:hover { color: var(--gsu-blue); }
+
+@media (max-width: 800px) {
+  .home-hero { padding: 124px 0 64px; }
+  .home-hero-grid { grid-template-columns: 1fr; }
+  .home-note { max-width: 500px; transform: none; }
+  .home-step-grid { grid-template-columns: 1fr; }
+  .home-step + .home-step { border-left: 0; border-top: 3px solid var(--ink); }
+  .home-step-number { margin-bottom: 20px; }
+}
+
+@media (max-width: 560px) {
+  .home-hero h1 { font-size: clamp(42px, 12vw, 64px); }
+  .home-actions { flex-direction: column; align-items: stretch; }
+  .home-actions a { width: 100%; }
+  .home-steps { padding: 48px 0 72px; }
+}
+
 /* Who can see the number. Between the scoring banner and the score itself, because that
    is where the question occurs to somebody, and carrying the same weight as the banner
    above it: as quiet grey text it was the one thing on the card nobody would read, which
