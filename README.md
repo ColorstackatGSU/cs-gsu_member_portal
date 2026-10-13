@@ -11,8 +11,8 @@ private account routes return `X-Robots-Tag: noindex` on Vercel. `/login` remain
 for existing links, while `/` is the search-facing address.
 
 The URL-prefix property `https://members.colorstackatgsu.com/` is configured in Google
-Search Console. Keep the verified owner's tag in `index.html` so ownership remains
-verified. After each deployment, check the live
+Search Console under the chapter account `official@colorstackatgsu.com`. Ownership is
+verified through the domain's DNS record. After each deployment, check the live
 `/robots.txt` and `/sitemap.xml`, then use Search Console's URL Inspection for the
 sign-in page and submit `/sitemap.xml` in the Sitemaps report. Indexing is decided by Google
 and can take days or weeks.
