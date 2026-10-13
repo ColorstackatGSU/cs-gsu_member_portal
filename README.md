@@ -3,6 +3,19 @@
 Members sign in, view and edit everything they put on the intake form, and upload a resume.
 Deploys to **members.colorstackatgsu.com**.
 
+## Search visibility
+
+The public `/` page explains the portal and links to joining and sign-in. Search metadata
+is set per route in `src/components/PageMetadata.tsx`. The sitemap at `/sitemap.xml` lists
+only public pages; private account routes return `X-Robots-Tag: noindex` on Vercel.
+
+The URL-prefix property `https://members.colorstackatgsu.com/` is configured in Google
+Search Console under Poorav Rawat's Google account. Keep the verification tag in
+`index.html` so ownership remains verified. After each deployment, check the live
+`/robots.txt` and `/sitemap.xml`, then use Search Console's URL Inspection for the
+homepage and submit `/sitemap.xml` in the Sitemaps report. Indexing is decided by Google
+and can take days or weeks.
+
 **Status: working end to end locally.** Activation, sign in, profile editing, resume upload
 and sponsor-visibility consent are all wired to the API.
 

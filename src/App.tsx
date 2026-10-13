@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { AuthProvider, RequireAuth } from './auth/AuthProvider';
 import GraduationGate from './components/GraduationGate';
 import EthnicityGate from './components/EthnicityGate';
@@ -17,15 +17,16 @@ import Events from './pages/Events';
 import Settings from './pages/Settings';
 import Authorize from './pages/Authorize';
 import NotFound from './pages/NotFound';
+import Home from './pages/Home';
+import PageMetadata from './components/PageMetadata';
 
 export default function App() {
   return (
     <AuthProvider>
+      <PageMetadata />
       <Routes>
         <Route element={<Layout />}>
-          {/* RequireAuth bounces to login when there is no session, so the root can
-              aim at the dashboard rather than guessing who is asking. */}
-          <Route index element={<Navigate to="/dashboard" replace />} />
+          <Route index element={<Home />} />
           <Route path="login" element={<Login />} />
           <Route path="activate" element={<Activate />} />
           {/* The membership form, embedded, so joining and getting an account are one
