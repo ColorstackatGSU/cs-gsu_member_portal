@@ -17,7 +17,6 @@ import Events from './pages/Events';
 import Settings from './pages/Settings';
 import Authorize from './pages/Authorize';
 import NotFound from './pages/NotFound';
-import Home from './pages/Home';
 import PageMetadata from './components/PageMetadata';
 
 export default function App() {
@@ -26,7 +25,7 @@ export default function App() {
       <PageMetadata />
       <Routes>
         <Route element={<Layout />}>
-          <Route index element={<Home />} />
+          <Route index element={<Login />} />
           <Route path="login" element={<Login />} />
           <Route path="activate" element={<Activate />} />
           {/* The membership form, embedded, so joining and getting an account are one
