@@ -1625,6 +1625,106 @@ textarea.field-input { resize: vertical; min-height: 82px; line-height: 1.55; }
   transform: translateY(0);
 }
 
+/* ============ EVENTS TIMELINE ============ */
+/*
+  Date on the left, card on the right, the way a calendar reads. Below 640px the date
+  moves above the card, since a narrow column beside a card squeezes the title.
+*/
+.events-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.events-tabs {
+  display: inline-flex;
+  border: 2px solid var(--ink);
+  background: var(--surface);
+  box-shadow: var(--drop-quiet);
+}
+
+.events-tab {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 9px 16px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.events-tab + .events-tab { border-left: 2px solid var(--ink); }
+.events-tab:hover { background: var(--paper-2); }
+.events-tab.active { background: var(--ink); color: var(--surface); }
+
+.events-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 22px;
+}
+
+.events-item {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.events-date { display: grid; gap: 2px; padding-top: 6px; }
+.events-date-main { font-family: var(--display); font-size: 17px; font-weight: 800; }
+.events-date-main.today { color: var(--gsu-blue); }
+.events-date-sub { font-size: 13px; color: var(--faint); }
+
+.events-card {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.events-card-body { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+
+.events-time {
+  margin: 0 0 6px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.events-title {
+  margin: 0 0 6px;
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.events-location {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.events-flyer { width: 150px; flex: none; padding: 6px; }
+
+@media (max-width: 640px) {
+  .events-item { grid-template-columns: 1fr; gap: 8px; }
+  .events-date { grid-auto-flow: column; justify-content: start; gap: 8px; align-items: baseline; padding-top: 0; }
+  .events-card { flex-direction: column-reverse; }
+  .events-flyer { width: 100%; max-width: 280px; }
+}
+
 /* ============ EMBEDDED MEMBERSHIP FORM (/join) ============ */
 /*
   Google serves the form from its own origin, so the same-origin policy stops this page

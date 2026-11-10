@@ -1,267 +1,219 @@
+import { useEffect, useState } from 'react';
+import { api } from '../lib/api';
+import Notice from '../components/Notice';
+
 /**
- * A placeholder with a route, so the nav item is real rather than decorative.
+ * The chapter's events, as officers write them in the admin portal.
  *
- * Events are the reason most members joined the chapter, and this is where sign-ups will
- * live once the tables exist.
+ * This used to be hand-written blocks, one per event, in the order somebody typed them, so
+ * September sat at the top in November. It reads GET /events now and sorts by date the way
+ * progsu's portal does: Upcoming shows the next event first, Past shows the most recent
+ * first, and each event sits beside its date so the page reads as a timeline.
+ *
+ * Every time is shown in Atlanta time, whatever the member's own clock says, because that
+ * is where the room is.
  */
+
+type ChapterEvent = {
+  id: string;
+  title: string;
+  description: string | null;
+  startsAt: string;
+  endsAt: string | null;
+  location: string | null;
+  linkUrl: string | null;
+  linkLabel: string | null;
+  flyerUrl: string | null;
+};
+
+type Tab = 'upcoming' | 'past';
+
+const ZONE = 'America/New_York';
+
+const dayKey = new Intl.DateTimeFormat('en-CA', { timeZone: ZONE, year: 'numeric', month: '2-digit', day: '2-digit' });
+const monthDay = new Intl.DateTimeFormat('en-US', { timeZone: ZONE, month: 'short', day: 'numeric' });
+const monthDayYear = new Intl.DateTimeFormat('en-US', { timeZone: ZONE, month: 'short', day: 'numeric', year: 'numeric' });
+const weekday = new Intl.DateTimeFormat('en-US', { timeZone: ZONE, weekday: 'long' });
+const shortDay = new Intl.DateTimeFormat('en-US', { timeZone: ZONE, weekday: 'short', month: 'short', day: 'numeric' });
+const clock = new Intl.DateTimeFormat('en-US', { timeZone: ZONE, hour: 'numeric', minute: '2-digit' });
+
+/** Upcoming until it is over: its end, or its start when it has no end, is still ahead. */
+function isUpcoming(e: ChapterEvent, now: number) {
+  return new Date(e.endsAt ?? e.startsAt).getTime() >= now;
+}
+
+/** "Today", "Tomorrow", or "Nov 20". The year only appears when it is not this one. */
+function dateLabel(start: Date, now: number): string {
+  const today = new Date(now);
+  const key = dayKey.format(start);
+  if (key === dayKey.format(today)) return 'Today';
+  if (key === dayKey.format(new Date(now + 86_400_000))) return 'Tomorrow';
+  const sameYear = key.slice(0, 4) === dayKey.format(today).slice(0, 4);
+  return (sameYear ? monthDay : monthDayYear).format(start);
+}
+
+/** "6:00 PM to 7:30 PM", or across days "Fri, Oct 9, 3:00 PM to Sun, Oct 11, 3:00 PM". */
+function timeRange(e: ChapterEvent): string {
+  const start = new Date(e.startsAt);
+  if (!e.endsAt) return clock.format(start);
+  const end = new Date(e.endsAt);
+  if (dayKey.format(start) === dayKey.format(end)) {
+    return `${clock.format(start)} to ${clock.format(end)}`;
+  }
+  return `${shortDay.format(start)}, ${clock.format(start)} to ${shortDay.format(end)}, ${clock.format(end)}`;
+}
+
 export default function Events() {
+  const [events, setEvents] = useState<ChapterEvent[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [tab, setTab] = useState<Tab>('upcoming');
+  // Read once per visit: which side of now an event sits on does not need to tick live.
+  const [now] = useState(() => Date.now());
+
+  useEffect(() => {
+    let cancelled = false;
+    api
+      .get<ChapterEvent[]>('/events')
+      .then((rows) => !cancelled && setEvents(rows))
+      .catch((e: unknown) => {
+        if (cancelled) return;
+        setEvents([]);
+        setError(e instanceof Error ? e.message : 'Could not load events.');
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const upcoming = (events ?? [])
+    .filter((e) => isUpcoming(e, now))
+    .sort((a, b) => a.startsAt.localeCompare(b.startsAt));
+  const past = (events ?? [])
+    .filter((e) => !isUpcoming(e, now))
+    .sort((a, b) => b.startsAt.localeCompare(a.startsAt));
+  const shown = tab === 'upcoming' ? upcoming : past;
+
   return (
     <section className="portal-pad">
-      <div className="container-wide" style={{ maxWidth: 820 }}>
-        <div className="fade-in-up page-head">
-          <p className="section-eyebrow" style={{ marginBottom: 12 }}>Member Portal</p>
-          <h1 className="page-title">Events</h1>
-        </div>
-
-        <div className="card fade-in-up fade-delay-1">
-          <div className="card-head" style={{ flexWrap: 'wrap', gap: 12 }}>
-            <h2 className="card-title">2026-2027 Events</h2>
-            <a
-              href="https://pin.gsu.edu/organization/colorstack"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-link"
-              style={{
-                fontFamily: 'var(--mono)',
-                fontSize: 12,
-                fontWeight: 700,
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                flex: 'none',
-              }}
-            >
-              View all events ↗
-            </a>
+      <div className="container-wide" style={{ maxWidth: 880 }}>
+        <div className="fade-in-up page-head events-head">
+          <div>
+            <p className="section-eyebrow" style={{ marginBottom: 12 }}>Member Portal</p>
+            <h1 className="page-title">Events</h1>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
-            <div style={{ display: 'grid', gap: 12, alignContent: 'start' }}>
-              <div>
-                <h3 style={{ fontSize: 16, fontWeight: 800, textTransform: 'uppercase', margin: '0 0 4px 0' }}>
-                  SHPE x ColorStack AI Ideathon
-                </h3>
-                <p className="card-sub" style={{ margin: 0 }}>
-                  Collaboration Ideathon event with SHPE at GSU.
-                </p>
-              </div>
-              <a 
-                href="https://pin.gsu.edu/event/12716936"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="event-flyer"
-                aria-label="View SHPE x ColorStack AI Ideathon on PIN"
+          <div className="events-tabs" role="tablist" aria-label="Which events">
+            {(['upcoming', 'past'] as const).map((t) => (
+              <button
+                key={t}
+                type="button"
+                role="tab"
+                aria-selected={tab === t}
+                className={tab === t ? 'events-tab active' : 'events-tab'}
+                onClick={() => setTab(t)}
               >
-                <div className="event-flyer-media">
-                  <img 
-                    src="/images/shpe-colorstack-ideathon-flyer.png" 
-                    alt="SHPE x ColorStack AI Ideathon Flyer" 
-                    className="event-flyer-img"
-                  />
-                  <div className="event-flyer-overlay">
-                    <span className="event-flyer-badge">
-                      Link to PIN
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <path d="M7 17L17 7" />
-                        <path d="M7 7h10v10" />
-                      </svg>
-                    </span>
-                  </div>
-                </div>
-              </a>
-            </div>
-
-            <div style={{ display: 'grid', gap: 12, alignContent: 'start' }}>
-              <div>
-                <h3 style={{ fontSize: 16, fontWeight: 800, textTransform: 'uppercase', margin: '0 0 4px 0' }}>
-                  Fall 2026 Kickoff
-                </h3>
-                <p className="card-sub" style={{ margin: 0 }}>
-                  Are you smarter than a Software Engineer?
-                </p>
-              </div>
-              <a 
-                href="https://pin.gsu.edu/event/12618217"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="event-flyer"
-                aria-label="View Fall 2026 Kickoff on PIN"
-              >
-                <div className="event-flyer-media">
-                  <img 
-                    src="/images/colorstack-fall-2026-kickoff-flyer.png" 
-                    alt="ColorStack Fall 2026 Kickoff Flyer" 
-                    className="event-flyer-img"
-                  />
-                  <div className="event-flyer-overlay">
-                    <span className="event-flyer-badge">
-                      Link to PIN
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <path d="M7 17L17 7" />
-                        <path d="M7 7h10v10" />
-                      </svg>
-                    </span>
-                  </div>
-                </div>
-              </a>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
-            <div style={{ display: 'grid', gap: 12, alignContent: 'start' }}>
-              <div>
-                <h3 style={{ fontSize: 16, fontWeight: 800, textTransform: 'uppercase', margin: '0 0 4px 0' }}>
-                  GSU Tech Clubs - Resume Workshop
-                </h3>
-                <p className="card-sub" style={{ margin: 0 }}>
-                  Get the ins and outs of perfecting your resume and standing out to recruiters.
-                </p>
-              </div>
-              <a 
-                href=""
-                target="_blank"
-                rel="noopener noreferrer"
-                className="event-flyer"
-                aria-label="View GSU Tech Clubs - Resume Workshop on PIN"
-              >
-                <div className="event-flyer-media">
-                  <img 
-                    src="/images/resume_workshop_1_2026.png" 
-                    alt="GSU Tech Clubs - Resume Workshop" 
-                    className="event-flyer-img"
-                  />
-                  <div className="event-flyer-overlay">
-                    <span className="event-flyer-badge">
-                      Link to PIN
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <path d="M7 17L17 7" />
-                        <path d="M7 7h10v10" />
-                      </svg>
-                    </span>
-                  </div>
-                </div>
-              </a>
-            </div>
-          </div>
-
-            <div style={{ display: 'grid', gap: 12, alignContent: 'start' }}>
-              <div>
-                <h3 style={{ fontSize: 16, fontWeight: 800, textTransform: 'uppercase', margin: '0 0 4px 0' }}>
-                  Equifax X Colorstack & CS Club
-                </h3>
-                <p className="card-sub" style={{ margin: 0 }}>
-                  An event built to introduce students to Equifax, Technical Career Paths, and 2027 Internship and Rotational Opportunities.
-                </p>
-              </div>
-              <a 
-                href="https://pin.gsu.edu/event/12793088"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="event-flyer"
-                aria-label="View Equifax X Colorstack & CS Club on PIN"
-              >
-                <div className="event-flyer-media">
-                  <img 
-                    src="/images/equifax_colorstack.png" 
-                    alt="Equifax x ColorStack Panel Flyer" 
-                    className="event-flyer-img"
-                  />
-                  <div className="event-flyer-overlay">
-                    <span className="event-flyer-badge">
-                      Link to PIN
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <path d="M7 17L17 7" />
-                        <path d="M7 7h10v10" />
-                      </svg>
-                    </span>
-                  </div>
-                </div>
-              </a>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
-            <div style={{ display: 'grid', gap: 12, alignContent: 'start' }}>
-              <div>
-                <h3 style={{ fontSize: 16, fontWeight: 800, textTransform: 'uppercase', margin: '0 0 4px 0' }}>
-                  CS Club X progsu X ColorStack Tech League
-                </h3>
-                <p className="card-sub" style={{ margin: 0 }}>
-                  A semester-long, team-based competition. Teams of 3-4 tackle 5 milestones, rack up points pn the leaderboard, and finish with a Capstone Hackathon.
-                </p>
-              </div>
-              <a 
-                href="https://pin.gsu.edu/event/12815571"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="event-flyer"
-                aria-label="View CS Club X progsu X ColorStack Tech League"
-              >
-                <div className="event-flyer-media">
-                  <img 
-                    src="/images/tech_league_3.jpg" 
-                    alt="CS Club X progsu X ColorStack Tech League" 
-                    className="event-flyer-img"
-                  />
-                  <div className="event-flyer-overlay">
-                    <span className="event-flyer-badge">
-                      Link To Pin
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <path d="M7 17L17 7" />
-                        <path d="M7 7h10v10" />
-                      </svg>
-                    </span>
-                  </div>
-                </div>
-              </a>
-            </div>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
-            <div style={{ display: 'grid', gap: 12, alignContent: 'start' }}>
-              <div>
-                <h3 style={{ fontSize: 16, fontWeight: 800, textTransform: 'uppercase', margin: '0 0 4px 0' }}>
-                  ColorStack X NVIDIA
-                </h3>
-                <p className="card-sub" style={{ margin: 0 }}>
-                  Explore the future of technology and hear from an NVIDIA engineering leader about the innovation shaping our industry.
-                  Registration is required, and the link is for GSU students only, so please don't share it publicly.{' '}
-                  <a
-                    href="https://nvidia.eightfold.ai/events/candidate/landing?plannedEventId=XR3pxKjw2"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-link"
-                  >
-                    Register with NVIDIA ↗
-                  </a>
-                </p>
-              </div>
-              <a
-                href="https://nvidia.eightfold.ai/events/candidate/landing?plannedEventId=XR3pxKjw2"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="event-flyer"
-                aria-label="Register for ColorStack X NVIDIA"
-              >
-                <div className="event-flyer-media">
-                  <img
-                    src="/images/colorstackgsu_nvidia_oct8.webp"
-                    alt="ColorStack X NVIDIA Flyer"
-                    className="event-flyer-img"
-                  />
-                  <div className="event-flyer-overlay">
-                    <span className="event-flyer-badge">
-                      Register
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <path d="M7 17L17 7" />
-                        <path d="M7 7h10v10" />
-                      </svg>
-                    </span>
-                  </div>
-                </div>
-              </a>
-            </div>
-          </div>
-
-            </div>
+                {t === 'upcoming' ? 'Upcoming' : 'Past'}
+              </button>
+            ))}
           </div>
         </div>
+
+        {error && (
+          <Notice kind="error" style={{ marginBottom: 20 }}>
+            {error}
+          </Notice>
+        )}
+
+        {events === null ? (
+          <p className="card-sub" role="status">Loading events…</p>
+        ) : shown.length === 0 ? (
+          <div className="card fade-in-up">
+            <h2 className="card-title">
+              {tab === 'upcoming' ? 'Nothing scheduled yet' : 'No past events yet'}
+            </h2>
+            <p className="card-sub">
+              {tab === 'upcoming'
+                ? 'New events show up here as soon as officers post them. Check PIN for anything else on campus.'
+                : 'Events move here once they are over.'}
+            </p>
+          </div>
+        ) : (
+          <ol className="events-timeline fade-in-up fade-delay-1">
+            {shown.map((e) => {
+              const start = new Date(e.startsAt);
+              const label = dateLabel(start, now);
+              return (
+                <li key={e.id} className="events-item">
+                  <div className="events-date">
+                    <span className={label === 'Today' ? 'events-date-main today' : 'events-date-main'}>{label}</span>
+                    <span className="events-date-sub">{weekday.format(start)}</span>
+                  </div>
+
+                  <article className="card events-card">
+                    <div className="events-card-body">
+                      <p className="events-time">{timeRange(e)}</p>
+                      <h2 className="events-title">{e.title}</h2>
+                      {e.location && (
+                        <p className="events-location">
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                            <path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z" />
+                            <circle cx="12" cy="10" r="2.5" />
+                          </svg>
+                          {e.location}
+                        </p>
+                      )}
+                      {e.description && <p className="card-sub">{e.description}</p>}
+                      {e.linkUrl && (
+                        <a
+                          href={e.linkUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={tab === 'upcoming' ? 'btn-primary btn-sm' : 'btn-secondary btn-sm'}
+                          style={{ marginTop: 14, alignSelf: 'flex-start' }}
+                        >
+                          {e.linkLabel || 'Details'} ↗
+                        </a>
+                      )}
+                    </div>
+
+                    {e.flyerUrl &&
+                      (e.linkUrl ? (
+                        <a
+                          href={e.linkUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="event-flyer events-flyer"
+                          aria-label={`${e.linkLabel || 'Details'}: ${e.title}`}
+                        >
+                          <span className="event-flyer-media">
+                            <img src={e.flyerUrl} alt={`${e.title} flyer`} className="event-flyer-img" loading="lazy" />
+                          </span>
+                        </a>
+                      ) : (
+                        <span className="event-flyer events-flyer">
+                          <span className="event-flyer-media">
+                            <img src={e.flyerUrl} alt={`${e.title} flyer`} className="event-flyer-img" loading="lazy" />
+                          </span>
+                        </span>
+                      ))}
+                  </article>
+                </li>
+              );
+            })}
+          </ol>
+        )}
+
+        <p style={{ marginTop: 28 }}>
+          <a
+            href="https://pin.gsu.edu/organization/colorstack"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-link"
+            style={{ fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}
+          >
+            View all events on PIN ↗
+          </a>
+        </p>
+      </div>
     </section>
   );
 }
