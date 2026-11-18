@@ -34,9 +34,6 @@ export default function App() {
               one viewport and drop the footer, and this page is a long form that scrolls. */}
           <Route path="join" element={<Join />} />
           <Route path="forgot" element={<ForgotPassword />} />
-          {/* The QR code on the tabling cloth. Public, and the only route in this app
-              aimed at people who are not members yet — it records attendance and mails
-              them the membership form rather than trying to sign them up here. */}
           {/* Where Google sign-in lands. Swaps the handoff code for a session and moves
               on; nothing here is a decision the member makes. */}
           <Route path="auth/callback" element={<AuthCallback />} />

@@ -61,7 +61,7 @@ export type ProfileEdits = Omit<
   | 'smsOptIn'
 >;
 
-export const EDITABLE_KEYS = [
+const EDITABLE_KEYS = [
   'phone',
   'firstName',
   'lastName',
@@ -165,10 +165,6 @@ export const activationApi = {
     publicApi.post<{ email: string }>('/activation/claim', { email, code, password }),
 };
 
-/**
- * Members give two addresses on the form and remember whichever they please, but Supabase
- * only knows the school one. Resolving first is what lets either address sign in.
- */
 /** Forgotten passwords: the same three steps as activation, on their own endpoints. */
 export const passwordApi = {
   requestCode: (email: string) =>
@@ -184,6 +180,10 @@ export const passwordApi = {
 };
 
 export const authApi = {
+  /**
+   * Members give two addresses on the form and remember whichever they please, but Supabase
+   * only knows the school one. Resolving first is what lets either address sign in.
+   */
   resolveEmail: (email: string) =>
     publicApi.post<{ email: string }>('/auth/resolve-email', { email }),
 };
